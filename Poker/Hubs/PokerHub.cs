@@ -4,19 +4,19 @@ using System.Collections.Generic;
 using Nancy.Json;
 
 
-//add exception getById
+//add exception for GetById
 
 public class Player
 {
-    public string id;
-    public string user_name;
-    public string status;
+    public string Id { get; set; }
+    public string UserName;
+    public string Status;
 
-    public Player(string id, string UserName, string status)
+    public Player(string id, string userName, string status)
     {
-        this.id = id;
-        this.user_name = UserName;
-        this.status = status;
+        this.Id = id;
+        this.UserName = userName;
+        this.Status = status;
     }
 }
 
@@ -24,25 +24,25 @@ public static class ConnectedUser
 {
     public static List<Player> Players = new List<Player>();
 
-    public static void removeById(string id)
+    public static void RemoveById(string id)
     {
-        Players.Remove(getById(id));
+        Players.Remove(GetById(id));
     }
-    public static Player getById(string id)
+    public static Player GetById(string id)
     {
         for (int i = 0; i < Players.Count; i++)
         {
-            if (Players[i].id == id)
+            if (Players[i].Id == id)
                 return Players[i];
         }
         return null;
     }
 
-    public static void setPlaying(int index)
+    public static void SetPlaying(int index)
     {
         for (int i = 0; i < Players.Count; i++)
-            Players[i].status = "Waiting";
-        Players[index].status = "Playing";
+            Players[i].Status = "Waiting";
+        Players[index].Status = "Playing";
     }
 }
 
@@ -51,58 +51,58 @@ namespace Poker.Hubs
     public class PokerHub : Hub
     {
         //Game Variables
-        static string GameStatus = "Not Playing";
-        static int turn_count = 0;
-        JavaScriptSerializer serializer = new JavaScriptSerializer();
+        static string gameStatus = "NotPlaying";
+        static int turnCount = 0;
+        readonly JavaScriptSerializer serializer = new JavaScriptSerializer();
 
 
         public override async Task OnConnectedAsync()
         {
             //game logic
-            Player NewPlayer = new Player(Context.ConnectionId, "Amit", "Not Playing");
+            Player NewPlayer = new Player(Context.ConnectionId, "Amit", "NotPlaying");
             ConnectedUser.Players.Add(NewPlayer);
-            if (GameStatus == "Not Playing" && ConnectedUser.Players.Count >= 2)
+            if (gameStatus == "NotPlaying" && ConnectedUser.Players.Count >= 2)
             {
-                GameStatus = "Playing";
-                ConnectedUser.setPlaying(0);
+                gameStatus = "Playing";
+                ConnectedUser.SetPlaying(0);
             }
 
-            //sending status
-            await sendGameStatus();
+            //sending Status
+            await SendGameStatus();
             await base.OnConnectedAsync();
         }
 
-        public async Task endTurn()
+        public async Task EndTurn()
         {
             //game logic
-            turn_count += 1;
-            turn_count %= ConnectedUser.Players.Count;
-            ConnectedUser.setPlaying(turn_count);
+            turnCount += 1;
+            turnCount %= ConnectedUser.Players.Count;
+            ConnectedUser.SetPlaying(turnCount);
 
-            //sending to everybody status and starting game
-            await sendGameStatus();
+            //sending to everybody Status and starting game
+            await SendGameStatus();
         }
 
 
         public override async Task OnDisconnectedAsync(System.Exception exception)
         {
             //game logic
-            ConnectedUser.removeById(Context.ConnectionId);
+            ConnectedUser.RemoveById(Context.ConnectionId);
             if (ConnectedUser.Players.Count == 1)
-                GameStatus = "Not Playing";
+                gameStatus = "NotPlaying";
 
             //sending to everyone
-            await sendGameStatus();
+            await SendGameStatus();
             await base.OnDisconnectedAsync(exception);
         }
 
-        //sending to everybody the current status
-        public async Task sendGameStatus()
+        //sending to everybody the current Status
+        public async Task SendGameStatus()
         {
-            System.Object[] status = { GameStatus, ConnectedUser.Players };
-            string statusJSON = serializer.Serialize(status);
+            System.Object[] Status = { gameStatus, ConnectedUser.Players };
+            string StatusJSON = serializer.Serialize(Status);
 
-            await Clients.All.SendAsync("ReceiveStatus", statusJSON);
+            await Clients.All.SendAsync("ReceiveStatus", StatusJSON);
 
         }
     }

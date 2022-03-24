@@ -11,7 +11,7 @@ connection.start().then(function () {
 
 document.getElementById("checkButton").addEventListener("click",
     function (event) {
-        connection.invoke("endTurn").catch(function (err) {
+        connection.invoke("EndTurn").catch(function (err) {
             return console.error(err.toString());
         });
         event.preventDefault();
@@ -32,7 +32,7 @@ connection.on("ReceiveStatus", function (GameStatus) {
         //set Waiting players
         document.getElementById("checkButton").disabled = true;
     }
-    else if (Player.status == "Not Playing") {
+    else if (Player.status == "NotPlaying") {
         //set Not playing players
         document.getElementById("checkButton").disabled = true;
     }
