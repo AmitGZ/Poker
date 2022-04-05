@@ -23,17 +23,14 @@ connection.on("ReceiveStatus", function (GameStatus) {
     let Players = GameStatus[1];
     let Player = Players.find(x => x.id == connection.connectionId);
 
-    //render playing
-    if (Player.status == "Playing") {
-        //set playing player
+    //render play
+    if (Player.status == 0) {        //set playing player
         document.getElementById("checkButton").disabled = false;
     }
-    else if (Player.status == "Waiting") {
-        //set Waiting players
+    else if (Player.status == 1) {  //set Not playing players
         document.getElementById("checkButton").disabled = true;
     }
-    else if (Player.status == "NotPlaying") {
-        //set Not playing players
+    else if (Player.status == 2) {  //set Waiting players
         document.getElementById("checkButton").disabled = true;
     }
 
