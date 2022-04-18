@@ -5,18 +5,17 @@ using System.Threading.Tasks;
 
 namespace Poker.ClassLibrary
 {
-    public enum Status { Playing, NotPlaying, Waiting };
     public class Player
     {
         public string Id { get; set; }
-        public string UserName;
-        public Status Status;
+        public string UserName { get; set; }
+        public bool isInGame { get; set; }
 
-        public Player(string id, string userName, Status status)
+        public List<Card> Cards = new List<Card>();
+
+        internal void DealPlayerCards()
         {
-            this.Id = id;
-            this.UserName = userName;
-            this.Status = status;
+            throw new NotImplementedException();
         }
     }
 }
