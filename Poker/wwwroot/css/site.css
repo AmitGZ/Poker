@@ -1,6 +1,31 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
+canvas {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.my-cards {
+    object-fit: contain;
+    width: 10%;
+}
+
+.my-buttons {
+    display: flex;
+    position: absolute;
+    z-index: 1;
+    justify-content: center;
+    flex-direction: column;
+    max-width: 97px;
+    max-height: 20px;
+    margin-left: 268.75px;
+    margin-top: 335.625px;
+}
+
 a.navbar-brand {
   white-space: normal;
   text-align: center;

@@ -16,11 +16,12 @@ html {
 }
 
 .container {
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto;
+    position: static;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 @media (min-width: 576px) {
@@ -133,9 +134,15 @@ html {
 }
 
 .col-6 {
-  -ms-flex: 0 0 50%;
-  flex: 0 0 50%;
-  max-width: 50%;
+    display: flex;
+    position: absolute;
+    z-index: 1;
+    justify-content: center;
+    flex-direction: column;
+    max-width: 97px;
+    max-height: 20px;
+    margin-left: 258.75px;
+    margin-top: 335.625px;
 }
 
 .col-7 {

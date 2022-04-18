@@ -1,10 +1,83 @@
 ﻿"use strict";
 
 
+//constants
+var CARD_PROPORTION = 8;
+var CARD_WIDTH = 500 / CARD_PROPORTION;
+var CARD_HEIGHT = 726 / CARD_PROPORTION;
+var CARD_SPACER = CARD_WIDTH / 6;
+var CARD_SHIFT = 80;
+var USER_SIZE = 80;
+
+var Shapes = {
+    hearts: 0,
+    clubs: 1,
+    diamonds: 2,
+    spades: 3
+};
+
+var Vals = {
+    two: 0,
+    three: 1,
+    four: 2,
+    five: 3,
+    six: 4,
+    seven: 5,
+    eight: 6,
+    nine: 7,
+    ten: 8,
+    jack: 9,
+    queen: 10,
+    king: 11,
+    ace: 12,
+};
+
+var player_pos = [[390, 330], [620, 290], [590, 80], [190, 80],[160, 290]];
+
+var canvas = document.getElementById("canvas");
+var userImage;
+var backgroundImage;
+var back_of_card;
+var Cards = new Array(13);
+for (var i = 0; i < Cards.length; i++) 
+    Cards[i] = new Array(4);
+
+var prom = new Promise(function (resolve, reject) {
+    //loading user image
+    userImage = document.createElement("img");
+    userImage.src = "resources/user.png";
+
+    //loading background image
+    backgroundImage = document.createElement("img");
+    backgroundImage.src = "resources/poker_table.png";
+    backgroundImage.style = "position: absolute; z-index:0;"
+
+    //loading back of card image
+    back_of_card = document.createElement("img");
+    back_of_card.src = "resources/Cards/back_of_card.png";
+    back_of_card.width = CARD_WIDTH;
+    back_of_card.height = CARD_HEIGHT;
+
+    var vals = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king', 'ace'];
+    var shapes = ['hearts', 'clubs', 'diamonds', 'spades'];
+    //loading card images
+    for (let i = 0; i < 13; i++)
+        for (let j = 0; j < 4; j++) {
+            Cards[i][j] = document.createElement("img");
+            Cards[i][j].src = '../../resources/Cards/' + vals[i] + '_of_' + shapes[j] + '.png';
+            Cards[i][j].width = CARD_WIDTH;
+            Cards[i][j].height = CARD_HEIGHT;
+        }
+
+    //resolving promises
+    resolve();
+});
+
 var connection = new signalR.HubConnectionBuilder().withUrl("/pokerHub").build();
 
 connection.start().then(function () {
-    document.getElementById("checkButton").disabled = true;
+    document.getElementById("checkButton").disabled = false;
+    prom.then(draw);
 }).catch(function (err) {
     return console.error(err.toString());
 });
@@ -33,15 +106,43 @@ connection.on("ReceiveStatus", function (GameStatus) {
     else if (Player.status == 2) {  //set Waiting players
         document.getElementById("checkButton").disabled = true;
     }
-
 });
 
+function draw() {
+    //loading background image
+    canvas.appendChild(backgroundImage);
 
-connection.on("ReceiveStatus", function (players) {
-    players = JSON.parse(players)
-    var li = document.getElementById("userList");
-    li.textContent = '';
-    for (let i = 0; i < players.length; i++)
-        li.textContent += `\nid = ${players[i].id}\n`;
-    document.getElementById("messagesList").appendChild(li);
-});
+    loadPlayer(0, Cards[0][0], Cards[0][0]);
+    loadPlayer(2, Cards[4][2], Cards[3][2]);
+}
+
+function loadPlayer(pos, card1, card2) {
+    //adding user image
+    var user = userImage.cloneNode(true);
+    user.style = "width : " + USER_SIZE 
+        + "px; position: absolute;"
+        + "margin-left:" + (player_pos[pos][0] - USER_SIZE / 2) + "px;"
+        + "margin-top:" + (player_pos[pos][1] - USER_SIZE / 2) + "px;";
+    canvas.appendChild(user);
+
+    if (card1 == undefined || card2 == undefined)
+        return;
+
+    //adding first card
+    var tmp1 = card1.cloneNode(true);
+    tmp1.style = "width : " + CARD_WIDTH + ";"
+        + "width : " + CARD_HEIGHT + ";"
+        + "px; position: absolute;"
+        + "margin-left:" + (player_pos[pos][0] - CARD_WIDTH / 2 + CARD_SHIFT - CARD_SPACER) + "px;"
+        + "margin-top:" + (player_pos[pos][1] - CARD_HEIGHT / 2) + "px;";
+    canvas.appendChild(tmp1);
+
+    //adding second card
+    var tmp2 = card2.cloneNode(true);
+    tmp2.style = "width : " + CARD_WIDTH + ";"
+        + "width : " + CARD_HEIGHT + ";"
+        + "px; position: absolute;"
+        + "margin-left:" + (player_pos[pos][0] - CARD_WIDTH / 2 + CARD_SHIFT + CARD_SPACER) + "px;"
+        + "margin-top:" + (player_pos[pos][1] - CARD_HEIGHT / 2) + "px;";
+    canvas.appendChild(tmp2);
+}
