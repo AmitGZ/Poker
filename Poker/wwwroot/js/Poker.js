@@ -1,5 +1,7 @@
 ﻿"use strict";
 
+//on connection
+var connection = new signalR.HubConnectionBuilder().withUrl("/pokerHub").build();
 
 //constants
 var CARD_PROPORTION = 8;
@@ -9,13 +11,24 @@ var CARD_SPACER = CARD_WIDTH / 6;
 var CARD_SHIFT = 80;
 var USER_SIZE = 80;
 
+var CANVAS_WIDTH = 780;
+var CANVAS_HEIGHT = 405;
+
+var player_pos = [[390, 330], [620, 290], [590, 80], [190, 80], [160, 290]];
+
+
+var card_pos = [
+    [CANVAS_WIDTH / 2 - 2 *CARD_WIDTH, CANVAS_HEIGHT / 2],
+    [CANVAS_WIDTH / 2 - 1 *CARD_WIDTH , CANVAS_HEIGHT / 2],
+    [CANVAS_WIDTH / 2 - 0 * CARD_WIDTH, CANVAS_HEIGHT / 2],
+    [CANVAS_WIDTH / 2 - 1 *CARD_WIDTH, CANVAS_HEIGHT / 2],
+    [CANVAS_WIDTH / 2 - 2 * CARD_WIDTH, CANVAS_HEIGHT / 2]];
 var Shapes = {
     hearts: 0,
     clubs: 1,
     diamonds: 2,
     spades: 3
 };
-
 var Vals = {
     two: 0,
     three: 1,
@@ -32,8 +45,7 @@ var Vals = {
     ace: 12,
 };
 
-var player_pos = [[390, 330], [620, 290], [590, 80], [190, 80],[160, 290]];
-
+//frequent variables
 var canvas = document.getElementById("canvas");
 var userImage;
 var backgroundImage;
@@ -41,7 +53,6 @@ var back_of_card;
 var Cards = new Array(13);
 for (var i = 0; i < Cards.length; i++) 
     Cards[i] = new Array(4);
-
 var prom = new Promise(function (resolve, reject) {
     //loading user image
     userImage = document.createElement("img");
@@ -73,7 +84,7 @@ var prom = new Promise(function (resolve, reject) {
     resolve();
 });
 
-var connection = new signalR.HubConnectionBuilder().withUrl("/pokerHub").build();
+
 
 connection.start().then(function () {
     document.getElementById("checkButton").disabled = false;
@@ -82,13 +93,21 @@ connection.start().then(function () {
     return console.error(err.toString());
 });
 
-document.getElementById("checkButton").addEventListener("click",
-    function (event) {
-        connection.invoke("EndTurn").catch(function (err) {
-            return console.error(err.toString());
-        });
-        event.preventDefault();
+
+var endTurn = function (event) {
+    console.log(event.srcElement.id);
+    connection.invoke("EndTurn").catch(function (err) {
+        return console.error(err.toString());
     });
+    event.preventDefault();
+};
+
+
+//todo put in for
+document.getElementById("checkButton").addEventListener("click", endTurn);
+document.getElementById("foldButton").addEventListener("click", endTurn);
+document.getElementById("raiseButton").addEventListener("click", endTurn);
+document.getElementById("callButton").addEventListener("click", endTurn);
 
 connection.on("ReceiveStatus", function (GameStatus) {
     GameStatus = JSON.parse(GameStatus);
@@ -128,21 +147,17 @@ function loadPlayer(pos, card1, card2) {
     if (card1 == undefined || card2 == undefined)
         return;
 
-    //adding first card
-    var tmp1 = card1.cloneNode(true);
+    loadCard(card1, pos);
+    
+    loadCard(card2, pos);
+}
+
+function loadCard(pos, card) {
+    var tmp = card.cloneNode(true);
     tmp1.style = "width : " + CARD_WIDTH + ";"
         + "width : " + CARD_HEIGHT + ";"
         + "px; position: absolute;"
         + "margin-left:" + (player_pos[pos][0] - CARD_WIDTH / 2 + CARD_SHIFT - CARD_SPACER) + "px;"
         + "margin-top:" + (player_pos[pos][1] - CARD_HEIGHT / 2) + "px;";
-    canvas.appendChild(tmp1);
-
-    //adding second card
-    var tmp2 = card2.cloneNode(true);
-    tmp2.style = "width : " + CARD_WIDTH + ";"
-        + "width : " + CARD_HEIGHT + ";"
-        + "px; position: absolute;"
-        + "margin-left:" + (player_pos[pos][0] - CARD_WIDTH / 2 + CARD_SHIFT + CARD_SPACER) + "px;"
-        + "margin-top:" + (player_pos[pos][1] - CARD_HEIGHT / 2) + "px;";
-    canvas.appendChild(tmp2);
+    canvas.appendChild(tmp);
 }

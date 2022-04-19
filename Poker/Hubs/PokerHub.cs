@@ -8,7 +8,7 @@ namespace Poker.Hubs
 {
     public class PokerHub : Hub
     {
-        GameEngine gameEngine;
+        GameEngine gameEngine = new GameEngine();
         readonly JavaScriptSerializer serializer = new JavaScriptSerializer();
 
         public override async Task OnConnectedAsync()
