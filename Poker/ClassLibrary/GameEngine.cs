@@ -3,73 +3,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-
 namespace Poker.ClassLibrary
 {
     public class GameEngine
     {
-        public Queue<Player> Players = new Queue<Player>(); 
+        const int MAX_AMOUNT_OF_PLAYERS = 6;
+
+        public MyHashTable Players = new MyHashTable(MAX_AMOUNT_OF_PLAYERS); 
         public Stack<Card> Stack = null;
         public List<Card> Deck = new List<Card>();
         public Player Dealer { get; set; }
         public bool isRunning = false;
-
-        internal void AddPlayer(string connectionId)
-        {
+        
+        internal void AddPlayer(string connectionId, int location)
+        { 
+            // Each player have his location on the current table
+            // Each player have his unique Id
             Player NewPlayer = new Player()
             {
                 Id = connectionId,
                 UserName = "Amit",// need to read from DB 
                 isInGame = false
             };
-            Players.Enqueue(NewPlayer);
+            Players.Add(location,NewPlayer);
         }
-
-        //public Player GetPlayerById(string Id)
-        //{
-        //    return Players.SingleOrDefault(p => p.Id == Id);
-        //}
         public void RemovePlayerById(string Id)
         {
-            Players = new Queue<Player>(Players.Where(p => p.Id != Id));
+            Players.Remove(Id);
         }
-
         public void StartGame()
         {
-            // Put All Players In Game
-            foreach (Player player in Players.Where(p => p.isInGame == false))
-                player.isInGame = true;
-
+            Players.setEveryonePlaying();
             SwitchDealer();
-
             Stack = Card.generateDeck();
-
             DealTheCards();
         }
         private void DealTheCards()
         {
-            while (Players.Peek().Id != Dealer.Id)
+            Player tmp = Dealer;
+            do
             {
-                Player player = Players.Dequeue();
-                player.Cards.Add(Stack.Pop());
-                player.Cards.Add(Stack.Pop());
-                Players.Enqueue(player);
-            }
-        }
-
-        private void GoToDealerPlus(int x)
-        {
-            // Go To Dealer
-            while (Players.Peek().Id != Dealer.Id)
-                Players.Enqueue(Players.Dequeue());
-
-            for (int i = 0; i < x; i++)
-                Players.Enqueue(Players.Dequeue());
+                tmp.Cards.Add(Stack.Pop());
+                tmp.Cards.Add(Stack.Pop());
+                tmp = Players.FindAdjacentPlayer(tmp);
+            } while (tmp.Id != Dealer.Id);
         }
         private void SwitchDealer()
         {
-            GoToDealerPlus(1);
-            Dealer = Players.Peek(); 
+            Dealer = Players.FindAdjacentPlayer(Dealer); 
         }
     }
 }
