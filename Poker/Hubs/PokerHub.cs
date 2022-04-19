@@ -14,7 +14,7 @@ namespace Poker.Hubs
         public override async Task OnConnectedAsync()
         {
             //game logic
-            gameEngine.AddPlayer(Context.ConnectionId);
+            //gameEngine.AddPlayer(Context.ConnectionId);
 
             //sending Status
             await SendGameStatus();
@@ -37,8 +37,8 @@ namespace Poker.Hubs
         {
             //game logic
             gameEngine.RemovePlayerById(Context.ConnectionId);
-            if (gameEngine.Players.Count == 1)
-                gameEngine.isRunning = false;
+            //if (gameEngine.Players.Count == 1)
+            //    gameEngine.isRunning = false;
 
             //sending to everyone
             await SendGameStatus();
