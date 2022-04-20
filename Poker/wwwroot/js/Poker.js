@@ -14,16 +14,15 @@ var USER_SIZE = 80;
 var CANVAS_WIDTH = 780;
 var CANVAS_HEIGHT = 405;
 
+
 var PLAYER_POSITIONS = [[390, 330], [620, 290], [590, 80], [190, 80], [160, 290]];
 
 
-//todo in for
-var CARD_POSITIONS = [
-    [CANVAS_WIDTH / 2 - 2 *CARD_WIDTH, CANVAS_HEIGHT / 2],
-    [CANVAS_WIDTH / 2 - 1 *CARD_WIDTH , CANVAS_HEIGHT / 2],
-    [CANVAS_WIDTH / 2 - 0 * CARD_WIDTH, CANVAS_HEIGHT / 2],
-    [CANVAS_WIDTH / 2 - 1 *CARD_WIDTH, CANVAS_HEIGHT / 2],
-    [CANVAS_WIDTH / 2 - 2 * CARD_WIDTH, CANVAS_HEIGHT / 2]];
+//Creating card position array
+var CARD_POSITIONS = new Array(5);
+for (let i = 0; i < 5; i++)
+    CARD_POSITIONS[i] = [CANVAS_WIDTH / 2 + (i - 2) * (CARD_WIDTH + CARD_SPACER), CANVAS_HEIGHT * 2 / 5];
+
 var Shapes = {
     hearts: 0,
     clubs: 1,
@@ -132,11 +131,11 @@ function draw() {
     //loading background image
     canvas.appendChild(backgroundImage);
 
-    loadPlayer(0, Cards[0][0], Cards[0][0]);
-    loadPlayer(2, Cards[4][2], Cards[3][2]);
+    loadPlayer(0, [Cards[0][0], Cards[0][0]]);
+    loadPlayer(2, [Cards[4][2], Cards[3][2]]);
 }
 
-function loadPlayer(position_index, card1, card2) {
+function loadPlayer(position_index, cards) {
     //adding user image
     var user = userImage.cloneNode(true);
     user.style = "width : " + USER_SIZE 
@@ -145,17 +144,21 @@ function loadPlayer(position_index, card1, card2) {
         + "margin-top:" + (PLAYER_POSITIONS[position_index][1] - USER_SIZE / 2) + "px;";
     canvas.appendChild(user);
 
-    //for overload
-    if (card1 == undefined || card2 == undefined)
+    //Overload when player has no cards
+    if (cards[0] == undefined || cards[1] == undefined)
         return;
 
+    //loading cards
     loadCard(
-        [PLAYER_POSITIONS[position_index][0] - CARD_SPACER, PLAYER_POSITIONS[position_index][1]],
-        card1);
+        [PLAYER_POSITIONS[position_index][0] + CARD_SHIFT - CARD_SPACER , PLAYER_POSITIONS[position_index][1]],
+        cards[0]);
 
     loadCard(
-        [PLAYER_POSITIONS[position_index][0] + CARD_SPACER, PLAYER_POSITIONS[position_index][1]],
-        card2);
+        [PLAYER_POSITIONS[position_index][0] + CARD_SHIFT + CARD_SPACER, PLAYER_POSITIONS[position_index][1]],
+        cards[1]);
+
+    for (let i = 0; i < 5; i++)
+        loadCard(CARD_POSITIONS[i], cards[1]);
 }
 
 function loadCard(position, card) {
@@ -163,7 +166,7 @@ function loadCard(position, card) {
     tmp.style = "width : " + CARD_WIDTH + ";"
         + "width : " + CARD_HEIGHT + ";"
         + "px; position: absolute;"
-        + "margin-left:" + (position[0] - CARD_WIDTH / 2 + CARD_SHIFT) + "px;"
+        + "margin-left:" + (position[0] - CARD_WIDTH / 2) + "px;"
         + "margin-top:" + (position[1] - CARD_HEIGHT / 2) + "px;";
     canvas.appendChild(tmp);
 }
