@@ -14,7 +14,7 @@ namespace Poker.Hubs
 
         public PokerHub(IDictionary<string, UserConnection> connections)
         {
-            _botUser = "notification";            
+            _botUser = "notification";   //notification user name          
             _connections = connections; // all connections
         }
 
@@ -35,6 +35,7 @@ namespace Poker.Hubs
             return base.OnDisconnectedAsync(exception);
         }
 
+        //TODO not working
         public Task SignOut()
         {
             Context.Abort();
@@ -49,7 +50,7 @@ namespace Poker.Hubs
             //adding to Room (Lobby)
             await Groups.AddToGroupAsync(Context.ConnectionId, userConnection.Room);
 
-            //sending everybody login message
+            //sending everybody join message
             await Clients.Group(userConnection.Room).SendAsync(
                 "ReceiveMessage",
                 _botUser, $"{userConnection.User} has joined {userConnection.Room}"
@@ -113,7 +114,7 @@ namespace Poker.Hubs
         }
         public Task SendRoomsAvailable()
         {
-            //filtering to get all Distinct rooms
+            //filtering to get all Distinct rooms excluding Lobby
             var users = _connections.Values;
 
             List<String> list = new List<String>();
@@ -122,7 +123,7 @@ namespace Poker.Hubs
 
             list = list.Distinct().Where(x => x != "Lobby").ToList();
 
-            //updating lobby rooms
+            //updating Lobby rooms
             return Clients.Group("Lobby").SendAsync("ReceiveRooms", list);
         }
     }
