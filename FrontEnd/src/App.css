@@ -1,0 +1,111 @@
+Form Button {
+    width: 100%;
+}
+
+h2 {
+    color: #ffffff;
+}
+
+h4 {
+    color: #ffffff;
+}
+
+
+h6 {
+    color: rgb(255, 255, 255);
+}
+
+hr.line {
+    border: 1px solid #313131;
+    width: 175px;
+}
+
+.app {
+    margin: auto;
+    padding-top: 40px;
+    width: 950px;
+    text-align: center;
+}
+
+.lobby {
+    width: 400px;
+    margin: auto;
+}
+
+.chat {
+    display: grid;
+}
+
+.leave-room {
+    text-align: right;
+    margin-bottom: 4px;
+}
+
+.user-list {
+    float: left;
+    background-color: #313131;
+    color:white;
+    width: 200px;
+    height: 240px;
+    margin-right: 4px;
+}
+
+.message-container {
+    height: 200px;    
+    background-color: #2a3846;
+    overflow: auto;
+    border-radius: 5px;
+    margin-bottom: 2px;
+}
+
+.user-message {
+    text-align: right;
+    padding-right: 5px;
+    font-size: 18px;
+}
+
+.message {
+    display: inline-flex;
+    margin: 0px auto 0px auto;
+    padding: 5px;
+    font-size: 18px;
+    color:white;
+    border-radius: 20px;
+    margin-top: 3px;
+}
+
+.from-user {
+    font-size: small;
+    color:white;
+    margin-bottom: 3px;
+    margin-right: 5px;
+}
+
+.form-control{
+    background-color: #2a3846 !important;
+    color: white !important;
+}
+
+.background-box{
+    z-index: -1;
+    height: 95%;
+    width: 90%;
+    background: #262626;
+    opacity: 0.8;
+    top: 10%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.room-list{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding-top: 20px;
+}
+
+.room-list > * {
+    margin-top:10px;
+  }
