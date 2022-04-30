@@ -6,6 +6,7 @@ import Chat from './components/Chat';
 import Game from './components/Game';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import background from './resources/background.png'
 
 const App = () => {
   const [connection, setConnection] = useState();
@@ -84,13 +85,18 @@ const App = () => {
   }
 
   return (
-    <div className='app'>
-      <h2>Poker Online</h2>
-      <hr className='line' />
-        {!connection ?
-          <Login joinGame={joinGame} setPage = {setPage} /> : 
-          <Game page ={page} joinRoom={joinRoom} rooms = {rooms} sendMessage = {sendMessage} messages = {messages} users = {users}/>
-        }
+    <div style={{ zIndex : '-2',backgroundImage: `url(${background})` , height: '120%', width:'100%', position:'absolute'}}> 
+      <div className='bounding-box'>
+        <div className='background-gray'/>
+        <div className='app'>
+          <h2>Poker Online</h2>
+          <hr className='line' />
+            {!connection ?
+              <Login joinGame={joinGame} setPage = {setPage} /> : 
+              <Game page ={page} joinRoom={joinRoom} rooms = {rooms} sendMessage = {sendMessage} messages = {messages} users = {users}/>
+            }
+        </div>
+      </div>
     </div>
   )
 }

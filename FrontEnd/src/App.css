@@ -23,8 +23,11 @@ hr.line {
 .app {
     margin: auto;
     padding-top: 40px;
-    width: 950px;
-    text-align: center;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .lobby {
@@ -48,6 +51,11 @@ hr.line {
     width: 200px;
     height: 240px;
     margin-right: 4px;
+
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex-direction: column;
 }
 
 .message-container {
@@ -82,21 +90,45 @@ hr.line {
 }
 
 .form-control{
+    margin:auto;
     background-color: #2a3846 !important;
     color: white !important;
 }
 
-.background-box{
-    z-index: -1;
+.form-group{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.background-image{
+    z-index: -2;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
+
+.bounding-box{
     height: 95%;
     width: 90%;
-    background: #262626;
-    opacity: 0.8;
     top: 10%;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+}
+
+.background-gray{
+    z-index: -1;
+    height: 100%;
+    width: 100%;
+    background: #262626;
+    opacity: 0.8;
+    position: absolute;
 }
 
 .room-list{
@@ -108,4 +140,18 @@ hr.line {
 
 .room-list > * {
     margin-top:10px;
+  }
+
+.button-list{
+  display: flex;
+  position:absolute;
+  justify-content: center;
+  flex-direction: column;
+  width: 80px;
+}
+
+.button-list > * {
+    padding: 0px;
+    height:35px;
+    margin-top:3px;
   }

@@ -59,10 +59,10 @@ import queen_of_diamonds from './Cards/queen_of_diamonds.png';
 import king_of_diamonds  from './Cards/king_of_diamonds.png';
 import ace_of_diamonds   from './Cards/ace_of_diamonds.png';
 
-const images = {
+const images_src = {
   poker_table: poker_table,
   user : user,
-  cards:{
+
     two_of_hearts  : two_of_hearts  ,
     three_of_hearts: three_of_hearts,
     four_of_hearts : four_of_hearts ,
@@ -118,7 +118,6 @@ const images = {
     queen_of_diamonds: queen_of_diamonds,
     king_of_diamonds : king_of_diamonds ,
     ace_of_diamonds  : ace_of_diamonds  
-  }
 };
 
-export default images;
+export default images_src;

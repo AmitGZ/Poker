@@ -3,13 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import background from './resources/background.png'
 
 ReactDOM.render(
   <React.StrictMode>
-    <div style={{ zIndex : '-2',backgroundImage: `url(${background})` , height: '100%', width:'100%', position:'absolute'}}/> 
-    <div className='background-box'/>
-        <App />
+      <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
