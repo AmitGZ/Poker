@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Poker.ClassLibrary
+namespace PokerClassLibrary
 {
     public class Card
     {

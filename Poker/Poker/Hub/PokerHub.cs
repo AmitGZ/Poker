@@ -8,6 +8,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using Microsoft.Extensions.Configuration;
+using PokerClassLibrary;
+using System.Diagnostics;
 
 namespace Poker.Hubs
 {
@@ -49,12 +51,21 @@ namespace Poker.Hubs
 
         public async Task JoinGame(UserConnection userConnection)
         {
-            con.Open();
-            SqlCommand insert = new SqlCommand("INSERT INTO Player (userName,userMoney) VALUES('amit',999)", con);
-            SqlCommand com = new SqlCommand("Select * from Player;", con);
-            insert.ExecuteNonQuery();
-            var tmp = com.ExecuteScalar().ToString() ;
-            con.Close();
+            try
+            {
+                con.Open();
+                SqlCommand insert = new SqlCommand("INSERT INTO Player (userName,userMoney) VALUES('amit',999)", con);
+                SqlCommand com = new SqlCommand("Select * from Player;", con);
+                insert.ExecuteNonQuery();
+                var tmp = com.ExecuteScalar().ToString();
+                con.Close();
+
+            }
+            catch(SqlException ex)
+            {
+                Debug.WriteLine(ex.ToString());
+            }
+
 
             //initializing user at _connections
             _connections[Context.ConnectionId] = userConnection;

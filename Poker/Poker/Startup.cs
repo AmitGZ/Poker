@@ -10,6 +10,7 @@ using Poker;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using PokerClassLibrary;
 
 namespace Poker
 {
