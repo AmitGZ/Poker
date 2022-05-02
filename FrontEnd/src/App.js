@@ -17,6 +17,7 @@ const App = () => {
 
   const joinGame = async (user) => {
     try {
+      //establishing connection
       const connection = new HubConnectionBuilder()
         .withUrl("https://localhost:44382/poker")
         .configureLogging(LogLevel.Information)
@@ -59,9 +60,9 @@ const App = () => {
       }
   }
   const joinRoom = async (room) => {
-    try {
-      setMessages([]) // clearing all messages on room leave
-      await connection.invoke("JoinRoom", room);
+    try {    
+      setMessages([]);      // clearing all messages on room leave  
+      await connection.invoke("JoinRoom", room);      //invoking join to the new room
     } catch (e) {
       console.log(e);
     }
@@ -69,12 +70,13 @@ const App = () => {
 
   const sendMessage = async (message) => {
     try {
-      await connection.invoke("SendMessage", message);
+      await connection.invoke("SendMessage", message);      //invoking send message
     } catch (e) {
       console.log(e);
     }
   }
 
+  //TODO implement
   const closeConnection = async () => {
     try {
       connection.closeConnection();

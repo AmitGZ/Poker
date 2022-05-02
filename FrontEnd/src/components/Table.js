@@ -8,13 +8,20 @@ import images_src from "../resources/index"
 
 
 const Table = ({ joinRoom, sendMessage, messages, users, page}) => {
+    //setting width and height for playing canvas
     const WIDTH = 946;
     const HEIGHT = Math.round(WIDTH *0.519);
+
+    //number of images to load
     var image_num = Object.keys(images_src).length;
 
+    //used to keep track of how many images loaded
     const [loaded_num, setLoadedNum] = useState(0);
+
+    //array of loaded images
     const [loaded_img, setLoadedImg] = useState();
 
+    //loading all images upon window loading
     useEffect(()=>{
         //loading all assets
         setLoadedImg(()=>{

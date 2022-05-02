@@ -66,7 +66,6 @@ namespace Poker.Hubs
                 Debug.WriteLine(ex.ToString());
             }
 
-
             //initializing user at _connections
             _connections[Context.ConnectionId] = userConnection;
 

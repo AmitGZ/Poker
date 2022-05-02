@@ -8,7 +8,6 @@ import Table from './Table';
 
 
 const Game = ({ joinRoom, rooms, sendMessage, messages, users ,page}) => {
-
     
     return (
         <div>

@@ -61,7 +61,8 @@ import ace_of_diamonds   from './Cards/ace_of_diamonds.png';
 
 const images_src = {
   poker_table: poker_table,
-  user : user,
+  user: user,
+  background: background,
 
     two_of_hearts  : two_of_hearts  ,
     three_of_hearts: three_of_hearts,
