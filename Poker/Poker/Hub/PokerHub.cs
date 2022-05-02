@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Poker;
 using System.Linq;
 using System;
-using PokerClassLibrary;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
