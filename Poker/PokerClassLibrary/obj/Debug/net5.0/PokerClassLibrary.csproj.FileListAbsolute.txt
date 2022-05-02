@@ -1,0 +1,12 @@
+C:\Users\Amit Zohar\Desktop\PokerReact\Poker\PokerClassLibrary\bin\Debug\net5.0\PokerClassLibrary.deps.json
+C:\Users\Amit Zohar\Desktop\PokerReact\Poker\PokerClassLibrary\bin\Debug\net5.0\PokerClassLibrary.dll
+C:\Users\Amit Zohar\Desktop\PokerReact\Poker\PokerClassLibrary\bin\Debug\net5.0\ref\PokerClassLibrary.dll
+C:\Users\Amit Zohar\Desktop\PokerReact\Poker\PokerClassLibrary\bin\Debug\net5.0\PokerClassLibrary.pdb
+C:\Users\Amit Zohar\Desktop\PokerReact\Poker\PokerClassLibrary\obj\Debug\net5.0\PokerClassLibrary.csproj.AssemblyReference.cache
+C:\Users\Amit Zohar\Desktop\PokerReact\Poker\PokerClassLibrary\obj\Debug\net5.0\PokerClassLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Amit Zohar\Desktop\PokerReact\Poker\PokerClassLibrary\obj\Debug\net5.0\PokerClassLibrary.AssemblyInfoInputs.cache
+C:\Users\Amit Zohar\Desktop\PokerReact\Poker\PokerClassLibrary\obj\Debug\net5.0\PokerClassLibrary.AssemblyInfo.cs
+C:\Users\Amit Zohar\Desktop\PokerReact\Poker\PokerClassLibrary\obj\Debug\net5.0\PokerClassLibrary.csproj.CoreCompileInputs.cache
+C:\Users\Amit Zohar\Desktop\PokerReact\Poker\PokerClassLibrary\obj\Debug\net5.0\PokerClassLibrary.dll
+C:\Users\Amit Zohar\Desktop\PokerReact\Poker\PokerClassLibrary\obj\Debug\net5.0\ref\PokerClassLibrary.dll
+C:\Users\Amit Zohar\Desktop\PokerReact\Poker\PokerClassLibrary\obj\Debug\net5.0\PokerClassLibrary.pdb
