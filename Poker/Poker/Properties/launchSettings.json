@@ -1,4 +1,5 @@
 ﻿{
+  "connectionString": "Data Source=.\\SQLEXPRESS;Initial Catalog=Poker;Integrated Security=True",
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,

@@ -4,14 +4,14 @@
     "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\Poker\\Poker.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\Poker\\Poker.csproj": {
+    "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\PokerClassLibrary\\PokerClassLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\Poker\\Poker.csproj",
-        "projectName": "Poker",
-        "projectPath": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\Poker\\Poker.csproj",
+        "projectUniqueName": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\PokerClassLibrary\\PokerClassLibrary.csproj",
+        "projectName": "PokerClassLibrary",
+        "projectPath": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\PokerClassLibrary\\PokerClassLibrary.csproj",
         "packagesPath": "C:\\Users\\Amit Zohar\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\Poker\\obj\\",
+        "outputPath": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\PokerClassLibrary\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Amit Zohar\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -39,6 +39,74 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.406\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\Poker\\Poker.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\Poker\\Poker.csproj",
+        "projectName": "Poker",
+        "projectPath": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\Poker\\Poker.csproj",
+        "packagesPath": "C:\\Users\\Amit Zohar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\Poker\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Amit Zohar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\PokerClassLibrary\\PokerClassLibrary.csproj": {
+                "projectPath": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\PokerClassLibrary\\PokerClassLibrary.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "EntityFramework": {
+              "target": "Package",
+              "version": "[6.4.4, )"
+            },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.3, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
