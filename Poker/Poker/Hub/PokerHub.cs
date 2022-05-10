@@ -16,32 +16,31 @@ namespace Poker.Hubs
     public class PokerHub : Hub
     {
         private readonly string _botUser;
-        private readonly IDictionary<string, UserConnection> _connections;
-        PokerContext db = new PokerContext();
-        private SqlConnection con = new SqlConnection("Data Source=.\\SQLEXPRESS;Initial Catalog=Poker;Integrated Security=True");
+        //private readonly IDictionary<string, UserConnection> _connections;
         
-        public PokerHub(IDictionary<string, UserConnection> connections)
+                                             //private SqlConnection con = new SqlConnection("Data Source=.\\SQLEXPRESS;Initial Catalog=Poker;Integrated Security=True");
+
+        public PokerHub()
         {
             _botUser = "notification";   //notification user name          
-            _connections = connections; // all connections
         }
 
-        public override Task OnDisconnectedAsync(Exception exception)
-        {
-            if (_connections.TryGetValue(Context.ConnectionId, out UserConnection userConnection))
-            {
-                //removing connection
-                _connections.Remove(Context.ConnectionId);
-                
-                //messaging user's group
-                Clients.Group(userConnection.Room).SendAsync(
-                    "ReceiveMessage", _botUser, $"{userConnection.User} has left");
+        //public override Task OnDisconnectedAsync(Exception exception)
+        //{
+        //    if (_connections.TryGetValue(Context.ConnectionId, out UserConnection userConnection))
+        //    {
+        //        //removing connection
+        //        _connections.Remove(Context.ConnectionId);
 
-                //signaling user's group
-                SendUsersConnected(userConnection.Room);
-            }
-            return base.OnDisconnectedAsync(exception);
-        }
+        //        //messaging user's group
+        //        Clients.Group(userConnection.Room).SendAsync(
+        //            "ReceiveMessage", _botUser, $"{userConnection.User} has left");
+
+        //        //signaling user's group
+        //        SendUsersConnected(userConnection.Room);
+        //    }
+        //    return base.OnDisconnectedAsync(exception);
+        //}
 
         //TODO not working
         public Task SignOut()
@@ -50,105 +49,93 @@ namespace Poker.Hubs
             return Task.CompletedTask;
         }
 
-        public async Task JoinGame(UserConnection userConnection)
+        public Task SignIn(string Username, string Password)
         {
-            /*
-            db.Player.First();
-            var t = new Player()
+            PokerContext db = new PokerContext();// Connect to DB
+            User user = db.Users.FirstOrDefault(u => u.Username == Username);
+            if (user == null || user.Password != Password)
             {
-                UserMoney = 992,
-                UserName = "z"
-            };
-
-            var g =db.Player.AsEnumerable();
-            var tmp = db.Player.Find("z");
-            
-
-            db.SaveChanges();
-            */
-
-
-            //initializing user at _connections
-            _connections[Context.ConnectionId] = userConnection;
-
-            //adding to Room (Lobby)
-            await Groups.AddToGroupAsync(Context.ConnectionId, userConnection.Room);
-
-            //sending everybody join message
-            await Clients.Group(userConnection.Room).SendAsync(
-                "ReceiveMessage",
-                _botUser, $"{userConnection.User} has joined {userConnection.Room}"
-                );
-
-            //updating all the room that someone connected
-            await SendUsersConnected(userConnection.Room);
-
-            //updating rooms available in Lobby
-            await SendRoomsAvailable();
-        }
-
-        public async Task JoinRoom(string room)
-        {
-            //storing old room to update
-            string old_room = _connections[Context.ConnectionId].Room;
-            
-            //if clicked new room 
-            if (room == "new")
-                room = _connections[Context.ConnectionId].User + "'s Room";
-
-            //updating groups
-            _connections[Context.ConnectionId].Room = room;
-            await Groups.AddToGroupAsync(Context.ConnectionId, room);
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, old_room);
-
-            //sending join message
-            await Clients.Group(room)
-                .SendAsync(
-                "ReceiveMessage", _botUser, $"{_connections[Context.ConnectionId].User} " +
-                $"has joined {_connections[Context.ConnectionId].Room}"
-                );
-
-            //updating old room and new room
-            await SendUsersConnected(old_room);
-            await SendUsersConnected(_connections[Context.ConnectionId].Room);
-
-            //updating rooms available
-            await SendRoomsAvailable();
-        }
-
-        public async Task SendMessage(string message)
-        {
-            //sending a message to all users in current room
-            if (_connections.TryGetValue(Context.ConnectionId, out UserConnection userConnection))
-            {
-                await Clients.Group(userConnection.Room).SendAsync("ReceiveMessage", userConnection.User, message);
+                Clients.Client(Context.ConnectionId).SendAsync("SignInStatus", false);
+                return null;
             }
+
+            user.ConnectionId = Context.ConnectionId;
+            Clients.Client(Context.ConnectionId).SendAsync("SignInStatus",true,user);
+            return null;
         }
 
-        public Task SendUsersConnected(string room)
-        {
-            //getting all room users
-            var users = _connections.Values.Where(c => c.Room == room).Select(c => c.User);
 
-            //sending the user his current room
-            Clients.Group(room).SendAsync("ReceivePage", room);
+        public async Task JoinRoom(int RoomId)
+        {
+
+        }
+        public async Task CreateRoom(int RoomId,string RoomName)
+        {
+
+        }
+
+        //public async Task JoinRoom(string room)
+        //{
+        //    //storing old room to update
+        //    string old_room = _connections[Context.ConnectionId].Room;
             
-            //updating all players in the room
-            return Clients.Group(room).SendAsync("UsersInRoom", users);
-        }
-        public Task SendRoomsAvailable()
-        {
-            //filtering to get all Distinct rooms excluding Lobby
-            var users = _connections.Values;
+        //    //if clicked new room 
+        //    if (room == "new")
+        //        room = _connections[Context.ConnectionId].User + "'s Room";
 
-            List<String> list = new List<String>();
-            for (int i = 0; i < users.Count(); i++)
-                list.Add(users.ElementAt(i).Room);
+        //    //updating groups
+        //    _connections[Context.ConnectionId].Room = room;
+        //    await Groups.AddToGroupAsync(Context.ConnectionId, room);
+        //    await Groups.RemoveFromGroupAsync(Context.ConnectionId, old_room);
 
-            list = list.Distinct().Where(x => x != "Lobby").ToList();
+        //    //sending join message
+        //    await Clients.Group(room)
+        //        .SendAsync(
+        //        "ReceiveMessage", _botUser, $"{_connections[Context.ConnectionId].User} " +
+        //        $"has joined {_connections[Context.ConnectionId].Room}"
+        //        );
 
-            //updating Lobby rooms
-            return Clients.Group("Lobby").SendAsync("ReceiveRooms", list);
-        }
+        //    //updating old room and new room
+        //    await SendUsersConnected(old_room);
+        //    await SendUsersConnected(_connections[Context.ConnectionId].Room);
+
+        //    //updating rooms available
+        //    await SendRoomsAvailable();
+        //}
+
+        //public async Task SendMessage(string message)
+        //{
+        //    //sending a message to all users in current room
+        //    if (_connections.TryGetValue(Context.ConnectionId, out UserConnection userConnection))
+        //    {
+        //        await Clients.Group(userConnection.Room).SendAsync("ReceiveMessage", userConnection.User, message);
+        //    }
+        //}
+
+        //public Task SendUsersConnected(string room)
+        //{
+        //    //getting all room users
+        //    var users = _connections.Values.Where(c => c.Room == room).Select(c => c.User);
+
+        //    //sending the user his current room
+        //    Clients.Group(room).SendAsync("ReceivePage", room);
+            
+        //    //updating all players in the room
+        //    return Clients.Group(room).SendAsync("UsersInRoom", users);
+        //}
+        //public Task SendRoomsAvailable()
+        //{
+        //    //filtering to get all Distinct rooms excluding Lobby
+        //    var users = _connections.Values;
+
+        //    List<String> list = new List<String>();
+        //    for (int i = 0; i < users.Count(); i++)
+        //        list.Add(users.ElementAt(i).Room);
+
+        //    list = list.Distinct().Where(x => x != "Lobby").ToList();
+
+        //    //updating Lobby rooms
+        //    return Clients.Group("Lobby").SendAsync("ReceiveRooms", list);
+        //}
     }
 }

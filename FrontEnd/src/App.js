@@ -39,6 +39,11 @@ const App = () => {
         connection.on("ReceiveMessage", (user, message) => {
           setMessages(messages => [...messages, { user, message }]);
         });
+
+        
+        connection.on("SignInStatus", (user) => {
+          console.log(user);
+        });
         
         //resetting all hooks
         connection.onclose(e => {
@@ -48,11 +53,12 @@ const App = () => {
           setRooms([]);
           setPage();
         });
-  
+
         //on initial connect move to Lobby
         await connection.start();
-        await connection.invoke("SignIn", { user, password });
+        await connection.invoke("SignIn",  user, password );
         setConnection(connection);
+        console.log(connection.connectionId);
       } catch (e) {
         console.log(e);
       }
