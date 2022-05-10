@@ -12,8 +12,6 @@ namespace PokerClassLibrary
         public int? MoneyInTable { get; set; }
         public bool? IsActive { get; set; }
         public short? Position { get; set; }
-
-        public virtual Room Room { get; set; }
         public virtual User UsernameNavigation { get; set; }
     }
 }

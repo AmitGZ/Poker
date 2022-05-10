@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PokerClassLibrary;
 
 namespace Poker.Migrations
 {
     [DbContext(typeof(PokerContext))]
-    partial class PokerContextModelSnapshot : ModelSnapshot
+    [Migration("20220510143642_AddLobbyDto")]
+    partial class AddLobbyDto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

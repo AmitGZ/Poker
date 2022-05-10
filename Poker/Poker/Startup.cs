@@ -32,7 +32,6 @@ namespace Poker
             services.AddDbContext<PokerContext>(options =>
                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-
             services.AddSignalR();
 
             services.AddCors(options =>

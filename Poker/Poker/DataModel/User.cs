@@ -9,7 +9,7 @@ namespace PokerClassLibrary
     {
         public string Username { get; set; }
         public string Password { get; set; }
-        public int? UserMoney { get; set; }
+        public double UserMoney { get; set; }
         public string ConnectionId { get; set; }
     }
 }

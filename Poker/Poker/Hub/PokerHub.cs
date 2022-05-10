@@ -10,12 +10,14 @@ using System.Configuration;
 using Microsoft.Extensions.Configuration;
 using PokerClassLibrary;
 using System.Diagnostics;
+using Poker.DataModel.Dto;
 
 namespace Poker.Hubs
 {
     public class PokerHub : Hub
     {
         private readonly string _botUser;
+        PokerContext db = new PokerContext(options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));// Connect to DB
         //private readonly IDictionary<string, UserConnection> _connections;
         
                                              //private SqlConnection con = new SqlConnection("Data Source=.\\SQLEXPRESS;Initial Catalog=Poker;Integrated Security=True");
@@ -51,16 +53,16 @@ namespace Poker.Hubs
 
         public Task SignIn(string Username, string Password)
         {
-            PokerContext db = new PokerContext();// Connect to DB
             User user = db.Users.FirstOrDefault(u => u.Username == Username);
             if (user == null || user.Password != Password)
             {
-                Clients.Client(Context.ConnectionId).SendAsync("SignInStatus", false);
+                Clients.Client(Context.ConnectionId).SendAsync("SignInStatus", false,null);
                 return null;
             }
 
             user.ConnectionId = Context.ConnectionId;
-            Clients.Client(Context.ConnectionId).SendAsync("SignInStatus",true,user);
+            LobbyDto lobby = new LobbyDto(user,db.Rooms.ToList());
+            Clients.Client(Context.ConnectionId).SendAsync("SignInStatus",true,lobby);
             return null;
         }
 
