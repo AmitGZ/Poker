@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\PokerClassLibrary\\PokerClassLibrary.csproj": {}
+    "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\PokerClassLibrary\\PokerClassLibrary.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\PokerClassLibrary\\PokerClassLibrary.csproj": {
+    "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\PokerClassLibrary\\PokerClassLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\PokerClassLibrary\\PokerClassLibrary.csproj",
+        "projectUniqueName": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\PokerClassLibrary\\PokerClassLibrary.csproj",
         "projectName": "PokerClassLibrary",
-        "projectPath": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\PokerClassLibrary\\PokerClassLibrary.csproj",
+        "projectPath": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\PokerClassLibrary\\PokerClassLibrary.csproj",
         "packagesPath": "C:\\Users\\Amit Zohar\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\PokerClassLibrary\\obj\\",
+        "outputPath": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\PokerClassLibrary\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Amit Zohar\\AppData\\Roaming\\NuGet\\NuGet.Config",

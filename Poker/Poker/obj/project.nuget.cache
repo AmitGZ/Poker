@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "E5lJ4bOCHH7PD8vWMMTwWKmoKJvEOivXews082uk3ROMd30yynJEhD+6Fs38tn51SCu82GAfrvzD1nwtJSUvmQ==",
+  "dgSpecHash": "6QOxJ+wlKDVPKVmEmuQBUYFIyqBXLq/4U28sKE7lZ4CXd+y3tkZLj/6TwY2YzhMguqMwQZ8nbZgWLgpXJmk55g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\Poker\\Poker.csproj",
+  "projectFilePath": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\Poker\\Poker.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Amit Zohar\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Amit Zohar\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

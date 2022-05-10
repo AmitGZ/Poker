@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.32228.343
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Poker", "Poker\Poker.csproj", "{63357C1F-2960-4AF7-9FC3-3EC95644DDA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokerClassLibrary", "PokerClassLibrary\PokerClassLibrary.csproj", "{7B393755-F527-460A-8FEA-AAC8936E1264}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{63357C1F-2960-4AF7-9FC3-3EC95644DDA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63357C1F-2960-4AF7-9FC3-3EC95644DDA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63357C1F-2960-4AF7-9FC3-3EC95644DDA8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7B393755-F527-460A-8FEA-AAC8936E1264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7B393755-F527-460A-8FEA-AAC8936E1264}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7B393755-F527-460A-8FEA-AAC8936E1264}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7B393755-F527-460A-8FEA-AAC8936E1264}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

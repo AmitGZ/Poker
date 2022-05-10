@@ -15,7 +15,7 @@ const App = () => {
   const [rooms,setRooms] = useState([]);
   const [page,setPage] = useState('');
 
-  const joinGame = async (user) => {
+  const joinGame = async (user, password) => {
     try {
       //establishing connection
       const connection = new HubConnectionBuilder()
@@ -25,7 +25,7 @@ const App = () => {
   
         //on update from server
         connection.on("UsersInRoom", (users) => {
-          setUsers(users);
+            setUsers(users);
         });
 
         connection.on("ReceivePage", (page) => {
@@ -50,10 +50,8 @@ const App = () => {
         });
   
         //on initial connect move to Lobby
-        let room ="Lobby"
-        setPage(room)
         await connection.start();
-        await connection.invoke("JoinGame", { user, room });
+        await connection.invoke("SignIn", { user, password });
         setConnection(connection);
       } catch (e) {
         console.log(e);

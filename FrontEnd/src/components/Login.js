@@ -9,7 +9,7 @@ const Login = ({ joinGame }) => {
         <Form className='login'
             onSubmit={e => {
                 e.preventDefault();
-                joinGame(user);
+                joinGame(user,password);
             }} >
             <Form.Group>
                 <Form.Control placeholder="name" onChange={e => setUser(e.target.value)} />

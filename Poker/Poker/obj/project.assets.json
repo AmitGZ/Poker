@@ -1578,21 +1578,6 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
-      },
-      "PokerClassLibrary/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v5.0",
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore": "5.0.16",
-          "Microsoft.EntityFrameworkCore.Relational": "5.0.16",
-          "Microsoft.EntityFrameworkCore.SqlServer": "5.0.16"
-        },
-        "compile": {
-          "bin/placeholder/PokerClassLibrary.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/PokerClassLibrary.dll": {}
-        }
       }
     }
   },
@@ -6010,18 +5995,14 @@
         "system.xml.xmlserializer.4.3.0.nupkg.sha512",
         "system.xml.xmlserializer.nuspec"
       ]
-    },
-    "PokerClassLibrary/1.0.0": {
-      "type": "project",
-      "path": "../PokerClassLibrary/PokerClassLibrary.csproj",
-      "msbuildProject": "../PokerClassLibrary/PokerClassLibrary.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
       "Microsoft.EntityFrameworkCore >= 5.0.16",
+      "Microsoft.EntityFrameworkCore.Relational >= 5.0.16",
+      "Microsoft.EntityFrameworkCore.SqlServer >= 5.0.16",
       "Microsoft.EntityFrameworkCore.Tools >= 5.0.16",
-      "PokerClassLibrary >= 1.0.0",
       "System.Data.SqlClient >= 4.8.3"
     ]
   },
@@ -6031,11 +6012,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\Poker\\Poker.csproj",
+      "projectUniqueName": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\Poker\\Poker.csproj",
       "projectName": "Poker",
-      "projectPath": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\Poker\\Poker.csproj",
+      "projectPath": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\Poker\\Poker.csproj",
       "packagesPath": "C:\\Users\\Amit Zohar\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\Poker\\obj\\",
+      "outputPath": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\Poker\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Amit Zohar\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -6051,11 +6032,7 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
-          "projectReferences": {
-            "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\PokerClassLibrary\\PokerClassLibrary.csproj": {
-              "projectPath": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\PokerClassLibrary\\PokerClassLibrary.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
@@ -6069,6 +6046,14 @@
         "targetAlias": "net5.0",
         "dependencies": {
           "Microsoft.EntityFrameworkCore": {
+            "target": "Package",
+            "version": "[5.0.16, )"
+          },
+          "Microsoft.EntityFrameworkCore.Relational": {
+            "target": "Package",
+            "version": "[5.0.16, )"
+          },
+          "Microsoft.EntityFrameworkCore.SqlServer": {
             "target": "Package",
             "version": "[5.0.16, )"
           },

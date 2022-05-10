@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "O9CaOXHj2mMJEiCfFubjDSThOdebAtOAqh+Te8M8fJjMXtEiIWQp8bpU3a4iXl3Yl/8gWBs8gHsCFZU1wi9ocQ==",
+  "dgSpecHash": "hAmuyTGvDavTrihX0J+HpKUqRyfGHFyFqnGbeBLxDrOHinKOwDI3pLMddfZkBehYcjNcG9xpJo9JDgdoiJTnaQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Amit Zohar\\Desktop\\PokerReact\\Poker\\PokerClassLibrary\\PokerClassLibrary.csproj",
+  "projectFilePath": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\PokerClassLibrary\\PokerClassLibrary.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Amit Zohar\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\Amit Zohar\\.nuget\\packages\\microsoft.data.sqlclient\\2.0.1\\microsoft.data.sqlclient.2.0.1.nupkg.sha512",
