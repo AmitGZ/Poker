@@ -20,8 +20,8 @@ namespace PokerClassLibrary
         {
         }
 
-        public virtual DbSet<Room> Room { get; set; }
-        public virtual DbSet<UserInRoom> UserInRoom { get; set; }
+        public virtual DbSet<Room> Rooms { get; set; }
+        public virtual DbSet<UserInRoom> UsersInRoom { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Card> Cards { get; set; }
         public virtual DbSet<Pot> Pots { get; set; }
@@ -49,7 +49,8 @@ namespace PokerClassLibrary
 
             modelBuilder.Entity<UserInRoom>(entity =>
             {
-                entity.HasNoKey();
+
+                entity.HasKey(e => e.Username);
 
                 entity.Property(e => e.IsActive).HasColumnName("isActive");
 
@@ -60,11 +61,11 @@ namespace PokerClassLibrary
                     .HasMaxLength(50)
                     .HasColumnName("userName");
 
-                entity.HasOne(d => d.Room)
-                    .WithMany()
-                    .HasForeignKey(d => d.RoomId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserInRoo__RoomI__412EB0B6");
+                //entity.HasOne(d => d.Room)
+                //    .WithMany()
+                //    .HasForeignKey(d => d.RoomId)
+                //    .OnDelete(DeleteBehavior.ClientSetNull)
+                //    .HasConstraintName("FK__UserInRoo__RoomI__412EB0B6");
 
                 entity.HasOne(d => d.UsernameNavigation)
                     .WithMany()

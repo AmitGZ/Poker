@@ -10,6 +10,7 @@ using System.Configuration;
 using Microsoft.Extensions.Configuration;
 using PokerClassLibrary;
 using System.Diagnostics;
+using Poker.DataModel.Dto;
 
 namespace Poker.Hubs
 {
@@ -55,12 +56,13 @@ namespace Poker.Hubs
             User user = db.Users.FirstOrDefault(u => u.Username == Username);
             if (user == null || user.Password != Password)
             {
-                await Clients.Client(Context.ConnectionId).SendAsync("SignInStatus", false);
+                await Clients.Client(Context.ConnectionId).SendAsync("SignInStatus", false,null);
                 return;
             }
 
             user.ConnectionId = Context.ConnectionId;
-            await Clients.Client(Context.ConnectionId).SendAsync("SignInStatus",true,user);
+            LobbyDto lobby = new LobbyDto(user,db.Rooms.ToList());
+            await Clients.Client(Context.ConnectionId).SendAsync("SignInStatus",true,lobby);
         }
 
 
