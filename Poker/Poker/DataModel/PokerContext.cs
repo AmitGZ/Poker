@@ -3,6 +3,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Poker.DataModel;
 
 #nullable disable
 
@@ -21,16 +22,17 @@ namespace PokerClassLibrary
 
         public virtual DbSet<Room> Room { get; set; }
         public virtual DbSet<UserInRoom> UserInRoom { get; set; }
-        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Card> Cards { get; set; }
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                //optionsBuilder.UseSqlServer("Data Source=AMITS-PC\\SQLEXPRESS;Initial Catalog=PokerNew;Integrated Security=True;Connect Timeout=30");
-            }
-        }
+        public virtual DbSet<Pot> Pots { get; set; }
+//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//        {
+//            if (!optionsBuilder.IsConfigured)
+//            {
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//                //optionsBuilder.UseSqlServer("Data Source=AMITS-PC\\SQLEXPRESS;Initial Catalog=PokerNew;Integrated Security=True;Connect Timeout=30");
+//            }
+//        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -53,7 +55,7 @@ namespace PokerClassLibrary
 
                 entity.Property(e => e.Position).HasColumnName("position");
 
-                entity.Property(e => e.UserName)
+                entity.Property(e => e.Username)
                     .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("userName");
@@ -64,18 +66,18 @@ namespace PokerClassLibrary
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__UserInRoo__RoomI__412EB0B6");
 
-                entity.HasOne(d => d.UserNameNavigation)
+                entity.HasOne(d => d.UsernameNavigation)
                     .WithMany()
-                    .HasForeignKey(d => d.UserName)
+                    .HasForeignKey(d => d.Username)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__UserInRoo__userN__403A8C7D");
             });
 
-            modelBuilder.Entity<Users>(entity =>
+            modelBuilder.Entity<User>(entity =>
             {
-                entity.HasKey(e => e.UserName);
+                entity.HasKey(e => e.Username);
 
-                entity.Property(e => e.UserName)
+                entity.Property(e => e.Username)
                     .HasMaxLength(50)
                     .HasColumnName("userName");
 
