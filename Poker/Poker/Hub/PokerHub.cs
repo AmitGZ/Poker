@@ -17,6 +17,7 @@ namespace Poker.Hubs
     {
         private readonly string _botUser;
         private readonly IDictionary<string, UserConnection> _connections;
+        PokerContext db = new PokerContext();
         private SqlConnection con = new SqlConnection("Data Source=.\\SQLEXPRESS;Initial Catalog=Poker;Integrated Security=True");
         
         public PokerHub(IDictionary<string, UserConnection> connections)
@@ -51,20 +52,21 @@ namespace Poker.Hubs
 
         public async Task JoinGame(UserConnection userConnection)
         {
-            try
+            /*
+            db.Player.First();
+            var t = new Player()
             {
-                con.Open();
-                SqlCommand insert = new SqlCommand("INSERT INTO Player (userName,userMoney) VALUES('amit',999)", con);
-                SqlCommand com = new SqlCommand("Select * from Player;", con);
-                insert.ExecuteNonQuery();
-                var tmp = com.ExecuteScalar().ToString();
-                con.Close();
+                UserMoney = 992,
+                UserName = "z"
+            };
 
-            }
-            catch(SqlException ex)
-            {
-                Debug.WriteLine(ex.ToString());
-            }
+            var g =db.Player.AsEnumerable();
+            var tmp = db.Player.Find("z");
+            
+
+            db.SaveChanges();
+            */
+
 
             //initializing user at _connections
             _connections[Context.ConnectionId] = userConnection;

@@ -11,21 +11,28 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 using PokerClassLibrary;
+using Microsoft.EntityFrameworkCore;
 
 namespace Poker
 {
     public class Startup
     {
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
 
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("Properties/launchSettings.json", false)
-                .Build();
-            var connectionString = configuration.GetSection("connectionString").Value;
+            
+            services.AddDbContext<PokerContext>(options =>
+               options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
 
             services.AddSignalR();
 
