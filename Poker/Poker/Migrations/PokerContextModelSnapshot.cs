@@ -66,7 +66,9 @@ namespace Poker.Migrations
             modelBuilder.Entity("PokerClassLibrary.Room", b =>
                 {
                     b.Property<int>("RoomId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("DealerPosition")
                         .HasColumnType("int");
@@ -97,9 +99,18 @@ namespace Poker.Migrations
                     b.Property<string>("ConnectionId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("MoneyInTable")
+                        .HasColumnType("int");
+
                     b.Property<string>("Password")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<short?>("Position")
+                        .HasColumnType("smallint");
 
                     b.Property<double>("UserMoney")
                         .HasColumnType("float")
@@ -108,34 +119,6 @@ namespace Poker.Migrations
                     b.HasKey("Username");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("PokerClassLibrary.UserInRoom", b =>
-                {
-                    b.Property<string>("Username")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("userName");
-
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit")
-                        .HasColumnName("isActive");
-
-                    b.Property<int?>("MoneyInTable")
-                        .HasColumnType("int");
-
-                    b.Property<short?>("Position")
-                        .HasColumnType("smallint")
-                        .HasColumnName("position");
-
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Username");
-
-                    b.HasIndex("RoomId");
-
-                    b.ToTable("UsersInRoom");
                 });
 
             modelBuilder.Entity("Poker.DataModel.Pot", b =>
@@ -152,28 +135,9 @@ namespace Poker.Migrations
                         .HasForeignKey("RoomId");
                 });
 
-            modelBuilder.Entity("PokerClassLibrary.UserInRoom", b =>
-                {
-                    b.HasOne("PokerClassLibrary.Room", null)
-                        .WithMany("Players")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PokerClassLibrary.User", "UsernameNavigation")
-                        .WithMany()
-                        .HasForeignKey("Username")
-                        .HasConstraintName("FK__UserInRoo__userN__403A8C7D")
-                        .IsRequired();
-
-                    b.Navigation("UsernameNavigation");
-                });
-
             modelBuilder.Entity("PokerClassLibrary.Room", b =>
                 {
                     b.Navigation("Deck");
-
-                    b.Navigation("Players");
 
                     b.Navigation("Pots");
                 });

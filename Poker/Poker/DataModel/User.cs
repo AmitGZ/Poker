@@ -11,5 +11,8 @@ namespace PokerClassLibrary
         public string Password { get; set; }
         public double UserMoney { get; set; }
         public string ConnectionId { get; set; }
+        public int? MoneyInTable { get; set; }
+        public bool? IsActive { get; set; }
+        public short? Position { get; set; }
     }
 }

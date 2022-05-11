@@ -10,8 +10,8 @@ using PokerClassLibrary;
 namespace Poker.Migrations
 {
     [DbContext(typeof(PokerContext))]
-    [Migration("20220510131607_AddPot")]
-    partial class AddPot
+    [Migration("20220511184739_afterDelete")]
+    partial class afterDelete
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -68,7 +68,9 @@ namespace Poker.Migrations
             modelBuilder.Entity("PokerClassLibrary.Room", b =>
                 {
                     b.Property<int>("RoomId")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("DealerPosition")
                         .HasColumnType("int");
@@ -86,7 +88,7 @@ namespace Poker.Migrations
 
                     b.HasKey("RoomId");
 
-                    b.ToTable("Room");
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("PokerClassLibrary.User", b =>
@@ -99,46 +101,26 @@ namespace Poker.Migrations
                     b.Property<string>("ConnectionId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("MoneyInTable")
+                        .HasColumnType("int");
+
                     b.Property<string>("Password")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("UserMoney")
-                        .HasColumnType("int")
+                    b.Property<short?>("Position")
+                        .HasColumnType("smallint");
+
+                    b.Property<double>("UserMoney")
+                        .HasColumnType("float")
                         .HasColumnName("userMoney");
 
                     b.HasKey("Username");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("PokerClassLibrary.UserInRoom", b =>
-                {
-                    b.Property<bool?>("IsActive")
-                        .HasColumnType("bit")
-                        .HasColumnName("isActive");
-
-                    b.Property<int?>("MoneyInTable")
-                        .HasColumnType("int");
-
-                    b.Property<short?>("Position")
-                        .HasColumnType("smallint")
-                        .HasColumnName("position");
-
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
-                        .HasColumnName("userName");
-
-                    b.HasIndex("RoomId");
-
-                    b.HasIndex("Username");
-
-                    b.ToTable("UserInRoom");
                 });
 
             modelBuilder.Entity("Poker.DataModel.Pot", b =>
@@ -153,25 +135,6 @@ namespace Poker.Migrations
                     b.HasOne("PokerClassLibrary.Room", null)
                         .WithMany("Deck")
                         .HasForeignKey("RoomId");
-                });
-
-            modelBuilder.Entity("PokerClassLibrary.UserInRoom", b =>
-                {
-                    b.HasOne("PokerClassLibrary.Room", "Room")
-                        .WithMany()
-                        .HasForeignKey("RoomId")
-                        .HasConstraintName("FK__UserInRoo__RoomI__412EB0B6")
-                        .IsRequired();
-
-                    b.HasOne("PokerClassLibrary.User", "UsernameNavigation")
-                        .WithMany()
-                        .HasForeignKey("Username")
-                        .HasConstraintName("FK__UserInRoo__userN__403A8C7D")
-                        .IsRequired();
-
-                    b.Navigation("Room");
-
-                    b.Navigation("UsernameNavigation");
                 });
 
             modelBuilder.Entity("PokerClassLibrary.Room", b =>

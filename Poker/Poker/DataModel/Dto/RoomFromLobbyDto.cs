@@ -12,7 +12,7 @@ namespace Poker.DataModel.Dto
         {
             RoomId = room.RoomId;
             RoomName = room.RoomName;
-            NumberOfPlayers = room.Players.Count;
+            //NumberOfPlayers = room.Players.Count;
         }
     }
 }

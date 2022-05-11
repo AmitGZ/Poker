@@ -12,7 +12,7 @@ namespace PokerClassLibrary
         public string RoomName { get; set; }
         public List<Card> Deck { get; set; }
         public List<Pot> Pots { get; set; }
-        public List<UserInRoom> Players = new List<UserInRoom>();
+        public List<User> Players = new List<User>();
         public int TalkingPosition { get; set; }
         public int DealerPosition { get; set; }
         public int? Pot { get; set; }

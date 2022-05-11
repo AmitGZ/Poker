@@ -58,3 +58,4 @@ C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\obj\Debug\net5.0\Poker.dll
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\obj\Debug\net5.0\ref\Poker.dll
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\obj\Debug\net5.0\Poker.pdb
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\obj\Debug\net5.0\Poker.genruntimeconfig.cache
+C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\obj\Debug\net5.0\Poker.csproj.AssemblyReference.cache

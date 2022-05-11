@@ -44,14 +44,14 @@ namespace Poker.Data
                 // Adding New Rooms
                 var Rooms = new Room[]
                 {
-                new Room{RoomName = "Test2", RoomId = 456, Players = new List<UserInRoom>()}
+                new Room{RoomName = "Test" }//Players = new List<User>()}
                 };
                 foreach (Room r in Rooms)
                 {
                     context.Rooms.Add(r);
                 }
 
-                context.SaveChanges();
+                int status = context.SaveChanges();
             }
         }
     }
