@@ -40,9 +40,15 @@ const App = () => {
           setMessages(messages => [...messages, { user, message }]);
         });
 
-        
-        connection.on("SignInStatus", (user) => {
-          console.log(user);
+        // On receiving sign in confirmation/rejection
+        connection.on("SignInStatus", (status, lobbyDto) => {
+          if(!status){
+            alert("Incorrect username or password");
+            return;
+          }
+          console.log(lobbyDto.rooms);
+          setPage("Lobby");
+          setRooms(lobbyDto.rooms);
         });
         
         //resetting all hooks
@@ -58,7 +64,6 @@ const App = () => {
         await connection.start();
         await connection.invoke("SignIn",  user, password );
         setConnection(connection);
-        console.log(connection.connectionId);
       } catch (e) {
         console.log(e);
       }

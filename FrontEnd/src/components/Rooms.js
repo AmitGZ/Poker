@@ -5,8 +5,9 @@ const Rooms = ({ rooms , joinRoom , setPage}) => (
         <h4>Available Rooms</h4>
         <Button variant="primary" key = "new" onClick={() => {joinRoom("new")}}>New Room</Button>
         {
+
             rooms.map(room=>(
-                <Button key = {room} onClick={() => {joinRoom(room)}}>{room}</Button>
+                <Button key = {room.RoomId} onClick={() => {joinRoom(room.RoomName)}}>{room.RoomName}</Button>
             ))
         }
     </div>
