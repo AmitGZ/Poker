@@ -40,7 +40,7 @@ namespace PokerClassLibrary
 
             modelBuilder.Entity<Room>(entity =>
             {
-                entity.Property(e => e.RoomId).ValueGeneratedNever();
+                entity.Property(e => e.RoomId).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.RoomName)
                     .IsRequired()

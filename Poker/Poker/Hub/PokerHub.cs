@@ -17,13 +17,12 @@ namespace Poker.Hubs
     public class PokerHub : Hub
     {
         private readonly string _botUser;
-        PokerContext db = new PokerContext(options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));// Connect to DB
-        //private readonly IDictionary<string, UserConnection> _connections;
-        
-                                             //private SqlConnection con = new SqlConnection("Data Source=.\\SQLEXPRESS;Initial Catalog=Poker;Integrated Security=True");
+        PokerContext _db;
 
-        public PokerHub()
+        //private SqlConnection con = new SqlConnection("Data Source=.\\SQLEXPRESS;Initial Catalog=Poker;Integrated Security=True");
+        public PokerHub(PokerContext db)
         {
+            _db = db;
             _botUser = "notification";   //notification user name          
         }
 
@@ -53,7 +52,7 @@ namespace Poker.Hubs
 
         public Task SignIn(string Username, string Password)
         {
-            User user = db.Users.FirstOrDefault(u => u.Username == Username);
+            User user = _db.Users.FirstOrDefault(u => u.Username == Username);
             if (user == null || user.Password != Password)
             {
                 Clients.Client(Context.ConnectionId).SendAsync("SignInStatus", false,null);
@@ -61,9 +60,9 @@ namespace Poker.Hubs
             }
 
             user.ConnectionId = Context.ConnectionId;
-            LobbyDto lobby = new LobbyDto(user,db.Rooms.ToList());
+            LobbyDto lobby = new LobbyDto(user,_db.Rooms.ToList());
             Clients.Client(Context.ConnectionId).SendAsync("SignInStatus",true,lobby);
-            return null;
+            return Task.CompletedTask;
         }
 
 
