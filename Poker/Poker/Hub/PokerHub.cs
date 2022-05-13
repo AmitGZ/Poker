@@ -55,20 +55,35 @@ namespace Poker.Hubs
             User user = _db.Users.FirstOrDefault(u => u.Username == Username);
             if (user == null || user.Password != Password)
             {
-                Clients.Client(Context.ConnectionId).SendAsync("SignInStatus", false,null);
+                Clients.Client(Context.ConnectionId).SendAsync("SignInStatus", false);
                 return null;
             }
 
             user.ConnectionId = Context.ConnectionId;
-            LobbyDto lobby = new LobbyDto(user,_db.Rooms.ToList());
-            Clients.Client(Context.ConnectionId).SendAsync("SignInStatus",true,lobby);
+            Clients.Client(Context.ConnectionId).SendAsync("SignInStatus", true);
+            Clients.Client(Context.ConnectionId).SendAsync("AllRoomsStatus", new LobbyDto(_db.Rooms.ToList()));
+            Clients.Client(Context.ConnectionId).SendAsync("UserStatus", new UserDto(user));
+
+            _db.SaveChanges();
             return Task.CompletedTask;
         }
 
 
         public async Task JoinRoom(int RoomId)
         {
+            User user = _db.Users.First(u => u.ConnectionId == Context.ConnectionId);
+            Room room = _db.Rooms.First(r => r.RoomId == RoomId);
+            if (user == null || room == null || room.Players.Count() > 5)
+                return;
 
+            room.Players.Add(user);
+            _db.Rooms.ToList()[0].Players.Add(user);
+            user.UserMoney = 999;
+            await _db.SaveChangesAsync();
+
+            LobbyDto lobbyDto = new LobbyDto(_db.Rooms.ToList());
+            await Clients.Clients(room.Players.Select(p => p.ConnectionId)).SendAsync("RoomStatus", new RoomFromLobbyDto(room));
+            await Clients.All.SendAsync("AllRoomsStatus", lobbyDto);
         }
         public async Task CreateRoom(int RoomId,string RoomName)
         {
@@ -104,14 +119,17 @@ namespace Poker.Hubs
         //    await SendRoomsAvailable();
         //}
 
-        //public async Task SendMessage(string message)
-        //{
-        //    //sending a message to all users in current room
-        //    if (_connections.TryGetValue(Context.ConnectionId, out UserConnection userConnection))
-        //    {
-        //        await Clients.Group(userConnection.Room).SendAsync("ReceiveMessage", userConnection.User, message);
-        //    }
-        //}
+        public Task SendMessage(string message)
+        {
+            User user = _db.Users.FirstOrDefault(u => u.ConnectionId == Context.ConnectionId);
+            Room room = _db.Rooms.FirstOrDefault(r => 1==1);
+            if (room == null)
+                return null;
+
+            //sending a message to all users in current room
+            Clients.Clients(room.Players.Select(p => p.ConnectionId)).SendAsync("ReceiveMessage", user.Username, message);
+            return Task.CompletedTask;
+        }
 
         //public Task SendUsersConnected(string room)
         //{

@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-import Lobby from './components/Lobby';
 import Login from './components/Login';
-import Chat from './components/Chat';
 import Game from './components/Game';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,42 +11,46 @@ const App = () => {
   const [messages, setMessages] = useState([]);
   const [users, setUsers] = useState([]);
   const [rooms,setRooms] = useState([]);
+  const [user, setUser] = useState({});
   const [page,setPage] = useState('');
 
-  const joinGame = async (user, password) => {
+  const joinGame = async (username, password) => {
     try {
       //establishing connection
       const connection = new HubConnectionBuilder()
         .withUrl("https://localhost:44382/poker")
         .configureLogging(LogLevel.Information)
         .build();
-  
-        //on update from server
-        connection.on("UsersInRoom", (users) => {
-            setUsers(users);
+
+        connection.on("RoomStatus", (status) => {
+          setPage(status.roomName);
         });
 
-        connection.on("ReceivePage", (page) => {
-          setPage(page);
+        connection.on("ReceiveMessage", (username, message) => {
+          console.log(username );
+          setMessages(messages => [...messages, { username, message }]);
         });
 
-        connection.on("ReceiveRooms", (rooms) => {
-          setRooms(rooms);
-        });
-
-        connection.on("ReceiveMessage", (user, message) => {
-          setMessages(messages => [...messages, { user, message }]);
+        connection.on("AllRoomsStatus", (status) => {
+          console.log(status);
+          setRooms(status.rooms);
         });
 
         // On receiving sign in confirmation/rejection
-        connection.on("SignInStatus", (status, lobbyDto) => {
+        connection.on("SignInStatus", (status) => {
           if(!status){
             alert("Incorrect username or password");
             return;
           }
-          console.log(lobbyDto.rooms);
           setPage("Lobby");
-          setRooms(lobbyDto.rooms);
+        });
+
+        // Username and money
+        connection.on("UserStatus", (status) => {
+        setUser({
+          username: status.username,
+          money: status.money
+          });
         });
         
         //resetting all hooks
@@ -62,16 +64,16 @@ const App = () => {
 
         //on initial connect move to Lobby
         await connection.start();
-        await connection.invoke("SignIn",  user, password );
+        await connection.invoke("SignIn",  username, password );
         setConnection(connection);
       } catch (e) {
         console.log(e);
       }
   }
-  const joinRoom = async (room) => {
+  const joinRoom = async (roomId) => {
     try {    
       setMessages([]);      // clearing all messages on room leave  
-      await connection.invoke("JoinRoom", room);      //invoking join to the new room
+      await connection.invoke("JoinRoom", roomId);      //invoking join to the new room
     } catch (e) {
       console.log(e);
     }
@@ -99,12 +101,25 @@ const App = () => {
     <div style={{ zIndex : '-2',backgroundImage: `url(${background})` , height: '120%', width:'100%', position:'absolute'}}> 
       <div className='bounding-box'>
         <div className='background-gray'/>
+        {( Object.keys(user).length !== 0 )&& // Check if user is defined
+          <div>
+            <h4 style= {{textAlign: "left", position:"absolute", padding:"10px"}}>Hello {user.username}!</h4>
+            <h4 style= {{textAlign: "right", padding:"10px"}}>{user.money}$</h4>
+          </div>
+        }   
         <div className='app'>
           <h2>Poker Online</h2>
           <hr className='line' />
             {!connection ?
               <Login joinGame={joinGame} setPage = {setPage} /> : 
-              <Game page ={page} joinRoom={joinRoom} rooms = {rooms} sendMessage = {sendMessage} messages = {messages} users = {users}/>
+              <Game page ={page} 
+                    joinRoom={joinRoom} 
+                    rooms = {rooms} 
+                    sendMessage = {sendMessage} 
+                    messages = {messages} 
+                    users = {users}
+                    user ={user}
+              />
             }
         </div>
       </div>

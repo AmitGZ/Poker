@@ -1,4 +1,6 @@
 ﻿using PokerClassLibrary;
+using System.Collections.Generic;
+using System;
 
 namespace Poker.DataModel.Dto
 {
@@ -8,11 +10,14 @@ namespace Poker.DataModel.Dto
         public string RoomName { get; set; }
         public int NumberOfPlayers { get; set; }
 
+        public List<User> Players { get; set; }
+
         public RoomFromLobbyDto(Room room)
         {
+            NumberOfPlayers = room.Players.Count;
             RoomId = room.RoomId;
             RoomName = room.RoomName;
-            //NumberOfPlayers = room.Players.Count;
+            Players = room.Players;
         }
     }
 }

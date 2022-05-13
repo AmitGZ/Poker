@@ -7,7 +7,7 @@ import Lobby from './Lobby';
 import images_src from "../resources/index"
 
 
-const Table = ({ joinRoom, sendMessage, messages, users, page}) => {
+const Table = ({ joinRoom, sendMessage, messages, users}) => {
     //setting width and height for playing canvas
     const WIDTH = 946;
     const HEIGHT = Math.round(WIDTH *0.519);
@@ -66,7 +66,7 @@ const Table = ({ joinRoom, sendMessage, messages, users, page}) => {
                 </div>
             </div>
         </div>
-        <Chat sendMessage={sendMessage} messages={messages} users={users} joinRoom = {joinRoom} page = {page}/>
+        <Chat sendMessage={sendMessage} messages={messages} users={users} joinRoom = {joinRoom}/>
     </div>
     )
 }

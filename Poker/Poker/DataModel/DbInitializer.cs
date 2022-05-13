@@ -38,6 +38,7 @@ namespace Poker.Data
                 context.Rooms.Remove(r);
             }
             context.SaveChanges();
+
             // Look for any Rooms.
             if (!context.Rooms.Any())
             {
