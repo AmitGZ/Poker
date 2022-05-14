@@ -8,13 +8,8 @@ import Table from './Table';
 
 
 const Game = ({ joinRoom, LeaveRoom, rooms, sendMessage, messages, users , createRoom, user}) => {
-    console.log(user);
     return (
         <div>
-            <div>
-                <h4 style= {{textAlign: "left", position:"absolute", padding:"10px"}}>Hello {user.username}!</h4>
-                <h4 style= {{textAlign: "right", padding:"10px"}}>{user.money}$</h4>
-            </div>
             {
             (user.roomId == null)?
                 <Lobby joinRoom={joinRoom} createRoom = {createRoom} rooms = {rooms} user = {user}/> :

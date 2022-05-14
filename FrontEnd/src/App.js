@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import Login from './components/Login';
 import Game from './components/Game';
+import UserStats from './components/UserStats';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import background from './resources/background.png'
@@ -107,7 +108,8 @@ const App = () => {
   }
 
   const LeaveRoom = async () => {
-    await connection.invoke("LeaveRoom");      //invoking send message
+     //invoking send message
+    await connection.invoke("LeaveRoom");   
     try {
     } catch (e) {
       console.log(e);
@@ -118,6 +120,7 @@ const App = () => {
     <div style={{ zIndex : '-2',backgroundImage: `url(${background})` , height: '120%', width:'100%', position:'absolute'}}> 
       <div className='bounding-box'>
         <div className='background-gray'/>
+        {connection && <UserStats user= {user}/>}
         <div className='app'>
           <h2>Poker Online</h2>
           <hr className='line' />

@@ -26,7 +26,6 @@ hr.line {
 
 .app {
     margin: auto;
-    padding-top: 40px;
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;
