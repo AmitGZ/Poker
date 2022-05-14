@@ -22,7 +22,6 @@ const NewRoomButton = ({createRoom, user, enterMoney}) => {
 
     function onClick(){
         setToggle(toggle.state?hide:show)
-        console.log(user)
     }
 
     return (

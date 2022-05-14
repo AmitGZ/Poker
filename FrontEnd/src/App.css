@@ -125,6 +125,10 @@ hr.line {
     transform: translate(-50%, -50%);
 }
 
+.css-3g5hux-Slider {
+    background-color: #7d0015 !important;
+}
+
 .background-gray{
     z-index: -1;
     height: 100%;

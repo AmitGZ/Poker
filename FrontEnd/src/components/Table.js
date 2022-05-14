@@ -7,10 +7,16 @@ import Lobby from './Lobby';
 import images_src from "../resources/index"
 
 
-const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users}) => {
+const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users, user}) => {
     //setting width and height for playing canvas
     const WIDTH = 946;
     const HEIGHT = Math.round(WIDTH *0.519);
+    const USER_SIZE = 100;
+    const POSITIONS = [[WIDTH/2, 400],[184,337],[217,84]];
+    const TEXT_OFFSET = 77;
+    POSITIONS[3] = [WIDTH - POSITIONS[2][0] ,POSITIONS[2][1] ];
+    POSITIONS[4] = [WIDTH - POSITIONS[1][0] ,POSITIONS[1][1] ];
+    const PLAYER_NUM = 5;
 
     //number of images to load
     var image_num = Object.keys(images_src).length;
@@ -18,10 +24,23 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users}) => {
     //used to keep track of how many images loaded
     const [loaded_num, setLoadedNum] = useState(0);
 
-    //array of loaded images
+    // Asrray of loaded images
     const [loaded_img, setLoadedImg] = useState();
 
-    //loading all images upon window loading
+    const drawUser = (context, position, user) => {
+        context.drawImage(loaded_img['user'],
+        POSITIONS[position][0] - USER_SIZE/2,
+        POSITIONS[position][1] - USER_SIZE/2,
+        USER_SIZE,
+        USER_SIZE);
+        context.font = "20px Arial";
+        context.fillStyle = "white";
+        context.textAlign = "center";
+        context.backgroundColor = "white";
+        context.fillText(user.username, POSITIONS[position][0], POSITIONS[position][1] + TEXT_OFFSET);
+    }
+
+    // Loading all images upon window loading
     useEffect(()=>{
         //loading all assets
         setLoadedImg(()=>{
@@ -38,13 +57,19 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users}) => {
     },[])
 
     useEffect(()=>{
-        //if not loaded yet return
+        // If not loaded yet return
         if(loaded_num < image_num)
             return;
 
-        //render
+        // Render
         var ctx = document.getElementById("myCanvas").getContext("2d");
         ctx.drawImage(loaded_img['poker_table'],0,0,WIDTH,HEIGHT)
+
+
+        for(let i =0; i<users.length; i++){
+            drawUser(ctx, (users[i]._position - user.position +PLAYER_NUM) % PLAYER_NUM, users[i])
+        }
+
     },[loaded_num])
 
     return (

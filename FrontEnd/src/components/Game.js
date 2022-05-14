@@ -13,7 +13,8 @@ const Game = ({ joinRoom, LeaveRoom, rooms, sendMessage, messages, users , creat
             {
             (user.roomId == null)?
                 <Lobby joinRoom={joinRoom} createRoom = {createRoom} rooms = {rooms} user = {user}/> :
-                <Table joinRoom={joinRoom} LeaveRoom = {LeaveRoom} sendMessage = {sendMessage} messages = {messages} users = {users}/>
+                <Table joinRoom={joinRoom} LeaveRoom = {LeaveRoom} sendMessage = {sendMessage}
+                messages = {messages} users = {users} user = {user}/>
             }
         </div>
     )

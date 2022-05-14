@@ -25,7 +25,7 @@ const App = () => {
 
         connection.on("RoomStatus", (room) => {
           setUsers(room._players);
-          // Add
+          // Add functionality
         });
 
         connection.on("ReceiveMessage", (username, message) => {
@@ -50,7 +50,8 @@ const App = () => {
         setUser({
             username: status._username,
             money: status._money,
-            roomId: status._roomId
+            roomId: status._roomId,
+            position: status._position
           });
         });
         

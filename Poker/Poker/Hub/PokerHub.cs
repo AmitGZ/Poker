@@ -74,10 +74,14 @@ namespace Poker.Hubs
             if (user == null || room == null)
                 return null;
 
+            //getting all players in room
+            List<User> playersInRoom = _db.Users.Where(u => u._roomId == roomId).ToList();
+
             // Adding the player to the room
             user._roomId = roomId;
             user._money -= enterMoney;
             user._moneyInTable = enterMoney;
+            user._position = (short?)(playersInRoom.Count());
             _db.SaveChanges();
 
             // TODO check if room is empty, and delete
@@ -86,7 +90,7 @@ namespace Poker.Hubs
             RoomDto roomDto = lobbyDto._rooms.FirstOrDefault(r => r._id == roomId);
 
             // Sending everyone in the room the status
-            List<User> playersInRoom = _db.Users.Where(u => u._roomId == roomId).ToList();
+            playersInRoom.Add(user);
             Clients.Clients(playersInRoom.Select(p => p._connectionId)).SendAsync("RoomStatus", roomDto);
             
             // Sending everyone new rooms status
@@ -102,11 +106,12 @@ namespace Poker.Hubs
         {
             // Getting the user, room, and players in room
             User user = _db.Users.FirstOrDefault(u => u._connectionId == Context.ConnectionId);
+            if (user == null) return null;
+
             Room room = _db.Rooms.FirstOrDefault(r => r._id == user._roomId);
 
             // Verifying room and user exist
-            if (user == null || room == null)
-                return null;
+            if (room == null) return null;
 
             // Returning player to lobby
             user._roomId = null;

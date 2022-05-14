@@ -10,7 +10,7 @@ using PokerClassLibrary;
 namespace Poker.Migrations
 {
     [DbContext(typeof(PokerContext))]
-    [Migration("20220514145132_changeMoneyType")]
+    [Migration("20220514185233_changeMoneyType")]
     partial class changeMoneyType
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
