@@ -24,43 +24,48 @@ namespace PokerClassLibrary
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Card> Cards { get; set; }
         public virtual DbSet<Pot> Pots { get; set; }
-//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//        {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                //optionsBuilder.UseSqlServer("Data Source=AMITS-PC\\SQLEXPRESS;Initial Catalog=PokerNew;Integrated Security=True;Connect Timeout=30");
-//            }
-//        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Hebrew_CI_AS");
 
+            // Room
             modelBuilder.Entity<Room>(entity =>
             {
-                entity.Property(e => e.RoomId).ValueGeneratedOnAdd();
+                entity.HasKey(e => e._id);
 
-                entity.Property(e => e.RoomName)
+                entity.Property(e => e._id).ValueGeneratedOnAdd() ;
+
+                entity.Property(e => e._name)
                     .IsRequired()
                     .HasMaxLength(50);
             });
 
-
+            // User
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasKey(e => e.Username);
+                entity.HasKey(e => e._username);
 
-                entity.Property(e => e.Username)
+                entity.Property(e => e._username)
                     .HasMaxLength(50)
                     .HasColumnName("userName");
 
-                entity.Property(e => e.Password).HasMaxLength(50);
+                entity.Property(e => e._password).HasMaxLength(50);
 
-                entity.Property(e => e.UserMoney).HasColumnName("userMoney");
+                entity.Property(e => e._money).HasColumnName("userMoney");
             });
 
-            
+            // Pot
+            modelBuilder.Entity<Pot>(entity =>
+            {
+                entity.HasKey(e => e._id);
+            });
+
+            // Card
+            modelBuilder.Entity<Card>(entity =>
+            {
+                entity.HasKey(e => e._id);
+            });
 
             OnModelCreatingPartial(modelBuilder);
         }

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 const MessageContainer = ({ messages }) => {
     const messageRef = useRef();
-
+    console.log(messages)
     useEffect(() => {
         if (messageRef && messageRef.current) {
             const { scrollHeight, clientHeight } = messageRef.current;
@@ -14,7 +14,7 @@ const MessageContainer = ({ messages }) => {
         {messages.map((m, index) =>
             <div key={index} className='user-message'>
                 <div className='message bg-primary'>{m.message}</div>
-                <div className='from-user'>{m.user}</div>
+                <div className='from-user'>{m.username}</div>
             </div>
         )}
     </div>

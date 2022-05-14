@@ -8,13 +8,13 @@ namespace Poker.DataModel.Dto
 {
     public class UserDto
     {
-        public string Username { get; set; }
-        public double Money { get; set; }
+        public string _username { get; set; }
+        public double _money { get; set; }
 
         public UserDto(User user)
         {
-            this.Username = user.Username;
-            this.Money = user.UserMoney;
+            this._username = user._username;
+            this._money = user._money;
         }
     }
 }

@@ -22,18 +22,17 @@ const App = () => {
         .configureLogging(LogLevel.Information)
         .build();
 
-        connection.on("RoomStatus", (status) => {
-          setPage(status.roomName);
+        connection.on("RoomStatus", (room) => {
+          setPage(room._Name);
         });
 
         connection.on("ReceiveMessage", (username, message) => {
-          console.log(username );
+          console.log(username);
           setMessages(messages => [...messages, { username, message }]);
         });
 
         connection.on("AllRoomsStatus", (status) => {
-          console.log(status);
-          setRooms(status.rooms);
+          setRooms(status._rooms);
         });
 
         // On receiving sign in confirmation/rejection
@@ -48,8 +47,8 @@ const App = () => {
         // Username and money
         connection.on("UserStatus", (status) => {
         setUser({
-          username: status.username,
-          money: status.money
+          username: status._username,
+          money: status._money
           });
         });
         
@@ -58,6 +57,7 @@ const App = () => {
           setConnection();
           setMessages([]);
           setUsers([]);
+          setUser({});
           setRooms([]);
           setPage();
         });
@@ -103,6 +103,7 @@ const App = () => {
         <div className='background-gray'/>
         {( Object.keys(user).length !== 0 )&& // Check if user is defined
           <div>
+            {/*TODO remove from here*/}
             <h4 style= {{textAlign: "left", position:"absolute", padding:"10px"}}>Hello {user.username}!</h4>
             <h4 style= {{textAlign: "right", padding:"10px"}}>{user.money}$</h4>
           </div>

@@ -6,10 +6,10 @@ namespace PokerClassLibrary
 {
     public class Card
     {
-        
-        public int CardId { get; set; }
+        public int _id { get; set; }
         public enum CardType { Clubs, Spades, Hearts, Diamonds }
-        public CardType Type { get; set; }
-        public int Number { get; set; }
+        public CardType _type { get; set; }
+        public int _number { get; set; }
+        public int _roomId { get; set; }
     }
 }

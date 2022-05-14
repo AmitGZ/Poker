@@ -10,50 +10,48 @@ namespace Poker.Data
         {
             context.Database.EnsureCreated();
 
-            // Look for any Users.
-            if (!context.Users.Any())
+            // Removing all Users
+            foreach (var u in context.Users)
             {
-                // Adding New Users
-                var Users = new User[]
-                {
-                new User{Username="Amit",    Password="1234",     UserMoney=123},
-                new User{Username="Ofek",    Password="1234",     UserMoney=123},
-                new User{Username="Arturo",  Password="Anand",    UserMoney=123},
-                new User{Username="Gytis",   Password="Barzdukas",UserMoney=123},
-                new User{Username="Yan",     Password="Li",       UserMoney=123},
-                new User{Username="Peggy",   Password="Justice",  UserMoney=123},
-                new User{Username="Laura",   Password="Norman",   UserMoney=123},
-                new User{Username="Nino",    Password="Olivetto", UserMoney=123}
-                };
-                foreach (User s in Users)
-                {
-                    context.Users.Add(s);
-                }
-
-                context.SaveChanges();
+                context.Users.Remove(u);
             }
 
+            // Adding New Users
+            var Users = new User[]
+            {
+            new User{_username="Amit",    _password="1234",      _money=123},
+            new User{_username="Ofek",    _password="1234",      _money=123},
+            new User{_username="Arturo",  _password="Anand",     _money=123},
+            new User{_username="Gytis",   _password="Barzdukas", _money=123},
+            new User{_username="Yan",     _password="Li",        _money=123},
+            new User{_username="Peggy",   _password="Justice",   _money=123},
+            new User{_username="Laura",   _password="Norman",    _money=123},
+            new User{_username="Nino",    _password="Olivetto",  _money=123}
+            };
+            foreach (User s in Users)
+            {
+                context.Users.Add(s);
+            }
+            context.SaveChanges();
+            
+            // Removing all Rooms
             foreach (var r in context.Rooms)
             {
                 context.Rooms.Remove(r);
             }
+
+            // Adding New Rooms
+            var Rooms = new Room[]
+            {
+            new Room{_name = "Test" }
+            };
+
+            foreach (Room r in Rooms)
+            {
+                context.Rooms.Add(r);
+            }
             context.SaveChanges();
 
-            // Look for any Rooms.
-            if (!context.Rooms.Any())
-            {
-                // Adding New Rooms
-                var Rooms = new Room[]
-                {
-                new Room{RoomName = "Test" }//Players = new List<User>()}
-                };
-                foreach (Room r in Rooms)
-                {
-                    context.Rooms.Add(r);
-                }
-
-                int status = context.SaveChanges();
-            }
         }
     }
 }
