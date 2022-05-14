@@ -7,7 +7,7 @@ namespace Poker.DataModel.Dto
 {
     public class RoomDto
     {
-        public int _id{ get; set; }
+        public string _id{ get; set; }
         public string _name { get; set; }
         public int _numberOfPlayers { get; set; }
         public List<User> _players { get; set; }

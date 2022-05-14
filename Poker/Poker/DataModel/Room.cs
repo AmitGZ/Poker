@@ -10,7 +10,7 @@ namespace PokerClassLibrary
 {
     public partial class Room
     {
-        public int _id { get; set; }
+        public string _id { get; set; }
         public string _name { get; set; }
 
         // TODO Create one to many relationship

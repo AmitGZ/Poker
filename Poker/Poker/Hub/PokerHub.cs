@@ -77,7 +77,7 @@ namespace Poker.Hubs
         }
 
 
-        public Task JoinRoom(int roomId)
+        public Task JoinRoom(string roomId, int enterMoney)
         {
             // Getting the user, room, and players in room
             User user = _db.Users.FirstOrDefault(u => u._connectionId == Context.ConnectionId);
@@ -89,6 +89,8 @@ namespace Poker.Hubs
 
             // Adding the player to the room
             user._roomId = roomId;
+            user._money -= enterMoney;
+            user._moneyInTable = enterMoney;
             _db.SaveChanges();
 
             LobbyDto lobbyDto = new LobbyDto(_db.Rooms.ToList(), _db.Users.ToList());
@@ -100,15 +102,51 @@ namespace Poker.Hubs
             
             // Sending everyone new rooms status
             Clients.All.SendAsync("AllRoomsStatus", lobbyDto);
-            
+
+            // Sending User's status
+            Clients.Client(Context.ConnectionId).SendAsync("UserStatus", new UserDto(user));
+
             return Task.CompletedTask;
         }
-        public Task CreateRoom(string roomName)
+
+        public Task LeaveRoom()
+        {
+            // Getting the user, room, and players in room
+            User user = _db.Users.FirstOrDefault(u => u._connectionId == Context.ConnectionId);
+            Room room = _db.Rooms.FirstOrDefault(r => r._id == user._roomId);
+
+            // Verifying room and user exist
+            if (user == null || room == null)
+                return null;
+
+            // Returning player to lobby
+            user._roomId = null;
+            user._money += (int)user._moneyInTable;
+            _db.SaveChanges();
+
+            LobbyDto lobbyDto = new LobbyDto(_db.Rooms.ToList(), _db.Users.ToList());
+            RoomDto roomDto = lobbyDto._rooms.FirstOrDefault(r => r._id == room._id);
+
+            // Sending everyone in the room the status
+            List<User> playersInRoom = _db.Users.Where(u => u._roomId == room._id).ToList();
+            Clients.Clients(playersInRoom.Select(p => p._connectionId)).SendAsync("RoomStatus", roomDto);
+
+            // Sending everyone new rooms status
+            Clients.All.SendAsync("AllRoomsStatus", lobbyDto);
+
+            // Sending User's status
+            Clients.Client(Context.ConnectionId).SendAsync("UserStatus", new UserDto(user));
+            Clients.Client(Context.ConnectionId).SendAsync("SignInStatus", true);
+
+            return Task.CompletedTask;
+        }
+
+        public Task CreateRoom(string roomName, int enterMoney)
         {
             Room room = new Room() { _name = roomName };
             _db.Rooms.Add(room);
             _db.SaveChanges();
-            JoinRoom(room._id);
+            JoinRoom(room._id, enterMoney);
             return Task.CompletedTask;
         }
 

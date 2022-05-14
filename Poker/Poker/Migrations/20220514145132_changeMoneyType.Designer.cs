@@ -10,8 +10,8 @@ using PokerClassLibrary;
 namespace Poker.Migrations
 {
     [DbContext(typeof(PokerContext))]
-    [Migration("20220514085021_fixedRelationships")]
-    partial class fixedRelationships
+    [Migration("20220514145132_changeMoneyType")]
+    partial class changeMoneyType
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,8 +29,8 @@ namespace Poker.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<double>("_money")
-                        .HasColumnType("float");
+                    b.Property<int>("_money")
+                        .HasColumnType("int");
 
                     b.Property<int>("_roomId")
                         .HasColumnType("int");
@@ -63,10 +63,9 @@ namespace Poker.Migrations
 
             modelBuilder.Entity("PokerClassLibrary.Room", b =>
                 {
-                    b.Property<int>("_id")
+                    b.Property<string>("_id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("_dealerPosition")
                         .HasColumnType("int");
@@ -100,8 +99,8 @@ namespace Poker.Migrations
                     b.Property<bool?>("_isActive")
                         .HasColumnType("bit");
 
-                    b.Property<double>("_money")
-                        .HasColumnType("float")
+                    b.Property<int>("_money")
+                        .HasColumnType("int")
                         .HasColumnName("userMoney");
 
                     b.Property<int?>("_moneyInTable")
@@ -114,8 +113,8 @@ namespace Poker.Migrations
                     b.Property<short?>("_position")
                         .HasColumnType("smallint");
 
-                    b.Property<int?>("_roomId")
-                        .HasColumnType("int");
+                    b.Property<string>("_roomId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("_username");
 

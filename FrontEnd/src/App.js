@@ -5,6 +5,7 @@ import Game from './components/Game';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import background from './resources/background.png'
+import { ConsoleLogger } from '@microsoft/signalr/dist/esm/Utils';
 
 const App = () => {
   const [connection, setConnection] = useState();
@@ -12,7 +13,6 @@ const App = () => {
   const [users, setUsers] = useState([]);
   const [rooms,setRooms] = useState([]);
   const [user, setUser] = useState({});
-  const [page,setPage] = useState('');
 
   const joinGame = async (username, password) => {
     try {
@@ -23,7 +23,8 @@ const App = () => {
         .build();
 
         connection.on("RoomStatus", (room) => {
-          setPage(room._Name);
+          setUsers(room._players);
+          // Add
         });
 
         connection.on("ReceiveMessage", (username, message) => {
@@ -41,14 +42,14 @@ const App = () => {
             alert("Incorrect username or password");
             return;
           }
-          setPage("Lobby");
         });
 
         // Username and money
         connection.on("UserStatus", (status) => {
         setUser({
-          username: status._username,
-          money: status._money
+            username: status._username,
+            money: status._money,
+            roomId: status._roomId
           });
         });
         
@@ -59,7 +60,6 @@ const App = () => {
           setUsers([]);
           setUser({});
           setRooms([]);
-          setPage();
         });
 
         //on initial connect move to Lobby
@@ -70,23 +70,23 @@ const App = () => {
         console.log(e);
       }
   }
-  const joinRoom = async (roomId) => {
+
+  const joinRoom = async (roomId, enterMoney) => {
     try {    
       setMessages([]);      // clearing all messages on room leave  
-      await connection.invoke("JoinRoom", roomId);      //invoking join to the new room
+      await connection.invoke("JoinRoom", roomId, enterMoney);      //invoking join to the new room
     } catch (e) {
       console.log(e);
     }
   }
 
-
-const createRoom = async (roomName) => {
-  try {  
-    await connection.invoke("createRoom", roomName);      //invoking join to the new room
-  } catch (e) {
-    console.log(e);
+  const createRoom = async (roomName, enterMoney) => {
+    try {
+      await connection.invoke("createRoom", roomName, parseInt(enterMoney));      //invoking join to the new room
+    } catch (e) {
+      console.log(e);
+    }
   }
-}
 
   const sendMessage = async (message) => {
     try {
@@ -106,32 +106,31 @@ const createRoom = async (roomName) => {
     }
   }
 
+  const LeaveRoom = async () => {
+    await connection.invoke("LeaveRoom");      //invoking send message
+    try {
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <div style={{ zIndex : '-2',backgroundImage: `url(${background})` , height: '120%', width:'100%', position:'absolute'}}> 
       <div className='bounding-box'>
         <div className='background-gray'/>
-
-        {( Object.keys(user).length !== 0 )&& // Check if user is defined
-          <div>
-            {/*TODO remove from here*/}
-            <h4 style= {{textAlign: "left", position:"absolute", padding:"10px"}}>Hello {user.username}!</h4>
-            <h4 style= {{textAlign: "right", padding:"10px"}}>{user.money}$</h4>
-          </div>
-        }
-
         <div className='app'>
           <h2>Poker Online</h2>
           <hr className='line' />
             {!connection ?
-              <Login joinGame={joinGame} setPage = {setPage} /> : 
-              <Game page ={page} 
-                    joinRoom={joinRoom} 
+              <Login joinGame={joinGame} /> : 
+              <Game joinRoom={joinRoom} 
                     rooms = {rooms} 
                     sendMessage = {sendMessage} 
                     messages = {messages} 
                     users = {users}
                     user ={user}
                     createRoom = {createRoom}
+                    LeaveRoom = {LeaveRoom}
               />
             }
         </div>

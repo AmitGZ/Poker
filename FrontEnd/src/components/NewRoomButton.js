@@ -5,7 +5,7 @@ import Login from './Login';
 import NewRoomForm from "./NewRoomForm"
 
 
-const NewRoomButton = ({createRoom, user}) => {
+const NewRoomButton = ({createRoom, user, enterMoney}) => {
     let show ={
         state: true,
             color:'green',
@@ -35,7 +35,7 @@ const NewRoomButton = ({createRoom, user}) => {
         className = 'btn' > {toggle.text}
         </Button>
 
-        {toggle.state || <NewRoomForm createRoom = {createRoom} user = {user}/>}
+        {toggle.state || <NewRoomForm createRoom = {createRoom} user = {user} enterMoney = {enterMoney}/>}
     </div>
     );
 };

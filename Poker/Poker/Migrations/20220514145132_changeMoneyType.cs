@@ -2,7 +2,7 @@
 
 namespace Poker.Migrations
 {
-    public partial class fixedRelationships : Migration
+    public partial class changeMoneyType : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,7 +27,7 @@ namespace Poker.Migrations
                 {
                     _id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    _money = table.Column<double>(type: "float", nullable: false),
+                    _money = table.Column<int>(type: "int", nullable: false),
                     _roomId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -39,8 +39,7 @@ namespace Poker.Migrations
                 name: "Rooms",
                 columns: table => new
                 {
-                    _id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    _id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     _name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     _talkingPosition = table.Column<int>(type: "int", nullable: true),
                     _dealerPosition = table.Column<int>(type: "int", nullable: true),
@@ -57,12 +56,12 @@ namespace Poker.Migrations
                 {
                     userName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     _password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    userMoney = table.Column<double>(type: "float", nullable: false),
+                    userMoney = table.Column<int>(type: "int", nullable: false),
                     _connectionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     _moneyInTable = table.Column<int>(type: "int", nullable: true),
                     _isActive = table.Column<bool>(type: "bit", nullable: true),
                     _position = table.Column<short>(type: "smallint", nullable: true),
-                    _roomId = table.Column<int>(type: "int", nullable: true)
+                    _roomId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

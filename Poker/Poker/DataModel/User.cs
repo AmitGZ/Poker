@@ -9,11 +9,11 @@ namespace PokerClassLibrary
     {
         public string _username { get; set; }
         public string _password { get; set; }
-        public double _money { get; set; }
+        public int _money { get; set; }
         public string? _connectionId { get; set; }
         public int? _moneyInTable { get; set; }
         public bool? _isActive { get; set; }
         public short? _position { get; set; }
-        public int? _roomId { get; set; }
+        public string? _roomId { get; set; }
     }
 }

@@ -7,7 +7,7 @@ import Lobby from './Lobby';
 import images_src from "../resources/index"
 
 
-const Table = ({ joinRoom, sendMessage, messages, users}) => {
+const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users}) => {
     //setting width and height for playing canvas
     const WIDTH = 946;
     const HEIGHT = Math.round(WIDTH *0.519);
@@ -57,7 +57,7 @@ const Table = ({ joinRoom, sendMessage, messages, users}) => {
                 height={HEIGHT}>
             </canvas>
             <div style = {{position:'absolute'}}>
-                <Button style = {{position:'absolute'}} variant='danger' onClick={() => joinRoom("Lobby")}>Leave Room</Button>
+                <Button style = {{position:'absolute'}} variant='danger' onClick={() => LeaveRoom()}>Leave Room</Button>
                 <div className='button-list' style = {{marginLeft :`${WIDTH*3/5}px`, marginTop :`${HEIGHT*2/3}px`}}>
                     <Button  variant="dark" key = "Check" onClick={() =>{console.log("Check")}}>Check</Button>
                     <Button  variant="dark" key = "Call" onClick={() => {console.log("Call")}}>Call</Button>

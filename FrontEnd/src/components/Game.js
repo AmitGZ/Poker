@@ -7,13 +7,18 @@ import Lobby from './Lobby';
 import Table from './Table';
 
 
-const Game = ({ joinRoom, rooms, sendMessage, messages, users ,page, createRoom, user}) => {
+const Game = ({ joinRoom, LeaveRoom, rooms, sendMessage, messages, users , createRoom, user}) => {
+    console.log(user);
     return (
         <div>
+            <div>
+                <h4 style= {{textAlign: "left", position:"absolute", padding:"10px"}}>Hello {user.username}!</h4>
+                <h4 style= {{textAlign: "right", padding:"10px"}}>{user.money}$</h4>
+            </div>
             {
-            (page ===  "Lobby")?
+            (user.roomId == null)?
                 <Lobby joinRoom={joinRoom} createRoom = {createRoom} rooms = {rooms} user = {user}/> :
-                <Table joinRoom={joinRoom} sendMessage = {sendMessage} messages = {messages} users = {users}/>
+                <Table joinRoom={joinRoom} LeaveRoom = {LeaveRoom} sendMessage = {sendMessage} messages = {messages} users = {users}/>
             }
         </div>
     )
