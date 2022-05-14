@@ -37,7 +37,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users, user}) => {
         context.fillStyle = "white";
         context.textAlign = "center";
         context.backgroundColor = "white";
-        context.fillText(user.username, POSITIONS[position][0], POSITIONS[position][1] + TEXT_OFFSET);
+        context.fillText(user._username, POSITIONS[position][0], POSITIONS[position][1] + TEXT_OFFSET);
     }
 
     // Loading all images upon window loading
@@ -70,7 +70,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users, user}) => {
             drawUser(ctx, (users[i]._position - user.position +PLAYER_NUM) % PLAYER_NUM, users[i])
         }
 
-    },[loaded_num])
+    },[loaded_num, users])
 
     return (
     <div>
