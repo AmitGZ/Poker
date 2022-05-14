@@ -34,7 +34,7 @@ namespace PokerClassLibrary
             {
                 entity.HasKey(e => e._id);
 
-                entity.Property(e => e._id).ValueGeneratedOnAdd() ;
+                entity.Property(e => e._id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e._name)
                     .IsRequired()

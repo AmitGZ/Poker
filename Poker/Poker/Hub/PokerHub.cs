@@ -50,11 +50,11 @@ namespace Poker.Hubs
             return Task.CompletedTask;
         }
 
-        public Task SignIn(string Username, string Password)
+        public Task SignIn(string username, string password)
         {
             // Checking if user exists and verifying
-            User user = _db.Users.FirstOrDefault(u => u._username == Username);
-            if (user == null || user._password != Password)
+            User user = _db.Users.FirstOrDefault(u => u._username == username);
+            if (user == null || user._password != password)
             {
                 Clients.Client(Context.ConnectionId).SendAsync("SignInStatus", false);
                 return null;
@@ -103,9 +103,13 @@ namespace Poker.Hubs
             
             return Task.CompletedTask;
         }
-        public async Task CreateRoom(int RoomId,string RoomName)
+        public Task CreateRoom(string roomName)
         {
-
+            Room room = new Room() { _name = roomName };
+            _db.Rooms.Add(room);
+            _db.SaveChanges();
+            JoinRoom(room._id);
+            return Task.CompletedTask;
         }
 
         //public async Task JoinRoom(string room)

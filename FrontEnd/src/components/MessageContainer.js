@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 
 const MessageContainer = ({ messages }) => {
     const messageRef = useRef();
-    console.log(messages)
     useEffect(() => {
         if (messageRef && messageRef.current) {
             const { scrollHeight, clientHeight } = messageRef.current;

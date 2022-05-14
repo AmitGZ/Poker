@@ -79,6 +79,15 @@ const App = () => {
     }
   }
 
+
+const createRoom = async (roomName) => {
+  try {  
+    await connection.invoke("createRoom", roomName);      //invoking join to the new room
+  } catch (e) {
+    console.log(e);
+  }
+}
+
   const sendMessage = async (message) => {
     try {
       await connection.invoke("SendMessage", message);      //invoking send message
@@ -101,13 +110,15 @@ const App = () => {
     <div style={{ zIndex : '-2',backgroundImage: `url(${background})` , height: '120%', width:'100%', position:'absolute'}}> 
       <div className='bounding-box'>
         <div className='background-gray'/>
+
         {( Object.keys(user).length !== 0 )&& // Check if user is defined
           <div>
             {/*TODO remove from here*/}
             <h4 style= {{textAlign: "left", position:"absolute", padding:"10px"}}>Hello {user.username}!</h4>
             <h4 style= {{textAlign: "right", padding:"10px"}}>{user.money}$</h4>
           </div>
-        }   
+        }
+
         <div className='app'>
           <h2>Poker Online</h2>
           <hr className='line' />
@@ -120,6 +131,7 @@ const App = () => {
                     messages = {messages} 
                     users = {users}
                     user ={user}
+                    createRoom = {createRoom}
               />
             }
         </div>

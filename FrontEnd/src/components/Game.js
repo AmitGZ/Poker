@@ -7,12 +7,12 @@ import Lobby from './Lobby';
 import Table from './Table';
 
 
-const Game = ({ joinRoom, rooms, sendMessage, messages, users ,page, user}) => {
+const Game = ({ joinRoom, rooms, sendMessage, messages, users ,page, createRoom, user}) => {
     return (
         <div>
             {
             (page ===  "Lobby")?
-                <Lobby joinRoom={joinRoom} rooms = {rooms}/> :
+                <Lobby joinRoom={joinRoom} createRoom = {createRoom} rooms = {rooms} user = {user}/> :
                 <Table joinRoom={joinRoom} sendMessage = {sendMessage} messages = {messages} users = {users}/>
             }
         </div>
