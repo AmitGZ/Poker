@@ -43,15 +43,12 @@ namespace Poker.Hubs
             User user = _db.Users.FirstOrDefault(u => u._username == username);
             if (user == null || user._password != password)
             {
-                Clients.Client(Context.ConnectionId).SendAsync("SignInStatus", false);
+                Clients.Client(Context.ConnectionId).SendAsync("Alert", "Invalid username or password");
                 return null;
             }
 
             // Setting user's ConnectionId
             user._connectionId = Context.ConnectionId;
-
-            // Sending successful sign in 
-            Clients.Client(Context.ConnectionId).SendAsync("SignInStatus", true);
 
             // Sending room status
             Clients.Client(Context.ConnectionId).SendAsync("AllRoomsStatus", new LobbyDto(_db.Rooms.ToList(), _db.Users.ToList()));
@@ -76,15 +73,25 @@ namespace Poker.Hubs
 
             //getting all players in room
             List<User> playersInRoom = _db.Users.Where(u => u._roomId == roomId).ToList();
+            if (playersInRoom.Count == 5)
+            {
+                Clients.Client(Context.ConnectionId).SendAsync("Alert", "Room is full!");
+                return null;
+            }
+
+            // Getting available position
+            List<short?> positions = playersInRoom.Select(p => p._position).ToList();
+            short pos = 0;
+            for ( ;pos<5; pos++)
+                if (!positions.Contains(pos))
+                    break;
 
             // Adding the player to the room
             user._roomId = roomId;
             user._money -= enterMoney;
             user._moneyInTable = enterMoney;
-            user._position = (short?)(playersInRoom.Count());
+            user._position = pos;
             _db.SaveChanges();
-
-            // TODO check if room is empty, and delete
 
             LobbyDto lobbyDto = new LobbyDto(_db.Rooms.ToList(), _db.Users.ToList());
             RoomDto roomDto = lobbyDto._rooms.FirstOrDefault(r => r._id == roomId);
@@ -118,19 +125,23 @@ namespace Poker.Hubs
             user._money += (int)user._moneyInTable;
             _db.SaveChanges();
 
-            LobbyDto lobbyDto = new LobbyDto(_db.Rooms.ToList(), _db.Users.ToList());
-            RoomDto roomDto = lobbyDto._rooms.FirstOrDefault(r => r._id == room._id);
-
             // Sending everyone in the room the status
             List<User> playersInRoom = _db.Users.Where(u => u._roomId == room._id).ToList();
-            Clients.Clients(playersInRoom.Select(p => p._connectionId)).SendAsync("RoomStatus", roomDto);
-
+            if (playersInRoom.Count() == 0)
+            {
+                _db.Rooms.Remove(room);
+                _db.SaveChanges();
+            }
+            else
+            {
+                // Sending everyone in the room the status
+                Clients.Clients(playersInRoom.Select(p => p._connectionId)).SendAsync("RoomStatus", new RoomDto(room, _db.Users.ToList()));
+            }
             // Sending everyone new rooms status
-            Clients.All.SendAsync("AllRoomsStatus", lobbyDto);
+            Clients.All.SendAsync("AllRoomsStatus", new LobbyDto(_db.Rooms.ToList(), _db.Users.ToList()));
 
             // Sending User's status
             Clients.Client(Context.ConnectionId).SendAsync("UserStatus", new UserDto(user));
-            Clients.Client(Context.ConnectionId).SendAsync("SignInStatus", true);
 
             return Task.CompletedTask;
         }

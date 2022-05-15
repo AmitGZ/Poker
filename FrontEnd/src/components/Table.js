@@ -8,7 +8,7 @@ import images_src from "../resources/index"
 
 
 const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users, user}) => {
-    //setting width and height for playing canvas
+    // CONSTANTS
     const WIDTH = 946;
     const HEIGHT = Math.round(WIDTH *0.519);
     const USER_SIZE = 100;
@@ -17,6 +17,16 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users, user}) => {
     POSITIONS[3] = [WIDTH - POSITIONS[2][0] ,POSITIONS[2][1] ];
     POSITIONS[4] = [WIDTH - POSITIONS[1][0] ,POSITIONS[1][1] ];
     const PLAYER_NUM = 5;
+    const CARD_PROPORTIONS = 6;
+    const CARD_WIDTH = 500/ CARD_PROPORTIONS;
+    const CARD_HEIGHT = 726/ CARD_PROPORTIONS; 
+    const CARD_OFFSET = [95,120];
+    const CARD_POSITIONS = [];
+    const CARD_SPACINGS = 6;
+    for(var i =-2; i<3; i++){
+        CARD_POSITIONS.push([WIDTH/2 + (i * (CARD_WIDTH+CARD_SPACINGS)), HEIGHT*9/20]);
+    }
+
 
     //number of images to load
     var image_num = Object.keys(images_src).length;
@@ -28,16 +38,45 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users, user}) => {
     const [loaded_img, setLoadedImg] = useState();
 
     const drawUser = (context, position, user) => {
+        // Drawing user image
         context.drawImage(loaded_img['user'],
         POSITIONS[position][0] - USER_SIZE/2,
         POSITIONS[position][1] - USER_SIZE/2,
         USER_SIZE,
         USER_SIZE);
+
+        var offset = 1
+        if(position<3)
+            offset = -1;
+
+        // Drawing cards
+        for(var i =0; i<2; i++){
+            context.drawImage(loaded_img['ten_of_hearts'],
+            POSITIONS[position][0] - CARD_WIDTH/2 + offset* CARD_OFFSET[i],
+            POSITIONS[position][1] - CARD_HEIGHT/2,
+            CARD_WIDTH,
+            CARD_HEIGHT);
+        }
+
+        // Writing User name and money
         context.font = "20px Arial";
         context.fillStyle = "white";
         context.textAlign = "center";
         context.backgroundColor = "white";
-        context.fillText(user._username, POSITIONS[position][0], POSITIONS[position][1] + TEXT_OFFSET);
+        context.fillText(user._username + "\n" + user._moneyInTable+'$',
+        POSITIONS[position][0],
+        POSITIONS[position][1] + TEXT_OFFSET
+        );
+    }
+    const drawTableCards = (context) => {
+        // Loading cards on table
+        for(var i =0; i<5; i++){
+            context.drawImage(loaded_img['ace_of_spades'],
+            CARD_POSITIONS[i][0] - CARD_WIDTH/2,
+            CARD_POSITIONS[i][1] - CARD_HEIGHT/2,
+            CARD_WIDTH,
+            CARD_HEIGHT);
+        }
     }
 
     // Loading all images upon window loading
@@ -69,6 +108,8 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users, user}) => {
         for(let i =0; i<users.length; i++){
             drawUser(ctx, (users[i]._position - user.position +PLAYER_NUM) % PLAYER_NUM, users[i])
         }
+
+        drawTableCards(ctx);
 
     },[loaded_num, users])
 

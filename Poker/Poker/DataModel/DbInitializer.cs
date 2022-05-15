@@ -19,14 +19,14 @@ namespace Poker.Data
             // Adding New Users
             var Users = new User[]
             {
-            new User{_username="Amit",    _password="1234",      _money=123},
-            new User{_username="Ofek",    _password="1234",      _money=123},
-            new User{_username="Arturo",  _password="Anand",     _money=123},
-            new User{_username="Gytis",   _password="Barzdukas", _money=123},
-            new User{_username="Yan",     _password="Li",        _money=123},
-            new User{_username="Peggy",   _password="Justice",   _money=123},
-            new User{_username="Laura",   _password="Norman",    _money=123},
-            new User{_username="Nino",    _password="Olivetto",  _money=123}
+            new User{_username="Amit",    _password="1234",      _money=1000},
+            new User{_username="Ofek",    _password="1234",      _money=1000},
+            new User{_username="Arturo",  _password="Anand",     _money=1000},
+            new User{_username="Gytis",   _password="Barzdukas", _money=1000},
+            new User{_username="Yan",     _password="Li",        _money=1000},
+            new User{_username="Peggy",   _password="Justice",   _money=1000},
+            new User{_username="Laura",   _password="Norman",    _money=1000},
+            new User{_username="Nino",    _password="Olivetto",  _money=1000}
             };
             foreach (User s in Users)
             {

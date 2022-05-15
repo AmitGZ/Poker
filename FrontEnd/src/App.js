@@ -38,11 +38,9 @@ const App = () => {
         });
 
         // On receiving sign in confirmation/rejection
-        connection.on("SignInStatus", (status) => {
-          if(!status){
-            alert("Incorrect username or password");
-            return;
-          }
+        connection.on("Alert", (status) => {
+          alert(status);
+          return;
         });
 
         // Username and money
