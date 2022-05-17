@@ -7,17 +7,17 @@ namespace Poker.DataModel.Dto
 {
     public class RoomDto
     {
-        public string _id{ get; set; }
-        public string _name { get; set; }
-        public int _numberOfPlayers { get; set; }
-        public List<User> _players { get; set; }
+        public string Id{ get; set; }
+        public string Name { get; set; }
+        public int NumberOfPlayers { get; set; }
+        public List<User> Users { get; set; }
 
-        public RoomDto(Room room, List<User> users)
+        public RoomDto(Room room)
         {
-            _id = room._id;
-            _name = room._name;
-            _players = users.Where(u => u._roomId == room._id).ToList();
-            _numberOfPlayers = _players.Count;
+            Id = room.Id;
+            Name = room.Name;
+            Users = room.Users.ToList();
+            NumberOfPlayers = room.Users.Count;
         }
     }
 }

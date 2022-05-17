@@ -10,8 +10,8 @@ using PokerClassLibrary;
 namespace Poker.Migrations
 {
     [DbContext(typeof(PokerContext))]
-    [Migration("20220514185233_changeMoneyType")]
-    partial class changeMoneyType
+    [Migration("20220517083030_oneToManyPoker")]
+    partial class oneToManyPoker
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,101 +24,143 @@ namespace Poker.Migrations
 
             modelBuilder.Entity("Poker.DataModel.Pot", b =>
                 {
-                    b.Property<int>("_id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("_money")
+                    b.Property<int>("Money")
                         .HasColumnType("int");
 
-                    b.Property<int>("_roomId")
+                    b.Property<int>("RoomId")
                         .HasColumnType("int");
 
-                    b.HasKey("_id");
+                    b.Property<string>("RoomId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId1");
 
                     b.ToTable("Pots");
                 });
 
             modelBuilder.Entity("PokerClassLibrary.Card", b =>
                 {
-                    b.Property<int>("_id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("_number")
+                    b.Property<int>("Number")
                         .HasColumnType("int");
 
-                    b.Property<int>("_roomId")
+                    b.Property<int>("RoomId")
                         .HasColumnType("int");
 
-                    b.Property<int>("_type")
+                    b.Property<string>("RoomId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.HasKey("_id");
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId1");
 
                     b.ToTable("Cards");
                 });
 
             modelBuilder.Entity("PokerClassLibrary.Room", b =>
                 {
-                    b.Property<string>("_id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("_dealerPosition")
+                    b.Property<int?>("DealerPosition")
                         .HasColumnType("int");
 
-                    b.Property<string>("_name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("_pot")
+                    b.Property<int?>("Pot")
                         .HasColumnType("int");
 
-                    b.Property<int?>("_talkingPosition")
+                    b.Property<int?>("TalkingPosition")
                         .HasColumnType("int");
 
-                    b.HasKey("_id");
+                    b.HasKey("Id");
 
                     b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("PokerClassLibrary.User", b =>
                 {
-                    b.Property<string>("_username")
+                    b.Property<string>("Username")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("userName");
 
-                    b.Property<string>("_connectionId")
+                    b.Property<string>("ConnectionId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("_isActive")
+                    b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int>("_money")
+                    b.Property<int>("Money")
                         .HasColumnType("int")
                         .HasColumnName("userMoney");
 
-                    b.Property<int?>("_moneyInTable")
+                    b.Property<int?>("MoneyInTable")
                         .HasColumnType("int");
 
-                    b.Property<string>("_password")
+                    b.Property<string>("Password")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<short?>("_position")
+                    b.Property<short?>("Position")
                         .HasColumnType("smallint");
 
-                    b.Property<string>("_roomId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("RoomId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("_username");
+                    b.HasKey("Username");
+
+                    b.HasIndex("RoomId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Poker.DataModel.Pot", b =>
+                {
+                    b.HasOne("PokerClassLibrary.Room", null)
+                        .WithMany("Pots")
+                        .HasForeignKey("RoomId1");
+                });
+
+            modelBuilder.Entity("PokerClassLibrary.Card", b =>
+                {
+                    b.HasOne("PokerClassLibrary.Room", null)
+                        .WithMany("Deck")
+                        .HasForeignKey("RoomId1");
+                });
+
+            modelBuilder.Entity("PokerClassLibrary.User", b =>
+                {
+                    b.HasOne("PokerClassLibrary.Room", null)
+                        .WithMany("Users")
+                        .HasForeignKey("RoomId");
+                });
+
+            modelBuilder.Entity("PokerClassLibrary.Room", b =>
+                {
+                    b.Navigation("Deck");
+
+                    b.Navigation("Pots");
+
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

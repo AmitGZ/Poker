@@ -10,15 +10,20 @@ namespace PokerClassLibrary
 {
     public partial class Room
     {
-        public string _id { get; set; }
-        public string _name { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public List<Card> Deck { get; set; }
+        public List<Pot> Pots { get; set; }
+        public virtual List<User> Users { get; set; }
+        public int? TalkingPosition { get; set; }
+        public int? DealerPosition { get; set; }
+        public int? Pot { get; set; }
 
-        // TODO Create one to many relationship
-        //public List<Card> _deck { get; set; }
-        //public List<Pot> _pots { get; set; }
-        //public List<User> _players { get ; set ;}
-        public int? _talkingPosition { get; set; }
-        public int? _dealerPosition { get; set; }
-        public int? _pot { get; set; }
+        public Room()
+        {
+            this.Users = new List<User>();
+            this.Deck = new List<Card>();
+            this.Pots = new List<Pot>();
+        }
     }
 }

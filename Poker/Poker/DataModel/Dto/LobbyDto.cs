@@ -6,15 +6,15 @@ namespace Poker.DataModel.Dto
 {
     public class LobbyDto
     {
-        public List<RoomDto> _rooms { get; set; }
+        public List<RoomDto> Rooms { get; set; }
 
-        public LobbyDto(List<Room> rooms, List<User> users)
+        public LobbyDto(List<Room> rooms)
         {
-            _rooms = new List<RoomDto>();
+            Rooms = new List<RoomDto>();
             foreach(var room in rooms)
             {
-                RoomDto roomDto = new RoomDto(room, users);
-                _rooms.Add(roomDto);
+                RoomDto roomDto = new RoomDto(room);
+                Rooms.Add(roomDto);
             }
         }
     }

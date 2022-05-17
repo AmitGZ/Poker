@@ -18,7 +18,7 @@ const Rooms = ({ rooms , joinRoom, createRoom, user}) => {
         <NewRoomButton createRoom = {createRoom} user = {user} enterMoney = {enterMoney.x}/>
         {
             rooms.map(room=>(
-                <Button key = {room._id} onClick={() => {joinRoom(room._id, enterMoney.x)}}>{room._name} {room._numberOfPlayers}/5</Button>
+                <Button key = {room.id} onClick={() => {joinRoom(room.id, enterMoney.x)}}>{room.name} {room.numberOfPlayers}/5</Button>
             ))
         }
     </div>);

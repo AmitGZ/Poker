@@ -5,8 +5,8 @@ namespace Poker.DataModel
 {
     public class Pot
     {
-        public int _id { get; set; }
-        public int _money { get; set; }
-        public int _roomId { get; set; }
+        public int Id { get; set; }
+        public int Money { get; set; }
+        public int RoomId { get; set; }
     }
 }

@@ -24,7 +24,8 @@ const App = () => {
         .build();
 
         connection.on("RoomStatus", (room) => {
-          setUsers(room._players);
+          console.log(room.users)
+          setUsers(room.users);
           // Add functionality
         });
 
@@ -34,7 +35,8 @@ const App = () => {
         });
 
         connection.on("AllRoomsStatus", (status) => {
-          setRooms(status._rooms);
+          console.log(status);
+          setRooms(status.rooms);
         });
 
         // On receiving sign in confirmation/rejection
@@ -46,10 +48,10 @@ const App = () => {
         // Username and money
         connection.on("UserStatus", (status) => {
         setUser({
-            username: status._username,
-            money: status._money,
-            roomId: status._roomId,
-            position: status._position
+            username: status.username,
+            money: status.money,
+            roomId: status.roomId,
+            position: status.position
           });
         });
         

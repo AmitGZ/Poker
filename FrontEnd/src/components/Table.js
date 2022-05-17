@@ -13,9 +13,9 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users, user}) => {
     const HEIGHT = Math.round(WIDTH *0.519);
     const USER_SIZE = 100;
     const POSITIONS = [[WIDTH/2, 400],[184,337],[217,84]];
-    const TEXT_OFFSET = 77;
     POSITIONS[3] = [WIDTH - POSITIONS[2][0] ,POSITIONS[2][1] ];
     POSITIONS[4] = [WIDTH - POSITIONS[1][0] ,POSITIONS[1][1] ];
+    const TEXT_OFFSET = 77;
     const PLAYER_NUM = 5;
     const CARD_PROPORTIONS = 6;
     const CARD_WIDTH = 500/ CARD_PROPORTIONS;
@@ -26,7 +26,6 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users, user}) => {
     for(var i =-2; i<3; i++){
         CARD_POSITIONS.push([WIDTH/2 + (i * (CARD_WIDTH+CARD_SPACINGS)), HEIGHT*9/20]);
     }
-
 
     //number of images to load
     var image_num = Object.keys(images_src).length;
@@ -63,7 +62,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users, user}) => {
         context.fillStyle = "white";
         context.textAlign = "center";
         context.backgroundColor = "white";
-        context.fillText(user._username + "\n" + user._moneyInTable+'$',
+        context.fillText(user.username + "\n" + user.moneyInTable+'$',
         POSITIONS[position][0],
         POSITIONS[position][1] + TEXT_OFFSET
         );
@@ -106,7 +105,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users, user}) => {
 
 
         for(let i =0; i<users.length; i++){
-            drawUser(ctx, (users[i]._position - user.position +PLAYER_NUM) % PLAYER_NUM, users[i])
+            drawUser(ctx, (users[i].position - user.position +PLAYER_NUM) % PLAYER_NUM, users[i])
         }
 
         drawTableCards(ctx);

@@ -7,13 +7,13 @@ namespace PokerClassLibrary
 {
     public partial class User
     {
-        public string _username { get; set; }
-        public string _password { get; set; }
-        public int _money { get; set; }
-        public string? _connectionId { get; set; }
-        public int? _moneyInTable { get; set; }
-        public bool? _isActive { get; set; }
-        public short? _position { get; set; }
-        public string? _roomId { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public int Money { get; set; }
+        public string? ConnectionId { get; set; }
+        public int? MoneyInTable { get; set; }
+        public bool? IsActive { get; set; }
+        public short? Position { get; set; }
+        public string? RoomId { get; set; }
     }
 }

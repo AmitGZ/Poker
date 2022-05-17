@@ -19,14 +19,14 @@ namespace Poker.Data
             // Adding New Users
             var Users = new User[]
             {
-            new User{_username="Amit",    _password="1234",      _money=1000},
-            new User{_username="Ofek",    _password="1234",      _money=1000},
-            new User{_username="Arturo",  _password="Anand",     _money=1000},
-            new User{_username="Gytis",   _password="Barzdukas", _money=1000},
-            new User{_username="Yan",     _password="Li",        _money=1000},
-            new User{_username="Peggy",   _password="Justice",   _money=1000},
-            new User{_username="Laura",   _password="Norman",    _money=1000},
-            new User{_username="Nino",    _password="Olivetto",  _money=1000}
+            new User{Username="Amit",    Password="1234",      Money=1000},
+            new User{Username="Ofek",    Password="1234",      Money=1000},
+            new User{Username="Golan",   Password="1234",      Money=1000},
+            new User{Username="Gytis",   Password="Barzdukas", Money=1000},
+            new User{Username="Yan",     Password="Li",        Money=1000},
+            new User{Username="Peggy",   Password="Justice",   Money=1000},
+            new User{Username="Laura",   Password="Norman",    Money=1000},
+            new User{Username="Nino",    Password="Olivetto",  Money=1000}
             };
             foreach (User s in Users)
             {
@@ -43,15 +43,17 @@ namespace Poker.Data
             // Adding New Rooms
             var Rooms = new Room[]
             {
-            new Room{_name = "Test" }
+            new Room{Name = "Test" }
             };
 
+            Rooms[0].Users.Add(context.Users.FirstOrDefault(u =>u.Username == "Ofek"));
+            
             foreach (Room r in Rooms)
             {
                 context.Rooms.Add(r);
             }
-            context.SaveChanges();
 
+            context.SaveChanges();
         }
     }
 }

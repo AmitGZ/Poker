@@ -32,11 +32,11 @@ namespace PokerClassLibrary
             // Room
             modelBuilder.Entity<Room>(entity =>
             {
-                entity.HasKey(e => e._id);
+                entity.HasKey(e => e.Id);
 
-                entity.Property(e => e._id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-                entity.Property(e => e._name)
+                entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
             });
@@ -44,27 +44,29 @@ namespace PokerClassLibrary
             // User
             modelBuilder.Entity<User>(entity =>
             {
-                entity.HasKey(e => e._username);
+                entity.HasKey(e => e.Username);
 
-                entity.Property(e => e._username)
+                entity.Property(e => e.Username)
                     .HasMaxLength(50)
                     .HasColumnName("userName");
 
-                entity.Property(e => e._password).HasMaxLength(50);
+                entity.Property(e => e.Password).HasMaxLength(50);
 
-                entity.Property(e => e._money).HasColumnName("userMoney");
+                entity.Property(e => e.Money).HasColumnName("userMoney");
+
+                entity.HasOne<Room>().WithMany(room => room.Users).HasForeignKey(user => user.RoomId).IsRequired(false);
             });
 
             // Pot
             modelBuilder.Entity<Pot>(entity =>
             {
-                entity.HasKey(e => e._id);
+                entity.HasKey(e => e.Id);
             });
 
             // Card
             modelBuilder.Entity<Card>(entity =>
             {
-                entity.HasKey(e => e._id);
+                entity.HasKey(e => e.Id);
             });
 
             OnModelCreatingPartial(modelBuilder);

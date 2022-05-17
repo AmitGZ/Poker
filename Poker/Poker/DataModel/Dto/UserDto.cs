@@ -8,17 +8,17 @@ namespace Poker.DataModel.Dto
 {
     public class UserDto
     {
-        public string _username { get; set; }
-        public int _money { get; set; }
-        public string? _roomId { get; set; }
-        public short? _position { get; set; }
+        public string Username { get; set; }
+        public int Money { get; set; }
+        public string? RoomId { get; set; }
+        public short? Position { get; set; }
 
         public UserDto(User user)
         {
-            this._username = user._username;
-            this._money = user._money;
-            this._roomId = user._roomId;
-            this._position = user._position;
+            this.Username = user.Username;
+            this.Money = user.Money;
+            this.RoomId = user.RoomId;
+            this.Position = user.Position;
         }
     }
 }
