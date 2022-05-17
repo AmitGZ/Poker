@@ -12,8 +12,8 @@ namespace PokerClassLibrary
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public List<Card> Deck { get; set; }
-        public List<Pot> Pots { get; set; }
+        public virtual List<Card> Deck { get; set; }
+        public virtual List<Pot> Pots { get; set; }
         public virtual List<User> Users { get; set; }
         public int? TalkingPosition { get; set; }
         public int? DealerPosition { get; set; }
@@ -24,6 +24,11 @@ namespace PokerClassLibrary
             this.Users = new List<User>();
             this.Deck = new List<Card>();
             this.Pots = new List<Pot>();
+        }
+
+        void check()
+        {
+
         }
     }
 }

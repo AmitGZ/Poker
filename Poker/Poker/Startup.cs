@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using PokerClassLibrary;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Proxies;
 
 namespace Poker
 {
@@ -30,7 +31,8 @@ namespace Poker
         {
 
             services.AddDbContext<PokerContext>(options =>
-               options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+               options.UseLazyLoadingProxies()
+               .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSignalR();
 

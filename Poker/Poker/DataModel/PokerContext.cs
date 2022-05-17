@@ -61,12 +61,16 @@ namespace PokerClassLibrary
             modelBuilder.Entity<Pot>(entity =>
             {
                 entity.HasKey(e => e.Id);
+
+                //entity.HasOne<Room>().WithMany(room => room.Pots).HasForeignKey(pot => pot.RoomId).IsRequired(false);
             });
 
             // Card
             modelBuilder.Entity<Card>(entity =>
             {
                 entity.HasKey(e => e.Id);
+
+                //entity.HasOne<Room>().WithMany(room => room.Deck).HasForeignKey(card => card.RoomId).IsRequired(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

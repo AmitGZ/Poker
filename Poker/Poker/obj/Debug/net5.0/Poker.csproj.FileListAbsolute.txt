@@ -59,3 +59,5 @@ C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\obj\Debug\net5.0\ref\Poker.
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\obj\Debug\net5.0\Poker.pdb
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\obj\Debug\net5.0\Poker.genruntimeconfig.cache
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\obj\Debug\net5.0\Poker.csproj.AssemblyReference.cache
+C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\Castle.Core.dll
+C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Proxies.dll

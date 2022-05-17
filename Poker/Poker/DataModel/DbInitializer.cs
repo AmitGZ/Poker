@@ -45,8 +45,6 @@ namespace Poker.Data
             {
             new Room{Name = "Test" }
             };
-
-            Rooms[0].Users.Add(context.Users.FirstOrDefault(u =>u.Username == "Ofek"));
             
             foreach (Room r in Rooms)
             {

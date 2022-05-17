@@ -54,8 +54,8 @@ namespace Poker.Hubs
             // Setting user's ConnectionId
             user.ConnectionId = Context.ConnectionId;
 
-            // Sending room status
-            Clients.Client(Context.ConnectionId).SendAsync("AllRoomsStatus", new LobbyDto(Db.Rooms.Include(room => room.Users).ToList()));
+            // Sending room status .Include(room => room.Users)
+            Clients.Client(Context.ConnectionId).SendAsync("AllRoomsStatus", new LobbyDto(Db.Rooms.ToList()));
             
             // Sending User's status
             Clients.Client(Context.ConnectionId).SendAsync("UserStatus", new UserDto(user));
@@ -75,7 +75,6 @@ namespace Poker.Hubs
             if (user == null || room == null)
                 return null;
 
-
             if (room.Users.Count == 5)
             {
                 Clients.Client(Context.ConnectionId).SendAsync("Alert", "Room is full!");
@@ -90,7 +89,6 @@ namespace Poker.Hubs
                     break;
 
             // Adding the player to the room
-            user.RoomId = roomId;
             user.Money -= enterMoney;
             user.MoneyInTable= enterMoney;
             user.Position = pos;
