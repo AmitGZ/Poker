@@ -1,13 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import ConnectedUsers from './ConnectedUsers';
-import Rooms from './Rooms';
 import Chat from './Chat';
-import Lobby from './Lobby';
 import images_src from "../resources/index"
 
 
-const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users, user}) => {
+const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomStatus, user}) => {
     // CONSTANTS
     const WIDTH = 946;
     const HEIGHT = Math.round(WIDTH *0.519);
@@ -35,6 +32,8 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users, user}) => {
 
     // Asrray of loaded images
     const [loaded_img, setLoadedImg] = useState();
+
+    const [Talking, setTalking] = useState(false);
 
     const drawUser = (context, position, user) => {
         // Drawing user image
@@ -104,13 +103,18 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users, user}) => {
         ctx.drawImage(loaded_img['poker_table'],0,0,WIDTH,HEIGHT)
 
 
-        for(let i =0; i<users.length; i++){
-            drawUser(ctx, (users[i].position - user.position +PLAYER_NUM) % PLAYER_NUM, users[i])
+        for(let i =0; i<roomStatus.users.length; i++){
+            drawUser(ctx, (roomStatus.users[i].position - user.position +PLAYER_NUM) % PLAYER_NUM, roomStatus.users[i])
         }
+
+        if(user.position == roomStatus.talkingPosition)
+            setTalking(true);
+        else
+            setTalking(false);
 
         drawTableCards(ctx);
 
-    },[loaded_num, users])
+    },[loaded_num, roomStatus])
 
     return (
     <div>
@@ -124,14 +128,14 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, messages, users, user}) => {
             <div style = {{position:'absolute'}}>
                 <Button style = {{position:'absolute'}} variant='danger' onClick={() => LeaveRoom()}>Leave Room</Button>
                 <div className='button-list' style = {{marginLeft :`${WIDTH*3/5}px`, marginTop :`${HEIGHT*2/3}px`}}>
-                    <Button  variant="dark" key = "Check" onClick={() =>{console.log("Check")}}>Check</Button>
-                    <Button  variant="dark" key = "Call" onClick={() => {console.log("Call")}}>Call</Button>
-                    <Button  variant="dark" key = "Raise" onClick={() =>{console.log("Raise")}}>Raise</Button>
-                    <Button  variant="dark" key = "Fold" onClick={() => {console.log("Fold")}}>Fold</Button>
+                    <Button  disabled = {!Talking} variant="dark" key = "Check" onClick={() =>{SendAction("Check")}}>Check</Button>
+                    <Button  disabled = {!Talking} variant="dark" key = "Call" onClick={() => {SendAction("Call")}}>Call</Button>
+                    <Button  disabled = {!Talking} variant="dark" key = "Raise" onClick={() =>{SendAction("Raise", 111)}}>Raise</Button>
+                    <Button  disabled = {!Talking} variant="dark" key = "Fold" onClick={() => {SendAction("Fold")}}>Fold</Button>
                 </div>
             </div>
         </div>
-        <Chat sendMessage={sendMessage} messages={messages} users={users} joinRoom = {joinRoom}/>
+        <Chat sendMessage={sendMessage} messages={messages} users={roomStatus.users} joinRoom = {joinRoom}/>
     </div>
     )
 }

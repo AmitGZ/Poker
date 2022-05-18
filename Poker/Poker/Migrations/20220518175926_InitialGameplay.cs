@@ -2,7 +2,7 @@
 
 namespace Poker.Migrations
 {
-    public partial class oneToManyPoker : Migration
+    public partial class InitialGameplay : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,7 +12,7 @@ namespace Poker.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    TalkingPosition = table.Column<int>(type: "int", nullable: true),
+                    TalkingPosition = table.Column<short>(type: "smallint", nullable: true),
                     DealerPosition = table.Column<int>(type: "int", nullable: true),
                     Pot = table.Column<int>(type: "int", nullable: true)
                 },
@@ -27,7 +27,7 @@ namespace Poker.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<int>(type: "int", nullable: false),
+                    Suit = table.Column<int>(type: "int", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
                     RoomId = table.Column<int>(type: "int", nullable: false),
                     RoomId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)

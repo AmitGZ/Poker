@@ -59,7 +59,7 @@ namespace Poker.Migrations
                     b.Property<string>("RoomId1")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Type")
+                    b.Property<int>("Suit")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -86,8 +86,8 @@ namespace Poker.Migrations
                     b.Property<int?>("Pot")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TalkingPosition")
-                        .HasColumnType("int");
+                    b.Property<short?>("TalkingPosition")
+                        .HasColumnType("smallint");
 
                     b.HasKey("Id");
 

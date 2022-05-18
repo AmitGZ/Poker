@@ -10,8 +10,8 @@ using PokerClassLibrary;
 namespace Poker.Migrations
 {
     [DbContext(typeof(PokerContext))]
-    [Migration("20220517083030_oneToManyPoker")]
-    partial class oneToManyPoker
+    [Migration("20220518175926_InitialGameplay")]
+    partial class InitialGameplay
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -61,7 +61,7 @@ namespace Poker.Migrations
                     b.Property<string>("RoomId1")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Type")
+                    b.Property<int>("Suit")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -88,8 +88,8 @@ namespace Poker.Migrations
                     b.Property<int?>("Pot")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TalkingPosition")
-                        .HasColumnType("int");
+                    b.Property<short?>("TalkingPosition")
+                        .HasColumnType("smallint");
 
                     b.HasKey("Id");
 

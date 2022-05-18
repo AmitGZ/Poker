@@ -11,7 +11,7 @@ import { ConsoleLogger } from '@microsoft/signalr/dist/esm/Utils';
 const App = () => {
   const [connection, setConnection] = useState();
   const [messages, setMessages] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [roomStatus, setRoomStatus] = useState([]);
   const [rooms,setRooms] = useState([]);
   const [user, setUser] = useState({});
 
@@ -23,10 +23,9 @@ const App = () => {
         .configureLogging(LogLevel.Information)
         .build();
 
-        connection.on("RoomStatus", (room) => {
-          console.log(room.users)
-          setUsers(room.users);
-          // Add functionality
+        connection.on("RoomStatus", (roomStatus) => {
+          console.log(roomStatus)
+          setRoomStatus(roomStatus);
         });
 
         connection.on("ReceiveMessage", (username, message) => {
@@ -59,7 +58,7 @@ const App = () => {
         connection.onclose(e => {
           setConnection();
           setMessages([]);
-          setUsers([]);
+          setRoomStatus([]);
           setUser({});
           setRooms([]);
         });
@@ -108,6 +107,10 @@ const App = () => {
     }
   }
 
+  const SendAction = async (action, amount = null) =>{
+    connection.invoke("ReceiveAction", action, amount)
+  }
+
   const LeaveRoom = async () => {
      //invoking send message
     await connection.invoke("LeaveRoom");   
@@ -131,10 +134,11 @@ const App = () => {
                     rooms = {rooms} 
                     sendMessage = {sendMessage} 
                     messages = {messages} 
-                    users = {users}
+                    roomStatus = {roomStatus}
                     user ={user}
                     createRoom = {createRoom}
                     LeaveRoom = {LeaveRoom}
+                    SendAction = {SendAction}
               />
             }
         </div>

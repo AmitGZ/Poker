@@ -11,6 +11,8 @@ namespace Poker.DataModel.Dto
         public string Name { get; set; }
         public int NumberOfPlayers { get; set; }
         public List<User> Users { get; set; }
+        public short? TalkingPosition { get; set; }
+        public int? Pot { get; set; }
 
         public RoomDto(Room room)
         {
@@ -18,6 +20,8 @@ namespace Poker.DataModel.Dto
             Name = room.Name;
             Users = room.Users.ToList();
             NumberOfPlayers = room.Users.Count;
+            TalkingPosition = room.TalkingPosition;
+            Pot = room.Pot;
         }
     }
 }

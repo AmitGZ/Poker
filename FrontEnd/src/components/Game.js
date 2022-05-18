@@ -7,15 +7,15 @@ import Lobby from './Lobby';
 import Table from './Table';
 
 
-const Game = ({ joinRoom, LeaveRoom, rooms, sendMessage, messages, users , createRoom, user}) => {
+const Game = ({ joinRoom, LeaveRoom, rooms, sendMessage, messages, roomStatus , createRoom, user, SendAction}) => {
 
     return (
         <div>
             {
             (user.roomId == null)?
                 <Lobby joinRoom={joinRoom} createRoom = {createRoom} rooms = {rooms} user = {user}/> :
-                <Table joinRoom={joinRoom} LeaveRoom = {LeaveRoom} sendMessage = {sendMessage}
-                messages = {messages} users = {users} user = {user}/>
+                <Table joinRoom={joinRoom} SendAction = {SendAction} LeaveRoom = {LeaveRoom} sendMessage = {sendMessage}
+                messages = {messages} roomStatus = {roomStatus} user = {user}/>
             }
         </div>
     )
