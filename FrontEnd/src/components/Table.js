@@ -21,7 +21,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
     const CARD_POSITIONS = [];
     const CARD_SPACINGS = 6;
     for(var i =-2; i<3; i++){
-        CARD_POSITIONS.push([WIDTH/2 + (i * (CARD_WIDTH+CARD_SPACINGS)), HEIGHT*9/20]);
+        CARD_POSITIONS.push([WIDTH/2 + (i * (CARD_WIDTH+CARD_SPACINGS)), HEIGHT*17/40]);
     }
 
     //number of images to load
@@ -66,7 +66,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
         POSITIONS[position][1] + TEXT_OFFSET
         );
     }
-    const drawTableCards = (context) => {
+    const drawTableStatus = (context) => {
         // Loading cards on table
         for(var i =0; i<5; i++){
             context.drawImage(loaded_img['ace_of_spades'],
@@ -75,6 +75,15 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
             CARD_WIDTH,
             CARD_HEIGHT);
         }
+
+        // Writing pot amount
+        context.font = "20px Arial";
+        context.fillStyle = "white";
+        context.textAlign = "center";
+        context.backgroundColor = "white";
+        context.fillText(roomStatus.pot +'$  Round:' + roomStatus.round,
+        WIDTH/2,
+        HEIGHT*5/8);
     }
 
     // Loading all images upon window loading
@@ -112,7 +121,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
         else
             setTalking(false);
 
-        drawTableCards(ctx);
+        drawTableStatus(ctx);
 
     },[loaded_num, roomStatus])
 

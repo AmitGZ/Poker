@@ -11,11 +11,21 @@ namespace PokerClassLibrary
         public string Password { get; set; }
         public int Money { get; set; }
         public string? ConnectionId { get; set; }
-        public int? MoneyInTable { get; set; }
-        public int? MoneyInTurn { get; set; }
-        public bool? IsActive { get; set; }
-        public bool? PlayedThisTurn { get; set; }
-        public short? Position { get; set; }
+        public int MoneyInTable { get; set; }
+        public int MoneyInTurn { get; set; }
+        public bool IsActive { get; set; }
+        public bool PlayedThisTurn { get; set; }
+        public short Position { get; set; }
         public string? RoomId { get; set; }
+
+        public User()
+        {
+            this.PlayedThisTurn = false;
+            this.IsActive = true;
+            this.MoneyInTurn = 0;
+            this.MoneyInTable = 0;
+            this.Money = 1000;
+            this.Position = 0;
+        }
     }
 }

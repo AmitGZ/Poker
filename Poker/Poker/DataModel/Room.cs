@@ -16,17 +16,23 @@ namespace PokerClassLibrary
         public virtual List<Card> Deck { get; set; }
         public virtual List<Pot> Pots { get; set; }
         public virtual List<User> Users { get; set; }
-        public short? TalkingPosition { get; set; }
-        public int? DealerPosition { get; set; }
-        public int? Pot { get; set; }
-        public int? TurnStake { get; set; }
-        public short? Round { get; set; }
+        public short TalkingPosition { get; set; }
+        public int DealerPosition { get; set; }
+        public int Pot { get; set; }
+        public int TurnStake { get; set; }
+        public short Round { get; set; }
 
         public Room()
         {
             this.Users = new List<User>();
             this.Deck = new List<Card>();
             this.Pots = new List<Pot>();
+            this.Pot = 0;
+            this.TurnStake = 0;
+            this.Round = 0;
+            this.DealerPosition = 0;
+            this.TalkingPosition = 0;
+            this.Pot = 0;
         }
 
         public bool AddUser(PokerContext context, User user, int enterMoney)
@@ -37,7 +43,7 @@ namespace PokerClassLibrary
             }
 
             // Getting available position
-            List<short?> positions = this.Users.Select(p => p.Position).ToList();
+            List<short> positions = this.Users.Select(p => p.Position).ToList();
             short pos = 0;
             for (; pos < 5; pos++)
                 if (!positions.Contains(pos))
@@ -74,13 +80,13 @@ namespace PokerClassLibrary
             return true;
         }
 
-        public bool ReceiveAction(PokerContext context,string action, int? amount = null)
+        public bool ReceiveAction(PokerContext context,string action, int? amount)
         {
             // Pervious talking user
             User talkingUser = this.Users.FirstOrDefault(u => u.Position == this.TalkingPosition);
             
             // Getting list of all player positions
-            List<short?> activePositions = this.Users.Where(u => u.IsActive == true).Select(u => u.Position).ToList();
+            List<short> activePositions = this.Users.Where(u => u.IsActive == true).Select(u => u.Position).ToList();
             
             if(action == "Fold")
             {
@@ -93,6 +99,7 @@ namespace PokerClassLibrary
             }
             else if(action == "Call")
             {
+                // User has enough money
                 if (TurnStake <= talkingUser.MoneyInTable)
                 {
                     this.Pot += this.TurnStake - talkingUser.MoneyInTurn;
@@ -103,22 +110,25 @@ namespace PokerClassLibrary
                     // Open new pot
                 }
             }
-            else if (action == "Raise")
+            else if (action == "Raise" && amount != null)
             {
+                // Validating user can raise
                 if (talkingUser.MoneyInTable < amount)
                     return false;
-                this.TurnStake += amount;
-                talkingUser.MoneyInTable -= amount;
-                this.Pot += amount;
+
+                this.TurnStake += (int)amount;
+                talkingUser.MoneyInTable -= (int)amount;
+                this.Pot += (int)amount;
 
                 //going another round
                 this.Users.Where(u => u.IsActive == true).ToList().ForEach(u => u.PlayedThisTurn = false);
             }
 
+            // Setting player already played
             talkingUser.PlayedThisTurn = true;
 
             // Check if everyone played this turn
-            if(this.Users.Where(u => u.IsActive == true && u.PlayedThisTurn == true).Count() ==0)
+            if(this.Users.Where(u => u.IsActive == true && u.PlayedThisTurn == false).Count() ==0)
             {
                 // Start new round
                 this.Users.ForEach(u => u.PlayedThisTurn = false);

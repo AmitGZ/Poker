@@ -169,7 +169,7 @@ namespace Poker.Hubs
             if (room.TalkingPosition != user.Position)
                 return null;
 
-            room.ReceiveAction(DbContext, action);
+            room.ReceiveAction(DbContext, action, amount);
 
             //sending a message to all users in current room
             Clients.Clients(room.Users.Select(p => p.ConnectionId)).SendAsync("RoomStatus", new RoomDto(room));

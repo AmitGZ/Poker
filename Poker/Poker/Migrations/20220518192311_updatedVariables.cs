@@ -2,7 +2,7 @@
 
 namespace Poker.Migrations
 {
-    public partial class InitialGameplay : Migration
+    public partial class updatedVariables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,9 +12,11 @@ namespace Poker.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    TalkingPosition = table.Column<short>(type: "smallint", nullable: true),
-                    DealerPosition = table.Column<int>(type: "int", nullable: true),
-                    Pot = table.Column<int>(type: "int", nullable: true)
+                    TalkingPosition = table.Column<short>(type: "smallint", nullable: false),
+                    DealerPosition = table.Column<int>(type: "int", nullable: false),
+                    Pot = table.Column<int>(type: "int", nullable: false),
+                    TurnStake = table.Column<int>(type: "int", nullable: false),
+                    Round = table.Column<short>(type: "smallint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -72,9 +74,11 @@ namespace Poker.Migrations
                     Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     userMoney = table.Column<int>(type: "int", nullable: false),
                     ConnectionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MoneyInTable = table.Column<int>(type: "int", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: true),
-                    Position = table.Column<short>(type: "smallint", nullable: true),
+                    MoneyInTable = table.Column<int>(type: "int", nullable: false),
+                    MoneyInTurn = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    PlayedThisTurn = table.Column<bool>(type: "bit", nullable: false),
+                    Position = table.Column<short>(type: "smallint", nullable: false),
                     RoomId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
