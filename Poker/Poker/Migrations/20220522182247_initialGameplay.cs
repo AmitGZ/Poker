@@ -2,7 +2,7 @@
 
 namespace Poker.Migrations
 {
-    public partial class updatedVariables : Migration
+    public partial class initialGameplay : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,43 +24,20 @@ namespace Poker.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cards",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Suit = table.Column<int>(type: "int", nullable: false),
-                    Number = table.Column<int>(type: "int", nullable: false),
-                    RoomId = table.Column<int>(type: "int", nullable: false),
-                    RoomId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cards", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Cards_Rooms_RoomId1",
-                        column: x => x.RoomId1,
-                        principalTable: "Rooms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Pots",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Money = table.Column<int>(type: "int", nullable: false),
-                    RoomId = table.Column<int>(type: "int", nullable: false),
-                    RoomId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    RoomId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Pots", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Pots_Rooms_RoomId1",
-                        column: x => x.RoomId1,
+                        name: "FK_Pots_Rooms_RoomId",
+                        column: x => x.RoomId,
                         principalTable: "Rooms",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -92,15 +69,47 @@ namespace Poker.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Cards_RoomId1",
-                table: "Cards",
-                column: "RoomId1");
+            migrationBuilder.CreateTable(
+                name: "Cards",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    Suit = table.Column<int>(type: "int", nullable: false),
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    RoomId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cards", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cards_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Cards_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "userName",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pots_RoomId1",
+                name: "IX_Cards_RoomId",
+                table: "Cards",
+                column: "RoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cards_UserId",
+                table: "Cards",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pots_RoomId",
                 table: "Pots",
-                column: "RoomId1");
+                column: "RoomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RoomId",

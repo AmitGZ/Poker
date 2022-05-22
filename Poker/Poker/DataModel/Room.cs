@@ -32,7 +32,6 @@ namespace PokerClassLibrary
             this.Round = 0;
             this.DealerPosition = 0;
             this.TalkingPosition = 0;
-            this.Pot = 0;
         }
 
         public bool AddUser(PokerContext context, User user, int enterMoney)
@@ -52,12 +51,15 @@ namespace PokerClassLibrary
             // Adding the player to the room
             user.Money -= enterMoney;
             user.MoneyInTable = enterMoney;
+            user.MoneyInTurn = 0;
+            user.PlayedThisTurn = false;
             user.Position = pos;
+            user.IsActive = false;
             this.Users.Add(user);
             context.SaveChanges();
 
             // If enough players start game
-            if (this.Users.Count() >= 2)
+            if (this.Users.Count() == 2)
                 this.StartGame(context);
 
             return true;
@@ -74,9 +76,30 @@ namespace PokerClassLibrary
             // Set everyone active
             this.Users.ForEach(u => u.IsActive = true);
 
+            // Dealing cards 
+
+            // Setting round and pot back to 0
+            this.Round = 0;
+            this.Pot = 0;
+
             // Updating database
             context.SaveChanges();
 
+            return true;
+        }
+
+        public bool Fold(User user)
+        {
+            user.IsActive = false;
+
+            // Getting list of all player positions
+            List<short> activePositions = this.Users.Where(u => u.IsActive == true).Select(u => u.Position).ToList();
+
+            if (activePositions.Count() == 2)
+            {
+                // Set next player the winner
+                return false;
+            }
             return true;
         }
 
@@ -90,12 +113,7 @@ namespace PokerClassLibrary
             
             if(action == "Fold")
             {
-                talkingUser.IsActive = false;
-                if(activePositions.Count() == 2)
-                {
-                    // Set next player the winner
-                    return false;
-                }
+                Fold(talkingUser);
             }
             else if(action == "Call")
             {
@@ -136,6 +154,9 @@ namespace PokerClassLibrary
                 if(Round == 4)
                 {
                     // End game
+
+                    // Start new game 
+                    this.StartGame(context);
                 }
             }
 

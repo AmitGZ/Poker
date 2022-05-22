@@ -17,11 +17,13 @@ namespace PokerClassLibrary
         public bool PlayedThisTurn { get; set; }
         public short Position { get; set; }
         public string? RoomId { get; set; }
+        public virtual List<Card> Cards { get; set; }
 
         public User()
         {
+            this.Cards = new List<Card>();
             this.PlayedThisTurn = false;
-            this.IsActive = true;
+            this.IsActive = false;
             this.MoneyInTurn = 0;
             this.MoneyInTable = 0;
             this.Money = 1000;

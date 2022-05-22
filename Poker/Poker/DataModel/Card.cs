@@ -13,9 +13,10 @@ namespace PokerClassLibrary
     }
     public class Card
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
+        public string UserId { get; set; }
         public CardSuit Suit { get; set; }
         public int Number { get; set; }
-        public int RoomId { get; set; }
+        public string RoomId { get; set; }
     }
 }

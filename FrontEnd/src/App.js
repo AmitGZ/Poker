@@ -50,7 +50,8 @@ const App = () => {
             username: status.username,
             money: status.money,
             roomId: status.roomId,
-            position: status.position
+            position: status.position,
+            cards: status.cards
           });
         });
         

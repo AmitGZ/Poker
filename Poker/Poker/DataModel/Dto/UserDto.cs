@@ -12,6 +12,7 @@ namespace Poker.DataModel.Dto
         public int Money { get; set; }
         public string? RoomId { get; set; }
         public short? Position { get; set; }
+        public List<Card> Cards { get; set; }
 
         public UserDto(User user)
         {
@@ -19,6 +20,7 @@ namespace Poker.DataModel.Dto
             this.Money = user.Money;
             this.RoomId = user.RoomId;
             this.Position = user.Position;
+            this.Cards = user.Cards; 
         }
     }
 }

@@ -7,6 +7,6 @@ namespace Poker.DataModel
     {
         public int Id { get; set; }
         public int Money { get; set; }
-        public int RoomId { get; set; }
+        public string RoomId { get; set; }
     }
 }

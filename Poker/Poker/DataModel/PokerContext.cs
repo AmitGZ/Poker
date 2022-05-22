@@ -64,7 +64,7 @@ namespace PokerClassLibrary
 
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-                //entity.HasOne<Room>().WithMany(room => room.Pots).HasForeignKey(pot => pot.RoomId).IsRequired(false);
+                entity.HasOne<Room>().WithMany(room => room.Pots).HasForeignKey(pot => pot.RoomId).IsRequired(false);
             });
 
             // Card
@@ -74,7 +74,9 @@ namespace PokerClassLibrary
 
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-                //entity.HasOne<Room>().WithMany(room => room.Deck).HasForeignKey(card => card.RoomId).IsRequired(false);
+                entity.HasOne<User>().WithMany(room => room.Cards).HasForeignKey(card => card.UserId).IsRequired(false);
+
+                entity.HasOne<Room>().WithMany(room => room.Deck).HasForeignKey(card => card.RoomId).IsRequired(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

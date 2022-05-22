@@ -108,6 +108,9 @@ namespace Poker.Hubs
             // Verifying room and user exist
             if (room == null) return null;
 
+            // Folding player
+            room.Fold(user);
+
             // Returning player to lobby
             room.Users.Remove(user);
             user.Money += (int)user.MoneyInTable;

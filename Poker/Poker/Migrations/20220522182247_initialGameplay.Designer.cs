@@ -9,8 +9,8 @@ using PokerClassLibrary;
 namespace Poker.Migrations
 {
     [DbContext(typeof(PokerContext))]
-    [Migration("20220518192311_updatedVariables")]
-    partial class updatedVariables
+    [Migration("20220522182247_initialGameplay")]
+    partial class initialGameplay
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,41 +31,39 @@ namespace Poker.Migrations
                     b.Property<int>("Money")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RoomId1")
+                    b.Property<string>("RoomId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoomId1");
+                    b.HasIndex("RoomId");
 
                     b.ToTable("Pots");
                 });
 
             modelBuilder.Entity("PokerClassLibrary.Card", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RoomId1")
+                    b.Property<string>("RoomId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Suit")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(50)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("RoomId1");
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Cards");
                 });
@@ -148,14 +146,18 @@ namespace Poker.Migrations
                 {
                     b.HasOne("PokerClassLibrary.Room", null)
                         .WithMany("Pots")
-                        .HasForeignKey("RoomId1");
+                        .HasForeignKey("RoomId");
                 });
 
             modelBuilder.Entity("PokerClassLibrary.Card", b =>
                 {
                     b.HasOne("PokerClassLibrary.Room", null)
                         .WithMany("Deck")
-                        .HasForeignKey("RoomId1");
+                        .HasForeignKey("RoomId");
+
+                    b.HasOne("PokerClassLibrary.User", null)
+                        .WithMany("Cards")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("PokerClassLibrary.User", b =>
@@ -172,6 +174,11 @@ namespace Poker.Migrations
                     b.Navigation("Pots");
 
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("PokerClassLibrary.User", b =>
+                {
+                    b.Navigation("Cards");
                 });
 #pragma warning restore 612, 618
         }
