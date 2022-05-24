@@ -46,6 +46,8 @@ const App = () => {
 
         // Username and money
         connection.on("UserStatus", (status) => {
+          console.log("************")
+          console.log(status)
         setUser({
             username: status.username,
             money: status.money,

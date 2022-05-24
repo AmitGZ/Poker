@@ -7,29 +7,43 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
+/*****
+ * TODO
+ * remove cards after leaving game
+ * create enum for card number
+ ****/
+
 namespace PokerClassLibrary
 {
+    public enum GameStage
+    {
+        Stopped,
+        Preflop,
+        Flop,
+        Turn,
+        River
+    }
     public partial class Room
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public virtual List<Card> Deck { get; set; }
+        public virtual List<Card> CardsOnTable { get; set; }
         public virtual List<Pot> Pots { get; set; }
         public virtual List<User> Users { get; set; }
         public short TalkingPosition { get; set; }
         public int DealerPosition { get; set; }
         public int Pot { get; set; }
         public int TurnStake { get; set; }
-        public short Round { get; set; }
+        public GameStage Stage { get; set; }
 
         public Room()
         {
             this.Users = new List<User>();
-            this.Deck = new List<Card>();
+            this.CardsOnTable = new List<Card>();
             this.Pots = new List<Pot>();
             this.Pot = 0;
             this.TurnStake = 0;
-            this.Round = 0;
+            this.Stage = GameStage.Stopped;
             this.DealerPosition = 0;
             this.TalkingPosition = 0;
         }
@@ -77,9 +91,21 @@ namespace PokerClassLibrary
             this.Users.ForEach(u => u.IsActive = true);
 
             // Dealing cards 
+            List<Card> tmpDeck = GenerateShuffledDeck();
 
-            // Setting round and pot back to 0
-            this.Round = 0;
+            int cardIdx;
+            for (cardIdx = 0; cardIdx < 5; cardIdx++)
+            {
+                this.CardsOnTable.Add(tmpDeck.ElementAt(cardIdx)); // Adding table cards
+            }
+            this.Users.ForEach(u => {                      // Adding two cards to each player
+                u.Cards.Add(tmpDeck.ElementAt(cardIdx++));
+                u.Cards.Add(tmpDeck.ElementAt(cardIdx++));
+                }
+            );
+
+            // Setting Stage and pot back to 0
+            this.Stage = GameStage.Preflop;
             this.Pot = 0;
 
             // Updating database
@@ -138,7 +164,7 @@ namespace PokerClassLibrary
                 talkingUser.MoneyInTable -= (int)amount;
                 this.Pot += (int)amount;
 
-                //going another round
+                //going another Stage
                 this.Users.Where(u => u.IsActive == true).ToList().ForEach(u => u.PlayedThisTurn = false);
             }
 
@@ -148,10 +174,10 @@ namespace PokerClassLibrary
             // Check if everyone played this turn
             if(this.Users.Where(u => u.IsActive == true && u.PlayedThisTurn == false).Count() ==0)
             {
-                // Start new round
+                // Start new Stage
                 this.Users.ForEach(u => u.PlayedThisTurn = false);
-                this.Round++;
-                if(Round == 4)
+                this.Stage++;
+                if(Stage > GameStage.River)
                 {
                     // End game
 
@@ -168,5 +194,28 @@ namespace PokerClassLibrary
 
             return true;
         }
+
+        private List<Card> GenerateShuffledDeck() // TODO move somewhere else
+        {
+            List<Card> tmpDeck = new List<Card>();          // Generating deck
+            for (var i = 0; i < 4; i++)
+            {
+                for (var j = 0; j < 13; j++)
+                {
+                    tmpDeck.Add(new Card() { Suit = (CardSuit)i, Number = j });
+                }
+            }
+            int n = tmpDeck.Count;                          // Shuffling tmpDeck
+            Random rng = new Random();
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                Card value = tmpDeck[k];
+                tmpDeck[k] = tmpDeck[n];
+                tmpDeck[n] = value;
+            }
+            return tmpDeck;
+        } 
     }
 }

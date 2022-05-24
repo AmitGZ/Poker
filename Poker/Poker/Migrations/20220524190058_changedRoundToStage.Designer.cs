@@ -9,8 +9,8 @@ using PokerClassLibrary;
 namespace Poker.Migrations
 {
     [DbContext(typeof(PokerContext))]
-    [Migration("20220522182247_initialGameplay")]
-    partial class initialGameplay
+    [Migration("20220524190058_changedRoundToStage")]
+    partial class changedRoundToStage
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -85,8 +85,8 @@ namespace Poker.Migrations
                     b.Property<int>("Pot")
                         .HasColumnType("int");
 
-                    b.Property<short>("Round")
-                        .HasColumnType("smallint");
+                    b.Property<int>("Stage")
+                        .HasColumnType("int");
 
                     b.Property<short>("TalkingPosition")
                         .HasColumnType("smallint");

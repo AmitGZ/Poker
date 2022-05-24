@@ -10,6 +10,12 @@ namespace Poker.Data
         {
             context.Database.EnsureCreated();
 
+            // Removing all Cards
+            foreach (var c in context.Cards)
+            {
+                context.Cards.Remove(c);
+            }
+
             // Removing all Users
             foreach (var u in context.Users)
             {

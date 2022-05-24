@@ -2,7 +2,7 @@
 
 namespace Poker.Migrations
 {
-    public partial class initialGameplay : Migration
+    public partial class changedRoundEnum : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,7 @@ namespace Poker.Migrations
                     DealerPosition = table.Column<int>(type: "int", nullable: false),
                     Pot = table.Column<int>(type: "int", nullable: false),
                     TurnStake = table.Column<int>(type: "int", nullable: false),
-                    Round = table.Column<short>(type: "smallint", nullable: false)
+                    Round = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,9 +74,9 @@ namespace Poker.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     Suit = table.Column<int>(type: "int", nullable: false),
                     Number = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     RoomId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>

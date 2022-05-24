@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PokerClassLibrary;
 
 namespace Poker.Migrations
 {
     [DbContext(typeof(PokerContext))]
-    partial class PokerContextModelSnapshot : ModelSnapshot
+    [Migration("20220524185432_changedRoundEnum")]
+    partial class changedRoundEnum
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,7 +85,7 @@ namespace Poker.Migrations
                     b.Property<int>("Pot")
                         .HasColumnType("int");
 
-                    b.Property<int>("Stage")
+                    b.Property<int>("Round")
                         .HasColumnType("int");
 
                     b.Property<short>("TalkingPosition")
@@ -150,7 +152,7 @@ namespace Poker.Migrations
             modelBuilder.Entity("PokerClassLibrary.Card", b =>
                 {
                     b.HasOne("PokerClassLibrary.Room", null)
-                        .WithMany("CardsOnTable")
+                        .WithMany("Deck")
                         .HasForeignKey("RoomId");
 
                     b.HasOne("PokerClassLibrary.User", null)
@@ -167,7 +169,7 @@ namespace Poker.Migrations
 
             modelBuilder.Entity("PokerClassLibrary.Room", b =>
                 {
-                    b.Navigation("CardsOnTable");
+                    b.Navigation("Deck");
 
                     b.Navigation("Pots");
 

@@ -81,7 +81,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
         context.fillStyle = "white";
         context.textAlign = "center";
         context.backgroundColor = "white";
-        context.fillText(roomStatus.pot +'$  Round:' + roomStatus.round,
+        context.fillText(roomStatus.pot +'$  Round:' + roomStatus.stage,
         WIDTH/2,
         HEIGHT*5/8);
     }
