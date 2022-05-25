@@ -154,7 +154,7 @@ hr.line {
   position:absolute;
   justify-content: center;
   flex-direction: column;
-  width: 80px;
+  width: 110px;
 }
 
 .button-list > * {

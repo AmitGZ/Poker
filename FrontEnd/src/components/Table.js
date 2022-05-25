@@ -66,7 +66,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
         context.fillStyle = "white";
         context.textAlign = "center";
         context.backgroundColor = "white";
-        context.fillText(user.username + "\n" + user.moneyInTable+'$',
+        context.fillText(user.username + "\n" + user.moneyInTable+'$' + ' ' + user.moneyInTurn,
         POSITIONS[position][0],
         POSITIONS[position][1] + TEXT_OFFSET
         );
@@ -132,6 +132,10 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
 
         drawTableStatus(ctx);
 
+        console.log((roomStatus.turnStake > user.moneyInTurn))
+        console.log((roomStatus.turnStake))
+        console.log((user.moneyInTurn))
+
     },[loaded_num, roomStatus])
 
     return (
@@ -146,10 +150,13 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
             <div style = {{position:'absolute'}}>
                 <Button style = {{position:'absolute'}} variant='danger' onClick={() => LeaveRoom()}>Leave Room</Button>
                 <div className='button-list' style = {{marginLeft :`${WIDTH*3/5}px`, marginTop :`${HEIGHT*2/3}px`}}>
-                    <Button  disabled = {!Talking} variant="dark" key = "Check" onClick={() =>{SendAction("Check")}}>Check</Button>
-                    <Button  disabled = {!Talking} variant="dark" key = "Call" onClick={() => {SendAction("Call")}}>Call</Button>
-                    <Button  disabled = {!Talking} variant="dark" key = "Raise" onClick={() =>{SendAction("Raise", 111)}}>Raise</Button>
-                    <Button  disabled = {!Talking} variant="dark" key = "Fold" onClick={() => {SendAction("Fold")}}>Fold</Button>
+                    <Button disabled = {(!Talking) || (user.moneyInTurn < roomStatus.turnStake)} variant="dark" key = "Check" onClick={() =>{SendAction("Check")}}>Check</Button>
+                    <Button disabled = {(!Talking) || (user.moneyInTurn == roomStatus.turnStake)} 
+                            variant="dark" key = "Call" onClick={() => {SendAction("Call")}}>
+                            Call {(roomStatus.turnStake > user.moneyInTurn) ? (roomStatus.turnStake - user.moneyInTurn): null }
+                    </Button>
+                    <Button disabled = {(!Talking) || (roomStatus.turnStake > user.moneyInTable)} variant="dark" key = "Raise" onClick={() =>{SendAction("Raise", 111)}}>Raise</Button>
+                    <Button disabled = {!Talking} variant="dark" key = "Fold" onClick={() => {SendAction("Fold")}}>Fold</Button>
                 </div>
             </div>
         </div>

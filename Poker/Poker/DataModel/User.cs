@@ -21,13 +21,13 @@ namespace PokerClassLibrary
 
         public User()
         {
-            this.Cards = new List<Card>();
-            this.PlayedThisTurn = false;
-            this.IsActive = false;
-            this.MoneyInTurn = 0;
-            this.MoneyInTable = 0;
-            this.Money = 1000;
-            this.Position = 0;
+            Cards = new List<Card>();
+            PlayedThisTurn = false;
+            IsActive = false;
+            MoneyInTurn = 0;
+            MoneyInTable = 0;
+            Money = 1000;
+            Position = 0;
         }
     }
 }

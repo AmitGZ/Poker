@@ -26,32 +26,34 @@ namespace PokerClassLibrary
         public virtual List<Pot> Pots { get; set; }
         public virtual List<User> Users { get; set; }
         public short TalkingPosition { get; set; }
-        public int DealerPosition { get; set; }
+        public short DealerPosition { get; set; }
         public int Pot { get; set; }
         public int TurnStake { get; set; }
         public GameStage Stage { get; set; }
+        public int BigBlind { get; set; }
 
         public Room()
         {
-            this.Users = new List<User>();
-            this.CardsOnTable = new List<Card>();
-            this.Pots = new List<Pot>();
-            this.Pot = 0;
-            this.TurnStake = 0;
-            this.Stage = GameStage.Stopped;
-            this.DealerPosition = 0;
-            this.TalkingPosition = 0;
+            Users = new List<User>();
+            CardsOnTable = new List<Card>();
+            Pots = new List<Pot>();
+            Pot = 0;
+            TurnStake = 0;
+            Stage = GameStage.Stopped;
+            DealerPosition = 0;
+            TalkingPosition = 0;
+            BigBlind = 10;
         }
 
         public bool AddUser(PokerContext context, User user, int enterMoney)
         {
-            if (this.Users.Count == 5)
+            if (Users.Count == 5)
             {
                 return false;
             }
 
             // Getting available position
-            List<short> positions = this.Users.Select(p => p.Position).ToList();
+            List<short> positions = Users.Select(p => p.Position).ToList();
             short pos = 0;
             for (; pos < 5; pos++)
                 if (!positions.Contains(pos))
@@ -64,39 +66,51 @@ namespace PokerClassLibrary
             user.PlayedThisTurn = false;
             user.Position = pos;
             user.IsActive = false;
-            this.Users.Add(user);
+            Users.Add(user);
             context.SaveChanges();
 
             // If enough players start game
-            if (this.Users.Count() == 2)
-                this.StartGame(context);
+            if (Users.Count() == 2 && Stage == GameStage.Stopped)
+                StartGame(context);
 
             return true;
         }
 
         public bool EndGame(PokerContext context)
         {
-            // Removing cards from all players and from table
+            // Resetting table
             Users.ToList().ForEach(u => u.Cards.ToList().ForEach(c => u.Cards.Remove(c)));
             CardsOnTable.ToList().ForEach(c => CardsOnTable.Remove(c));
+            Users.ForEach(u => u.IsActive = false);
+            Stage = GameStage.Stopped;
             // TODO reset pot
 
-            Users.ForEach(u => u.IsActive = false);
+            // Changing the dealer
+            DealerPosition += 1;
 
-            this.Stage = GameStage.Stopped;
+            if(Users.Count() > 1)
+            {
+                CheckWinner(context);
+            }
+
             return true;
         }
 
         public bool StartGame(PokerContext context)
         {
-            // Updating talking position
-            this.TalkingPosition = this.Users.Select(u => u.Position).Min();
+            TurnStake = BigBlind;
+
+            // Getting list of all player positions
+            List<short> positions = Users.Select(u => u.Position).ToList();
+
+            // Setting new talking position
+            TalkingPosition = positions.ElementAt(DealerPosition % positions.Count());
 
             // Getting talking user
-            User talklingUser = this.Users.FirstOrDefault(u=>u.Position == this.TalkingPosition);
+            User talklingUser = Users.FirstOrDefault(u=>u.Position == TalkingPosition);
 
             // Set everyone active
-            this.Users.ForEach(u => u.IsActive = true);
+            Users.ForEach(u => u.IsActive = true);
 
             // Dealing cards 
             List<Card> tmpDeck = GenerateShuffledDeck();
@@ -104,17 +118,17 @@ namespace PokerClassLibrary
             int cardIdx;
             for (cardIdx = 0; cardIdx < 5; cardIdx++)
             {
-                this.CardsOnTable.Add(tmpDeck.ElementAt(cardIdx)); // Adding table cards
+                CardsOnTable.Add(tmpDeck.ElementAt(cardIdx)); // Adding table cards
             }
-            this.Users.ForEach(u => {                      // Adding two cards to each player
+            Users.ForEach(u => {                      // Adding two cards to each player
                 u.Cards.Add(tmpDeck.ElementAt(cardIdx++));
                 u.Cards.Add(tmpDeck.ElementAt(cardIdx++));
                 }
             );
 
             // Setting Stage and pot back to 0
-            this.Stage = GameStage.Preflop;
-            this.Pot = 0;
+            Stage = GameStage.Preflop;
+            Pot = 0;
 
             // Updating database
             context.SaveChanges();
@@ -128,9 +142,9 @@ namespace PokerClassLibrary
             user.Cards.ToList().ForEach(c => user.Cards.Remove(c));
 
             // Getting list of all player positions
-            List<short> activePositions = this.Users.Where(u => u.IsActive == true).Select(u => u.Position).ToList();
+            List<short> activePositions = Users.Where(u => u.IsActive == true).Select(u => u.Position).ToList();
 
-            if (activePositions.Count() == 2)
+            if (activePositions.Count() == 1)
             {
                 // Set next player the winner
 
@@ -145,10 +159,10 @@ namespace PokerClassLibrary
         public bool ReceiveAction(PokerContext context,string action, int? amount)
         {
             // Pervious talking user
-            User talkingUser = this.Users.FirstOrDefault(u => u.Position == this.TalkingPosition);
+            User talkingUser = Users.FirstOrDefault(u => u.Position == TalkingPosition);
             
             // Getting list of all player positions
-            List<short> activePositions = this.Users.Where(u => u.IsActive == true).Select(u => u.Position).ToList();
+            List<short> activePositions = Users.Where(u => u.IsActive == true).Select(u => u.Position).ToList();
             
             if(action == "Fold")
             {
@@ -159,8 +173,8 @@ namespace PokerClassLibrary
                 // User has enough money
                 if (TurnStake <= talkingUser.MoneyInTable)
                 {
-                    this.Pot += this.TurnStake - talkingUser.MoneyInTurn;
-                    talkingUser.MoneyInTurn -= this.TurnStake - talkingUser.MoneyInTurn;
+                    talkingUser.MoneyInTurn += TurnStake;
+                    talkingUser.MoneyInTable -= TurnStake;
                 }
                 else
                 {
@@ -173,23 +187,38 @@ namespace PokerClassLibrary
                 if (talkingUser.MoneyInTable < amount)
                     return false;
 
-                this.TurnStake += (int)amount;
+                TurnStake += (int)amount;
                 talkingUser.MoneyInTable -= (int)amount;
-                this.Pot += (int)amount;
+                talkingUser.MoneyInTurn += (int)amount;
 
                 //going another Stage
-                this.Users.Where(u => u.IsActive == true).ToList().ForEach(u => u.PlayedThisTurn = false);
+                Users.Where(u => u.IsActive == true).ToList().ForEach(u => u.PlayedThisTurn = false);
+            }
+            else if(action == "Check")
+            {
+                if (TurnStake > 0)
+                {
+                    return false; // Invalid operation
+                }
             }
 
             // Setting player already played
             talkingUser.PlayedThisTurn = true;
 
             // Check if everyone played this turn
-            if(this.Users.Where(u => u.IsActive == true && u.PlayedThisTurn == false).Count() ==0)
+            if(Users.Where(u => u.IsActive == true && u.PlayedThisTurn == false).Count() ==0)
             {
                 // Start new Stage
-                this.Users.ForEach(u => u.PlayedThisTurn = false);
-                this.Stage++;
+                Users.ForEach(u => u.PlayedThisTurn = false);
+                Stage++;
+                TurnStake = 0;
+                Users.ForEach(u =>
+                {
+                    Pot += u.MoneyInTurn;
+                    u.MoneyInTurn = 0;
+                });
+
+                // Checking if game ended
                 if(Stage > GameStage.River)
                 {
                     // End game
@@ -198,13 +227,13 @@ namespace PokerClassLibrary
                     // Start new game 
                     if (Users.Count() >= 2)
                     {
-                        this.StartGame(context);
+                        StartGame(context);
                     }
                 }
             }
 
             // Setting new talking position
-            this.TalkingPosition = activePositions.ElementAt((activePositions.IndexOf(TalkingPosition)+1) % activePositions.Count());
+            TalkingPosition = activePositions.ElementAt((activePositions.IndexOf(TalkingPosition)+1) % activePositions.Count());
 
             // Updating database
             context.SaveChanges();
@@ -212,9 +241,18 @@ namespace PokerClassLibrary
             return true;
         }
 
+        public User CheckWinner(PokerContext context)
+        {
+            // Getting list of all active players
+            List<short> activePositions = Users.Where(u => u.IsActive == true).Select(u => u.Position).ToList();
+
+            return null;
+        }
+
         private List<Card> GenerateShuffledDeck() // TODO move somewhere else
         {
-            List<Card> tmpDeck = new List<Card>();          // Generating deck
+            // Generating deck
+            List<Card> tmpDeck = new List<Card>(); 
             for (var i = 0; i < 4; i++)
             {
                 for (var j = 0; j < 13; j++)
@@ -222,7 +260,9 @@ namespace PokerClassLibrary
                     tmpDeck.Add(new Card() { Suit = (CardSuit)i, Value = (CardValue)j });
                 }
             }
-            int n = tmpDeck.Count;                          // Shuffling tmpDeck
+
+            // Shuffling Deck
+            int n = tmpDeck.Count;           
             Random rng = new Random();
             while (n > 1)
             {

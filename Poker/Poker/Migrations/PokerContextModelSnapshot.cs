@@ -72,8 +72,11 @@ namespace Poker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("DealerPosition")
+                    b.Property<int>("BigBlind")
                         .HasColumnType("int");
+
+                    b.Property<short>("DealerPosition")
+                        .HasColumnType("smallint");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -144,18 +147,21 @@ namespace Poker.Migrations
                 {
                     b.HasOne("PokerClassLibrary.Room", null)
                         .WithMany("Pots")
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PokerClassLibrary.Card", b =>
                 {
                     b.HasOne("PokerClassLibrary.Room", null)
                         .WithMany("CardsOnTable")
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PokerClassLibrary.User", null)
                         .WithMany("Cards")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PokerClassLibrary.User", b =>

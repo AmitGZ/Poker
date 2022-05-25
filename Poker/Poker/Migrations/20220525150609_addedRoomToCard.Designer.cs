@@ -9,8 +9,8 @@ using PokerClassLibrary;
 namespace Poker.Migrations
 {
     [DbContext(typeof(PokerContext))]
-    [Migration("20220524193842_shuffledDeck")]
-    partial class shuffledDeck
+    [Migration("20220525150609_addedRoomToCard")]
+    partial class addedRoomToCard
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -47,9 +47,6 @@ namespace Poker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
                     b.Property<string>("RoomId")
                         .HasColumnType("nvarchar(450)");
 
@@ -58,6 +55,9 @@ namespace Poker.Migrations
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -146,18 +146,21 @@ namespace Poker.Migrations
                 {
                     b.HasOne("PokerClassLibrary.Room", null)
                         .WithMany("Pots")
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PokerClassLibrary.Card", b =>
                 {
                     b.HasOne("PokerClassLibrary.Room", null)
                         .WithMany("CardsOnTable")
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PokerClassLibrary.User", null)
                         .WithMany("Cards")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PokerClassLibrary.User", b =>

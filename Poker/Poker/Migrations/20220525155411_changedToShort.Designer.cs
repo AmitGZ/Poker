@@ -9,8 +9,8 @@ using PokerClassLibrary;
 namespace Poker.Migrations
 {
     [DbContext(typeof(PokerContext))]
-    [Migration("20220525073053_addedCardNumberEnum")]
-    partial class addedCardNumberEnum
+    [Migration("20220525155411_changedToShort")]
+    partial class changedToShort
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -74,8 +74,8 @@ namespace Poker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("DealerPosition")
-                        .HasColumnType("int");
+                    b.Property<short>("DealerPosition")
+                        .HasColumnType("smallint");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -146,18 +146,21 @@ namespace Poker.Migrations
                 {
                     b.HasOne("PokerClassLibrary.Room", null)
                         .WithMany("Pots")
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PokerClassLibrary.Card", b =>
                 {
                     b.HasOne("PokerClassLibrary.Room", null)
                         .WithMany("CardsOnTable")
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PokerClassLibrary.User", null)
                         .WithMany("Cards")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PokerClassLibrary.User", b =>

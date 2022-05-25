@@ -52,7 +52,10 @@ const App = () => {
             money: status.money,
             roomId: status.roomId,
             position: status.position,
-            cards: status.cards
+            cards: status.cards,
+            moneyInTable: status.moneyInTable,
+            moneyInTurn: status.moneyInTurn,
+            IsActive: status.IsActive
           });
         });
         

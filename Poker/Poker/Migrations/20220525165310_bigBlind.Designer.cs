@@ -9,8 +9,8 @@ using PokerClassLibrary;
 namespace Poker.Migrations
 {
     [DbContext(typeof(PokerContext))]
-    [Migration("20220524190058_changedRoundToStage")]
-    partial class changedRoundToStage
+    [Migration("20220525165310_bigBlind")]
+    partial class bigBlind
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -47,9 +47,6 @@ namespace Poker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
                     b.Property<string>("RoomId")
                         .HasColumnType("nvarchar(450)");
 
@@ -58,6 +55,9 @@ namespace Poker.Migrations
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -74,8 +74,11 @@ namespace Poker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("DealerPosition")
+                    b.Property<int>("BigBlind")
                         .HasColumnType("int");
+
+                    b.Property<short>("DealerPosition")
+                        .HasColumnType("smallint");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -146,18 +149,21 @@ namespace Poker.Migrations
                 {
                     b.HasOne("PokerClassLibrary.Room", null)
                         .WithMany("Pots")
-                        .HasForeignKey("RoomId");
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PokerClassLibrary.Card", b =>
                 {
                     b.HasOne("PokerClassLibrary.Room", null)
-                        .WithMany("Deck")
-                        .HasForeignKey("RoomId");
+                        .WithMany("CardsOnTable")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("PokerClassLibrary.User", null)
                         .WithMany("Cards")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PokerClassLibrary.User", b =>
@@ -169,7 +175,7 @@ namespace Poker.Migrations
 
             modelBuilder.Entity("PokerClassLibrary.Room", b =>
                 {
-                    b.Navigation("Deck");
+                    b.Navigation("CardsOnTable");
 
                     b.Navigation("Pots");
 

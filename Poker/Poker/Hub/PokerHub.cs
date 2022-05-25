@@ -174,6 +174,9 @@ namespace Poker.Hubs
 
             room.ReceiveAction(DbContext, action, amount);
 
+            // Sending User's status
+            Clients.Client(Context.ConnectionId).SendAsync("UserStatus", new UserDto(user));
+
             //sending a message to all users in current room
             Clients.Clients(room.Users.Select(p => p.ConnectionId)).SendAsync("RoomStatus", new RoomDto(room));
 

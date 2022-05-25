@@ -2,7 +2,7 @@
 
 namespace Poker.Migrations
 {
-    public partial class changedRoundEnum : Migration
+    public partial class addedRoomToCard : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,7 @@ namespace Poker.Migrations
                     DealerPosition = table.Column<int>(type: "int", nullable: false),
                     Pot = table.Column<int>(type: "int", nullable: false),
                     TurnStake = table.Column<int>(type: "int", nullable: false),
-                    Round = table.Column<int>(type: "int", nullable: false)
+                    Stage = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -40,7 +40,7 @@ namespace Poker.Migrations
                         column: x => x.RoomId,
                         principalTable: "Rooms",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -75,7 +75,7 @@ namespace Poker.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Suit = table.Column<int>(type: "int", nullable: false),
-                    Number = table.Column<int>(type: "int", nullable: false),
+                    Value = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     RoomId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
@@ -87,13 +87,13 @@ namespace Poker.Migrations
                         column: x => x.RoomId,
                         principalTable: "Rooms",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Cards_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "userName",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
