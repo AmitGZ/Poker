@@ -109,7 +109,7 @@ namespace Poker.Hubs
             if (room == null) return null;
 
             // Folding player
-            room.Fold(user);
+            room.Fold(DbContext ,user);
 
             // Returning player to lobby
             room.Users.Remove(user);

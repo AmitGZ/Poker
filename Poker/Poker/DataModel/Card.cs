@@ -4,6 +4,14 @@ using System.Linq;
 
 namespace PokerClassLibrary
 {
+    public class Card
+    {
+        public string Id { get; set; }
+        public CardSuit Suit { get; set; }
+        public CardValue Value { get; set; }
+        public string UserId { get; set; }
+        public string RoomId { get; set; }
+    }
     public enum CardSuit
     {
         Clubs,
@@ -11,12 +19,20 @@ namespace PokerClassLibrary
         Spades,
         Diamonds
     }
-    public class Card
+    public enum CardValue
     {
-        public string Id { get; set; }
-        public CardSuit Suit { get; set; }
-        public int Number { get; set; }
-        public string UserId { get; set; }
-        public string RoomId { get; set; }
+        Two,
+        Three,
+        Four,
+        Five,
+        Six,
+        Seven,
+        Eight,
+        Nine,
+        Ten,
+        Jack,
+        Queen,
+        King,
+        Ace
     }
 }

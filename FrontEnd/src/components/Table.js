@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import Chat from './Chat';
 import images_src from "../resources/index"
-
+import { cardSuits, cardValues } from "./Cards.js"
 
 const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomStatus, user}) => {
     // CONSTANTS
@@ -35,6 +35,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
 
     const [Talking, setTalking] = useState(false);
 
+    // TODO move to user class
     const drawUser = (context, position, user) => {
         // Drawing user image
         context.drawImage(loaded_img['user'],
@@ -43,17 +44,21 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
         USER_SIZE,
         USER_SIZE);
 
+        // Offset used to place cards to the right or left of the player
         var offset = 1
         if(position<3)
             offset = -1;
 
-        // Drawing cards
-        for(var i =0; i<2; i++){
-            context.drawImage(loaded_img['ten_of_hearts'],
-            POSITIONS[position][0] - CARD_WIDTH/2 + offset* CARD_OFFSET[i],
-            POSITIONS[position][1] - CARD_HEIGHT/2,
-            CARD_WIDTH,
-            CARD_HEIGHT);
+        // Checking game has started and user has cards
+        if(roomStatus.stage > 0 && user.cards.length != 0){
+            // Drawing cards
+            for(var i =0; i<2; i++){
+                context.drawImage(loaded_img[cardValues[user.cards[i].value] + '_of_' + cardSuits[user.cards[i].suit]],
+                POSITIONS[position][0] - CARD_WIDTH/2 + offset* CARD_OFFSET[i],
+                POSITIONS[position][1] - CARD_HEIGHT/2,
+                CARD_WIDTH,
+                CARD_HEIGHT);
+            }
         }
 
         // Writing User name and money
@@ -66,14 +71,18 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
         POSITIONS[position][1] + TEXT_OFFSET
         );
     }
+
     const drawTableStatus = (context) => {
         // Loading cards on table
-        for(var i =0; i<5; i++){
-            context.drawImage(loaded_img['ace_of_spades'],
-            CARD_POSITIONS[i][0] - CARD_WIDTH/2,
-            CARD_POSITIONS[i][1] - CARD_HEIGHT/2,
-            CARD_WIDTH,
-            CARD_HEIGHT);
+        var cardsToLoad = (roomStatus.stage < 2) ? 0 : (roomStatus.stage + 1);
+        if(roomStatus.cardsOnTable != undefined){ // TODO throw an exception?
+            for(var i =0; i < cardsToLoad; i++){
+                context.drawImage(loaded_img[cardValues[roomStatus.cardsOnTable[i].value] + '_of_' + cardSuits[roomStatus.cardsOnTable[i].suit]],
+                CARD_POSITIONS[i][0] - CARD_WIDTH/2,
+                CARD_POSITIONS[i][1] - CARD_HEIGHT/2,
+                CARD_WIDTH,
+                CARD_HEIGHT);
+            }
         }
 
         // Writing pot amount
@@ -81,7 +90,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
         context.fillStyle = "white";
         context.textAlign = "center";
         context.backgroundColor = "white";
-        context.fillText(roomStatus.pot +'$  Round:' + roomStatus.stage,
+        context.fillText(roomStatus.pot +'$',
         WIDTH/2,
         HEIGHT*5/8);
     }

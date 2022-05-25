@@ -39,6 +39,9 @@ namespace PokerClassLibrary
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.HasMany<User>(e => e.Users).WithOne().OnDelete(DeleteBehavior.Cascade);
+                entity.HasMany<Card>(e => e.CardsOnTable).WithOne().OnDelete(DeleteBehavior.Cascade);
             });
 
             // User
@@ -55,6 +58,8 @@ namespace PokerClassLibrary
                 entity.Property(e => e.Money).HasColumnName("userMoney");
 
                 entity.HasOne<Room>().WithMany(room => room.Users).HasForeignKey(user => user.RoomId).IsRequired(false);
+
+                entity.HasMany<Card>(e => e.Cards).WithOne().OnDelete(DeleteBehavior.Cascade);
             });
 
             // Pot

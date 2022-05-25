@@ -7,11 +7,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-/*****
- * TODO
- * remove cards after leaving game
- * create enum for card number
- ****/
 
 namespace PokerClassLibrary
 {
@@ -79,6 +74,19 @@ namespace PokerClassLibrary
             return true;
         }
 
+        public bool EndGame(PokerContext context)
+        {
+            // Removing cards from all players and from table
+            Users.ToList().ForEach(u => u.Cards.ToList().ForEach(c => u.Cards.Remove(c)));
+            CardsOnTable.ToList().ForEach(c => CardsOnTable.Remove(c));
+            // TODO reset pot
+
+            Users.ForEach(u => u.IsActive = false);
+
+            this.Stage = GameStage.Stopped;
+            return true;
+        }
+
         public bool StartGame(PokerContext context)
         {
             // Updating talking position
@@ -114,9 +122,10 @@ namespace PokerClassLibrary
             return true;
         }
 
-        public bool Fold(User user)
+        public bool Fold(PokerContext context,User user)
         {
             user.IsActive = false;
+            user.Cards.ToList().ForEach(c => user.Cards.Remove(c));
 
             // Getting list of all player positions
             List<short> activePositions = this.Users.Where(u => u.IsActive == true).Select(u => u.Position).ToList();
@@ -124,6 +133,10 @@ namespace PokerClassLibrary
             if (activePositions.Count() == 2)
             {
                 // Set next player the winner
+
+                // End game
+                EndGame(context);
+
                 return false;
             }
             return true;
@@ -139,7 +152,7 @@ namespace PokerClassLibrary
             
             if(action == "Fold")
             {
-                Fold(talkingUser);
+                Fold(context, talkingUser);
             }
             else if(action == "Call")
             {
@@ -180,9 +193,13 @@ namespace PokerClassLibrary
                 if(Stage > GameStage.River)
                 {
                     // End game
+                    EndGame(context);
 
                     // Start new game 
-                    this.StartGame(context);
+                    if (Users.Count() >= 2)
+                    {
+                        this.StartGame(context);
+                    }
                 }
             }
 
@@ -202,7 +219,7 @@ namespace PokerClassLibrary
             {
                 for (var j = 0; j < 13; j++)
                 {
-                    tmpDeck.Add(new Card() { Suit = (CardSuit)i, Number = j });
+                    tmpDeck.Add(new Card() { Suit = (CardSuit)i, Value = (CardValue)j });
                 }
             }
             int n = tmpDeck.Count;                          // Shuffling tmpDeck
