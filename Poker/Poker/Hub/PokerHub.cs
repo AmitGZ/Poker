@@ -83,7 +83,7 @@ namespace Poker.Hubs
             }
 
             LobbyDto lobbyDto = new LobbyDto(DbContext.Rooms.ToList());
-            RoomDto roomDto = lobbyDto.Rooms.FirstOrDefault(r => r.Id == roomId);
+            RoomDto roomDto = new RoomDto(room);
 
             // Sending everyone in the room the status
             Clients.Clients(room.Users.Select(p => p.ConnectionId)).SendAsync("RoomStatus", roomDto);

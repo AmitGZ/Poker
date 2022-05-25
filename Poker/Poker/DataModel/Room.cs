@@ -98,6 +98,7 @@ namespace PokerClassLibrary
 
         public bool StartGame(PokerContext context)
         {
+            // Setting initial bet
             TurnStake = BigBlind;
 
             // Getting list of all player positions

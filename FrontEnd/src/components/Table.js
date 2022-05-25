@@ -74,9 +74,8 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
 
     const drawTableStatus = (context) => {
         // Loading cards on table
-        var cardsToLoad = (roomStatus.stage < 2) ? 0 : (roomStatus.stage + 1);
         if(roomStatus.cardsOnTable != undefined){ // TODO throw an exception?
-            for(var i =0; i < cardsToLoad; i++){
+            for(var i =0; i < roomStatus.cardsOnTable.length; i++){
                 context.drawImage(loaded_img[cardValues[roomStatus.cardsOnTable[i].value] + '_of_' + cardSuits[roomStatus.cardsOnTable[i].suit]],
                 CARD_POSITIONS[i][0] - CARD_WIDTH/2,
                 CARD_POSITIONS[i][1] - CARD_HEIGHT/2,

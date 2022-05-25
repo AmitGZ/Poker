@@ -1,21 +1,34 @@
 ﻿using PokerClassLibrary;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Poker.DataModel.Dto
 {
     public class LobbyDto
     {
-        public List<RoomDto> Rooms { get; set; }
+        public List<LobbyRoomDto> Rooms { get; set; }
 
         public LobbyDto(List<Room> rooms)
         {
-            Rooms = new List<RoomDto>();
-            foreach(var room in rooms)
+            Rooms = new List<LobbyRoomDto>();
+            foreach (var room in rooms)
             {
-                RoomDto roomDto = new RoomDto(room);
-                Rooms.Add(roomDto);
+                LobbyRoomDto lobbyRoomDto = new LobbyRoomDto()
+                {
+                    Id = room.Id,
+                    Name = room.Name,
+                    NumberOfPlayers = (short)room.Users.Count()
+                };
+                Rooms.Add(lobbyRoomDto);
             }
         }
+    }
+
+    public class LobbyRoomDto
+    {
+        public string Name { get; set; }
+        public string Id { get; set; }
+        public short NumberOfPlayers { get; set; }
     }
 }

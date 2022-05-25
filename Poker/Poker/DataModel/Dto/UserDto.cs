@@ -17,14 +17,14 @@ namespace Poker.DataModel.Dto
         public int MoneyInTurn { get; set; }
         public bool IsActive { get; set; }
 
-        public UserDto(User user)
+        public UserDto(User user, GameStage stage = GameStage.Stopped)
         {
             Username = user.Username;
             Money = user.Money;
             MoneyInTable = user.MoneyInTable;
             RoomId = user.RoomId;
             Position = user.Position;
-            Cards = user.Cards;
+            Cards = stage == GameStage.Stopped ? user.Cards: new List<Card>();
             MoneyInTurn = user.MoneyInTurn;
             IsActive = user.IsActive;
         }

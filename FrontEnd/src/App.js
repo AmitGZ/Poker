@@ -47,16 +47,7 @@ const App = () => {
         // Username and money
         connection.on("UserStatus", (status) => {
           console.log(status)
-        setUser({
-            username: status.username,
-            money: status.money,
-            roomId: status.roomId,
-            position: status.position,
-            cards: status.cards,
-            moneyInTable: status.moneyInTable,
-            moneyInTurn: status.moneyInTurn,
-            IsActive: status.IsActive
-          });
+          setUser(status);
         });
         
         //resetting all hooks

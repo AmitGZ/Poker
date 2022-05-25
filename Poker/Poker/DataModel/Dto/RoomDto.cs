@@ -27,8 +27,8 @@ namespace Poker.DataModel.Dto
             TalkingPosition = room.TalkingPosition;
             Pot = room.Pot;
             Stage = room.Stage;
-            CardsOnTable = room.CardsOnTable;
             TurnStake = room.TurnStake;
+            CardsOnTable = ((int)room.Stage < 2) ? new List<Card>() : room.CardsOnTable.GetRange(0, (int)room.Stage + 1);
         }
     }
 }
