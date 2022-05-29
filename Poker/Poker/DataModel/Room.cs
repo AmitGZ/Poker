@@ -86,9 +86,26 @@ namespace PokerClassLibrary
             // TODO reset pot
 
             // Changing the dealer
-            DealerPosition += 1;
+            if (Users.Count() > 0)
+            {
+                //int dealerIndex = Users.Select(u => u.Position).ToList().FirstOrDefault(i => i == DealerPosition);
+                //DealerPosition = Users.Select(u=>u.Position).ToList().ElementAt((dealerIndex + 1) % Users.Count());
 
-            if(Users.Count() > 1)
+                int i = DealerPosition;
+                do
+                {
+                    i = (i + 1) % 5;
+                    if (Users.FirstOrDefault(u => u.Position == i) != null)
+                    {
+                        DealerPosition = (short)i;
+                        break;
+                    }
+                } while (i != DealerPosition);
+
+
+            }
+
+            if (Users.Count() > 1)
             {
                 CheckWinner(context);
             }
@@ -102,10 +119,10 @@ namespace PokerClassLibrary
             TurnStake = BigBlind;
 
             // Getting list of all player positions
-            List<short> positions = Users.Select(u => u.Position).ToList();
+            List<short> positions = Users.OrderBy(u =>u.Position).Select(u => u.Position).ToList();
 
             // Setting new talking position
-            TalkingPosition = positions.ElementAt(DealerPosition % positions.Count());
+            TalkingPosition = positions.ElementAt((positions.IndexOf(DealerPosition) + 3) % positions.Count());
 
             // Getting talking user
             User talklingUser = Users.FirstOrDefault(u=>u.Position == TalkingPosition);
@@ -121,7 +138,7 @@ namespace PokerClassLibrary
             {
                 CardsOnTable.Add(tmpDeck.ElementAt(cardIdx)); // Adding table cards
             }
-            Users.ForEach(u => {                      // Adding two cards to each player
+            Users.ForEach(u => {                              // Adding two cards to each player
                 u.Cards.Add(tmpDeck.ElementAt(cardIdx++));
                 u.Cards.Add(tmpDeck.ElementAt(cardIdx++));
                 }
@@ -161,13 +178,17 @@ namespace PokerClassLibrary
         {
             // Pervious talking user
             User talkingUser = Users.FirstOrDefault(u => u.Position == TalkingPosition);
-            
+
             // Getting list of all player positions
-            List<short> activePositions = Users.Where(u => u.IsActive == true).Select(u => u.Position).ToList();
+            List<short> activePositions = Users.Where(u => u.IsActive == true).OrderBy(u => u.Position).Select(u => u.Position).ToList();
             
             if(action == "Fold")
             {
-                Fold(context, talkingUser);
+                if(!Fold(context, talkingUser))
+                {
+                    StartGame(context);
+                    return false;
+                }
             }
             else if(action == "Call")
             {
@@ -245,7 +266,7 @@ namespace PokerClassLibrary
         public User CheckWinner(PokerContext context)
         {
             // Getting list of all active players
-            List<short> activePositions = Users.Where(u => u.IsActive == true).Select(u => u.Position).ToList();
+            List<short> activePositions = Users.Where(u => u.IsActive == true).OrderBy(u => u.Position).Select(u => u.Position).ToList();
 
             return null;
         }

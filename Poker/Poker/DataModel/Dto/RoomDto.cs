@@ -13,22 +13,25 @@ namespace Poker.DataModel.Dto
         public List<UserDto> Users { get; set; }
         public List<Card> CardsOnTable { get; set; }
         public short TalkingPosition { get; set; }
+        public short DealerPosition { get; set; }
         public int Pot { get; set; }
         public GameStage Stage { get; set; }
         public int TurnStake { get; set; }
 
-        public RoomDto(Room room)
+        public RoomDto(Room room, User user)
         {
             Id = room.Id;
             Name = room.Name;
             Users = new List<UserDto>();
-            room.Users.ForEach(u=> Users.Add(new UserDto(u)));
+            Users.Add(new UserDto(user, false));
+            room.Users.Where(u => u.Username != user.Username).ToList().ForEach(us => Users.Add(new UserDto(us, true)));
             NumberOfPlayers = room.Users.Count;
             TalkingPosition = room.TalkingPosition;
             Pot = room.Pot;
             Stage = room.Stage;
             TurnStake = room.TurnStake;
             CardsOnTable = ((int)room.Stage < 2) ? new List<Card>() : room.CardsOnTable.GetRange(0, (int)room.Stage + 1);
+            DealerPosition = room.DealerPosition;
         }
     }
 }

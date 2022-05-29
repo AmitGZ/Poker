@@ -31,6 +31,8 @@ namespace Poker.Hubs
         public override Task OnDisconnectedAsync(Exception exception)
         {
             LeaveRoom();
+            DbContext.Users.First(u => u.ConnectionId == Context.ConnectionId).ConnectionId = null;
+            DbContext.SaveChanges();
             return Task.CompletedTask;
         }
 
@@ -48,6 +50,12 @@ namespace Poker.Hubs
             if (user == null || user.Password != password)
             {
                 Clients.Client(Context.ConnectionId).SendAsync("Alert", "Invalid username or password");
+                return null;
+            }
+
+            if(user.ConnectionId != null)
+            {
+                Clients.Client(Context.ConnectionId).SendAsync("Alert", "User already connected");
                 return null;
             }
 
@@ -82,14 +90,14 @@ namespace Poker.Hubs
                 return null;
             }
 
-            LobbyDto lobbyDto = new LobbyDto(DbContext.Rooms.ToList());
-            RoomDto roomDto = new RoomDto(room);
-
             // Sending everyone in the room the status
-            Clients.Clients(room.Users.Select(p => p.ConnectionId)).SendAsync("RoomStatus", roomDto);
+            foreach(User u in room.Users)
+            {
+                Clients.Client(u.ConnectionId).SendAsync("RoomStatus", new RoomDto(room, u));
+            }
             
-            // Sending everyone new rooms status
-            Clients.All.SendAsync("AllRoomsStatus", lobbyDto);
+            // Sending everyone in lobby room status
+            Clients.All.SendAsync("AllRoomsStatus", new LobbyDto(DbContext.Rooms.ToList()));
 
             // Sending User's status
             Clients.Client(Context.ConnectionId).SendAsync("UserStatus", new UserDto(user));
@@ -126,9 +134,12 @@ namespace Poker.Hubs
             else
             {
                 // Sending everyone in the room the status
-                Clients.Clients(playersInRoom.Select(p => p.ConnectionId)).SendAsync("RoomStatus", new RoomDto(room));
+                foreach (User u in room.Users)
+                {
+                    Clients.Client(u.ConnectionId).SendAsync("RoomStatus", new RoomDto(room, u));
+                }
             }
-            // Sending everyone new rooms status
+            // Sending everyone in lobby room status
             Clients.All.SendAsync("AllRoomsStatus", new LobbyDto(DbContext.Rooms.ToList()));
 
             // Sending User's status
@@ -177,8 +188,11 @@ namespace Poker.Hubs
             // Sending User's status
             Clients.Client(Context.ConnectionId).SendAsync("UserStatus", new UserDto(user));
 
-            //sending a message to all users in current room
-            Clients.Clients(room.Users.Select(p => p.ConnectionId)).SendAsync("RoomStatus", new RoomDto(room));
+            // Sending everyone in the room the status
+            foreach (User u in room.Users)
+            {
+                Clients.Client(u.ConnectionId).SendAsync("RoomStatus", new RoomDto(room, u));
+            }
 
             return Task.CompletedTask;
         }

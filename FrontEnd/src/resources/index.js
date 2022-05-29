@@ -2,6 +2,8 @@
 import poker_table from './poker_table.png';
 import user from './user.png';
 import background from './background.png'
+import back_of_card from './Cards/back_of_card.png'
+import dealer from './dealer.png'
 
 import two_of_hearts   from './Cards/2_of_hearts.png';
 import three_of_hearts from './Cards/3_of_hearts.png';
@@ -63,6 +65,8 @@ const images_src = {
   poker_table: poker_table,
   user: user,
   background: background,
+  back_of_card: back_of_card,
+  dealer: dealer,
 
     two_of_hearts  : two_of_hearts  ,
     three_of_hearts: three_of_hearts,

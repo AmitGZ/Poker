@@ -23,6 +23,8 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
     for(var i =-2; i<3; i++){
         CARD_POSITIONS.push([WIDTH/2 + (i * (CARD_WIDTH+CARD_SPACINGS)), HEIGHT*17/40]);
     }
+    const CHIP_WIDTH = 40;
+    const CHIP_HEIGHT = 40; 
 
     //number of images to load
     var image_num = Object.keys(images_src).length;
@@ -34,6 +36,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
     const [loaded_img, setLoadedImg] = useState();
 
     const [Talking, setTalking] = useState(false);
+    const [Dealer, setDealer] = useState(false);
 
     // TODO move to user class
     const drawUser = (context, position, user) => {
@@ -50,14 +53,35 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
             offset = -1;
 
         // Checking game has started and user has cards
-        if(roomStatus.stage > 0 && user.cards.length != 0){
+        if(roomStatus.stage > 0 && user.isActive == true){
             // Drawing cards
-            for(var i =0; i<2; i++){
-                context.drawImage(loaded_img[cardValues[user.cards[i].value] + '_of_' + cardSuits[user.cards[i].suit]],
-                POSITIONS[position][0] - CARD_WIDTH/2 + offset* CARD_OFFSET[i],
-                POSITIONS[position][1] - CARD_HEIGHT/2,
-                CARD_WIDTH,
-                CARD_HEIGHT);
+            if(user.cards.length == 2){
+                for(var i = 0; i < 2; i++){
+                    context.drawImage(loaded_img[cardValues[user.cards[i].value] + '_of_' + cardSuits[user.cards[i].suit]],
+                    POSITIONS[position][0] - CARD_WIDTH/2 + offset* CARD_OFFSET[i],
+                    POSITIONS[position][1] - CARD_HEIGHT/2,
+                    CARD_WIDTH,
+                    CARD_HEIGHT);
+                }
+            }
+            else
+            {
+                for(var i =0; i < 2; i++){
+                    context.drawImage(loaded_img['back_of_card'],
+                    POSITIONS[position][0] - CARD_WIDTH/2 + offset* CARD_OFFSET[i],
+                    POSITIONS[position][1] - CARD_HEIGHT/2,
+                    CARD_WIDTH,
+                    CARD_HEIGHT);
+                }
+            }
+
+            if(user.position == roomStatus.dealerPosition)
+            {
+                context.drawImage(loaded_img['dealer'],
+                POSITIONS[position][0],
+                POSITIONS[position][1],
+                CHIP_WIDTH,
+                CHIP_HEIGHT);
             }
         }
 
@@ -129,6 +153,11 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
         else
             setTalking(false);
 
+        if(user.position == roomStatus.dealerPosition)
+            setDealer(true);
+        else
+            setDealer(false);
+
         drawTableStatus(ctx);
 
         console.log((roomStatus.turnStake > user.moneyInTurn))
@@ -148,15 +177,17 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
             </canvas>
             <div style = {{position:'absolute'}}>
                 <Button style = {{position:'absolute'}} variant='danger' onClick={() => LeaveRoom()}>Leave Room</Button>
-                <div className='button-list' style = {{marginLeft :`${WIDTH*3/5}px`, marginTop :`${HEIGHT*2/3}px`}}>
-                    <Button disabled = {(!Talking) || (user.moneyInTurn < roomStatus.turnStake)} variant="dark" key = "Check" onClick={() =>{SendAction("Check")}}>Check</Button>
-                    <Button disabled = {(!Talking) || (user.moneyInTurn == roomStatus.turnStake)} 
-                            variant="dark" key = "Call" onClick={() => {SendAction("Call")}}>
-                            Call {(roomStatus.turnStake > user.moneyInTurn) ? (roomStatus.turnStake - user.moneyInTurn): null }
-                    </Button>
-                    <Button disabled = {(!Talking) || (roomStatus.turnStake > user.moneyInTable)} variant="dark" key = "Raise" onClick={() =>{SendAction("Raise", 111)}}>Raise</Button>
-                    <Button disabled = {!Talking} variant="dark" key = "Fold" onClick={() => {SendAction("Fold")}}>Fold</Button>
-                </div>
+                    {(roomStatus.stage > 0) &&
+                    <div className='button-list' style = {{marginLeft :`${WIDTH*3/5}px`, marginTop :`${HEIGHT*2/3}px`}}>
+                        <Button disabled = {(!Talking) || (user.moneyInTurn < roomStatus.turnStake)} variant="dark" key = "Check" onClick={() =>{SendAction("Check")}}>Check</Button>
+                        <Button disabled = {(!Talking)  || (user.moneyInTurn == roomStatus.turnStake)} 
+                                variant="dark" key = "Call" onClick={() => {SendAction("Call")}}>
+                                Call {(roomStatus.turnStake > user.moneyInTurn) ? (roomStatus.turnStake - user.moneyInTurn): null }
+                        </Button>
+                        <Button disabled = {(!Talking) || (roomStatus.turnStake > user.moneyInTable)} variant="dark" key = "Raise" onClick={() =>{SendAction("Raise", 111)}}>Raise</Button>
+                        <Button disabled = {(!Talking)} variant="dark" key = "Fold" onClick={() => {SendAction("Fold")}}>Fold</Button>
+                    </div>
+                    }
             </div>
         </div>
         <Chat sendMessage={sendMessage} messages={messages} users={roomStatus.users} joinRoom = {joinRoom}/>
