@@ -2,6 +2,7 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PokerClassLibrary
 {
@@ -10,7 +11,6 @@ namespace PokerClassLibrary
         public string Username { get; set; }
         public string Password { get; set; }
         public int Money { get; set; }
-        public string? ConnectionId { get; set; }
         public int MoneyInTable { get; set; }
         public int MoneyInTurn { get; set; }
         public bool IsActive { get; set; }
@@ -18,9 +18,12 @@ namespace PokerClassLibrary
         public short Position { get; set; }
         public string? RoomId { get; set; }
         public virtual List<Card> Cards { get; set; }
+        [NotMapped]
+        public List<string> ConnectionIds { get; set; }
 
         public User()
         {
+            ConnectionIds = new List<string>();
             Cards = new List<Card>();
             PlayedThisTurn = false;
             IsActive = false;
