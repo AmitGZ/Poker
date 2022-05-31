@@ -4,7 +4,7 @@ import Chat from './Chat';
 import images_src from "../resources/index"
 import { cardSuits, cardValues } from "./Cards.js"
 
-const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomStatus, user}) => {
+const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomStatus, user}) => {
     // CONSTANTS
     const WIDTH = 946;
     const HEIGHT = Math.round(WIDTH *0.519);
@@ -179,13 +179,34 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, SendAction, messages, roomSta
                 <Button style = {{position:'absolute'}} variant='danger' onClick={() => LeaveRoom()}>Leave Room</Button>
                     {(roomStatus.stage > 0) &&
                     <div className='button-list' style = {{marginLeft :`${WIDTH*3/5}px`, marginTop :`${HEIGHT*2/3}px`}}>
-                        <Button disabled = {(!Talking) || (user.moneyInTurn < roomStatus.turnStake)} variant="dark" key = "Check" onClick={() =>{SendAction("Check")}}>Check</Button>
-                        <Button disabled = {(!Talking)  || (user.moneyInTurn == roomStatus.turnStake)} 
-                                variant="dark" key = "Call" onClick={() => {SendAction("Call")}}>
-                                Call {(roomStatus.turnStake > user.moneyInTurn) ? (roomStatus.turnStake - user.moneyInTurn): null }
+                        
+                        <Button 
+                        disabled = {(!Talking) || (user.moneyInTurn < roomStatus.turnStake)}        
+                        variant="dark" key = "Check" 
+                        onClick={() =>{connection.invoke("Check")}}>
+                        Check
                         </Button>
-                        <Button disabled = {(!Talking) || (roomStatus.turnStake > user.moneyInTable)} variant="dark" key = "Raise" onClick={() =>{SendAction("Raise", 111)}}>Raise</Button>
-                        <Button disabled = {(!Talking)} variant="dark" key = "Fold" onClick={() => {SendAction("Fold")}}>Fold</Button>
+                        
+                        <Button 
+                        disabled = {(!Talking)  || (user.moneyInTurn == roomStatus.turnStake)} 
+                        variant="dark" key = "Call" 
+                        onClick={() => {connection.invoke("Call")}}>
+                        Call {(roomStatus.turnStake > user.moneyInTurn) ? (roomStatus.turnStake - user.moneyInTurn): null }
+                        </Button>
+                        
+                        <Button 
+                        disabled = {(!Talking) || (roomStatus.turnStake > user.moneyInTable)} 
+                        variant="dark" key = "Raise" 
+                        onClick={() =>{connection.invoke("Raise", 100)}}>
+                        Raise
+                        </Button>
+                        
+                        <Button disabled = {(!Talking)}
+                        variant="dark" key = "Fold" 
+                        onClick={() => {connection.invoke("Fold")}}>
+                        Fold
+                        </Button>
+                        
                     </div>
                     }
             </div>

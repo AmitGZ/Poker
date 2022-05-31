@@ -103,10 +103,6 @@ const App = () => {
     }
   }
 
-  const SendAction = async (action, amount = null) =>{
-    connection.invoke("ReceiveAction", action, amount)
-  }
-
   const LeaveRoom = async () => {
      //invoking send message
     await connection.invoke("LeaveRoom");   
@@ -134,7 +130,7 @@ const App = () => {
                     user ={user}
                     createRoom = {createRoom}
                     LeaveRoom = {LeaveRoom}
-                    SendAction = {SendAction}
+                    connection = {connection}
               />
             }
         </div>

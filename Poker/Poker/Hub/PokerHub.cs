@@ -14,7 +14,6 @@ using Poker.DataModel.Dto;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
 
-// Change LobbyDto
 // Put User inside Player
 
 namespace Poker.Hubs
@@ -157,7 +156,7 @@ namespace Poker.Hubs
             return Task.CompletedTask;
         }
 
-        public Task ReceiveAction(string action, int? amount = null)
+        public Task Fold()
         {
             // Getting the user, room, and players in room
             User user = GetUserByConnectionId();
@@ -169,7 +168,70 @@ namespace Poker.Hubs
             if (room.TalkingPosition != user.Position)
                 return null;                  // Validating it's the player's turn
 
-            room.ReceiveAction(DbContext, action, amount);
+            room.Fold(DbContext, user);
+
+            SendUserStatus(user);             // Sending User's status
+
+            SendRoomStatus(room);             // Sending everyone in the room the status
+
+            return Task.CompletedTask;
+        }
+
+        public Task Call()
+        {
+            // Getting the user, room, and players in room
+            User user = GetUserByConnectionId();
+            if (user == null) return null;    // Verifying user exists
+
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.RoomId);
+            if (room == null) return null;    // Verifying room exists
+
+            if (room.TalkingPosition != user.Position)
+                return null;                  // Validating it's the player's turn
+
+            room.Call(DbContext, user);
+
+            SendUserStatus(user);             // Sending User's status
+
+            SendRoomStatus(room);             // Sending everyone in the room the status
+
+            return Task.CompletedTask;
+        }
+
+        public Task Raise(int amount)
+        {
+            // Getting the user, room, and players in room
+            User user = GetUserByConnectionId();
+            if (user == null) return null;    // Verifying user exists
+
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.RoomId);
+            if (room == null) return null;    // Verifying room exists
+
+            if (room.TalkingPosition != user.Position)
+                return null;                  // Validating it's the player's turn
+
+            room.Raise(DbContext, user, amount);
+
+            SendUserStatus(user);             // Sending User's status
+
+            SendRoomStatus(room);             // Sending everyone in the room the status
+
+            return Task.CompletedTask;
+        }
+
+        public Task Check()
+        {
+            // Getting the user, room, and players in room
+            User user = GetUserByConnectionId();
+            if (user == null) return null;    // Verifying user exists
+
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.RoomId);
+            if (room == null) return null;    // Verifying room exists
+
+            if (room.TalkingPosition != user.Position)
+                return null;                  // Validating it's the player's turn
+
+            room.Check(DbContext, user);
 
             SendUserStatus(user);             // Sending User's status
 
@@ -188,23 +250,23 @@ namespace Poker.Hubs
             }
         }
 
-        public void SendUserStatus(User user)
+        private void SendUserStatus(User user)
         {
             List<string> userConnectionIds = GetUserConnections(user);
             Clients.Clients(userConnectionIds).SendAsync("UserStatus", new UserDto(user));
         }
 
-        public List<string> GetUserConnections(User user)
+        private List<string> GetUserConnections(User user)
         {
             return ConnectionIds.Where(d => d.Value == user.Username).Select(d => d.Key).ToList();
         }
 
-        public void SendLobbyStatus()
+        private void SendLobbyStatus()
         {
             Clients.All.SendAsync("AllRoomsStatus", new LobbyDto(DbContext.Rooms.ToList()));
         }
 
-        public User GetUserByConnectionId()
+        private User GetUserByConnectionId()
         {
             string username;
             if (!ConnectionIds.TryGetValue(Context.ConnectionId, out username))

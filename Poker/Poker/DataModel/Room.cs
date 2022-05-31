@@ -166,69 +166,72 @@ namespace PokerClassLibrary
             {
                 // Set next player the winner
 
-                // End game
-                EndGame(context);
+                EndGame(context);        // End game
 
+                StartGame(context);      // Start game
+                
                 return false;
             }
+            FinishTurn(context);
             return true;
         }
 
-        public bool ReceiveAction(PokerContext context,string action, int? amount)
+        public bool Call(PokerContext context, User user)
+        {
+            // User has enough money
+            if (TurnStake <= user.MoneyInTable)
+            {
+                user.MoneyInTurn += TurnStake;
+                user.MoneyInTable -= TurnStake;
+            }
+            else
+            {
+                // Open new pot
+            }
+
+            FinishTurn(context);
+            return true;
+        }
+
+        public bool Raise(PokerContext context, User user, int amount)
+        {
+            // Validating user can raise
+            if (user.MoneyInTable < amount)
+                return false;
+
+            TurnStake += (int)amount;
+            user.MoneyInTable -= (int)amount;
+            user.MoneyInTurn += (int)amount;
+
+            //going another Stage
+            Users.Where(u => u.IsActive == true).ToList().ForEach(u => u.PlayedThisTurn = false);
+
+            FinishTurn(context);
+            return true;
+        }
+        public bool Check(PokerContext context, User user)
+        {
+            if (TurnStake > 0)
+            {
+                return false; // Invalid operation
+            }
+            FinishTurn(context);
+            return true;
+        }
+
+        private bool FinishTurn(PokerContext context)
         {
             // Pervious talking user
             User talkingUser = Users.FirstOrDefault(u => u.Position == TalkingPosition);
 
             // Getting list of all player positions
             List<short> activePositions = Users.Where(u => u.IsActive == true).OrderBy(u => u.Position).Select(u => u.Position).ToList();
-            
-            if(action == "Fold")
-            {
-                if(!Fold(context, talkingUser))
-                {
-                    StartGame(context);
-                    return false;
-                }
-            }
-            else if(action == "Call")
-            {
-                // User has enough money
-                if (TurnStake <= talkingUser.MoneyInTable)
-                {
-                    talkingUser.MoneyInTurn += TurnStake;
-                    talkingUser.MoneyInTable -= TurnStake;
-                }
-                else
-                {
-                    // Open new pot
-                }
-            }
-            else if (action == "Raise" && amount != null)
-            {
-                // Validating user can raise
-                if (talkingUser.MoneyInTable < amount)
-                    return false;
 
-                TurnStake += (int)amount;
-                talkingUser.MoneyInTable -= (int)amount;
-                talkingUser.MoneyInTurn += (int)amount;
-
-                //going another Stage
-                Users.Where(u => u.IsActive == true).ToList().ForEach(u => u.PlayedThisTurn = false);
-            }
-            else if(action == "Check")
-            {
-                if (TurnStake > 0)
-                {
-                    return false; // Invalid operation
-                }
-            }
-
-            // Setting player already played
+            // Setting player as already played
             talkingUser.PlayedThisTurn = true;
 
             // Check if everyone played this turn
-            if(Users.Where(u => u.IsActive == true && u.PlayedThisTurn == false).Count() ==0)
+            if (Users.Where(u => u.IsActive == true && u.PlayedThisTurn == false).Count() == 0)
             {
                 // Start new Stage
                 Users.ForEach(u => u.PlayedThisTurn = false);
@@ -241,7 +244,7 @@ namespace PokerClassLibrary
                 });
 
                 // Checking if game ended
-                if(Stage > GameStage.River)
+                if (Stage > GameStage.River)
                 {
                     // End game
                     EndGame(context);
@@ -255,7 +258,7 @@ namespace PokerClassLibrary
             }
 
             // Setting new talking position
-            TalkingPosition = activePositions.ElementAt((activePositions.IndexOf(TalkingPosition)+1) % activePositions.Count());
+            TalkingPosition = activePositions.ElementAt((activePositions.IndexOf(TalkingPosition) + 1) % activePositions.Count());
 
             // Updating database
             context.SaveChanges();
