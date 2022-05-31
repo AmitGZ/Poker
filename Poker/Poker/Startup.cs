@@ -47,6 +47,7 @@ namespace Poker
                 });
             });
 
+            services.AddSingleton<IDictionary<string, string>>(options => new Dictionary<string, string>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

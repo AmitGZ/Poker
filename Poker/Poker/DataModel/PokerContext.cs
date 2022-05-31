@@ -39,7 +39,6 @@ namespace PokerClassLibrary
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasMaxLength(50);
-
             });
 
             // User

@@ -66,7 +66,7 @@ namespace PokerClassLibrary
             user.PlayedThisTurn = false;
             user.Position = pos;
             user.IsActive = false;
-            Users.Add(user);
+            Users.Add(context.Users.FirstOrDefault(u => u.Username == user.Username));
             context.SaveChanges();
 
             // If enough players start game

@@ -28,7 +28,7 @@ namespace Poker.Data
             new User{Username="Amit",    Password="1234",      Money=1000},
             new User{Username="Ofek",    Password="1234",      Money=1000},
             new User{Username="Golan",   Password="1234",      Money=1000},
-            new User{Username="Gytis",   Password="Barzdukas", Money=1000},
+            new User{Username="Ofir",    Password="1234",      Money=1000},
             new User{Username="Yan",     Password="Li",        Money=1000},
             new User{Username="Peggy",   Password="Justice",   Money=1000},
             new User{Username="Laura",   Password="Norman",    Money=1000},

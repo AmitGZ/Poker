@@ -18,12 +18,9 @@ namespace PokerClassLibrary
         public short Position { get; set; }
         public string? RoomId { get; set; }
         public virtual List<Card> Cards { get; set; }
-        [NotMapped]
-        public List<string> ConnectionIds { get; set; }
 
         public User()
         {
-            ConnectionIds = new List<string>();
             Cards = new List<Card>();
             PlayedThisTurn = false;
             IsActive = false;
