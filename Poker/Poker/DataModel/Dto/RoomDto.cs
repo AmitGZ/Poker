@@ -18,13 +18,13 @@ namespace Poker.DataModel.Dto
         public GameStage Stage { get; set; }
         public int TurnStake { get; set; }
 
-        public RoomDto(Room room, User user)
+        public RoomDto(Room room, User user, Boolean cardsPrivate = true)
         {
             Id = room.Id;
             Name = room.Name;
             Users = new List<UserDto>();
             Users.Add(new UserDto(user, false));
-            room.Users.Where(u => u.User.Username != user.Username).ToList().ForEach(us => Users.Add(new UserDto(us.User, true)));
+            room.Users.Where(u => u.User.Username != user.Username).ToList().ForEach(us => Users.Add(new UserDto(us.User, cardsPrivate)));
             NumberOfPlayers = room.Users.Count;
             TalkingPosition = room.TalkingPosition;
             Pot = room.Pot;

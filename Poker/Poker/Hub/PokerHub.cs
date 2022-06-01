@@ -115,6 +115,9 @@ namespace Poker.Hubs
             user.Money += (int)user.UserInGame.MoneyInTable;
             DbContext.SaveChanges();
 
+            if (room.Users.Count() > 1)
+                room.StartGame(DbContext);
+
             // Sending everyone in the room the status
             List<User> playersInRoom = DbContext.Users.Where(u => u.UserInGame.RoomId == room.Id).ToList();
             if (playersInRoom.Count() == 0)
@@ -159,6 +162,7 @@ namespace Poker.Hubs
             return Task.CompletedTask;
         }
 
+        // "Synchrnoenous" fold received from fold button
         public Task Fold()
         {
             // Getting the user, room, and players in room
@@ -172,6 +176,9 @@ namespace Poker.Hubs
                 return null;                  // Validating it's the player's turn
 
             room.Fold(DbContext, user.UserInGame);
+
+            if (room.Users.Count() > 1)       // Starting new game
+                room.StartGame(DbContext);
 
             SendUserStatus(user);             // Sending User's status
 
@@ -243,13 +250,14 @@ namespace Poker.Hubs
             return Task.CompletedTask;
         }
 
-        public void SendRoomStatus(Room room)
+        private void SendRoomStatus(Room room)
         {
             // Sending everyone in the room the status
             foreach (UserInGame u in room.Users)
             {
                 List<string> tmpUserConnectionIds = GetUserConnections(u.User);
                 Clients.Clients(tmpUserConnectionIds).SendAsync("RoomStatus", new RoomDto(room, u.User));
+                SendUserStatus(u.User);
             }
         }
 

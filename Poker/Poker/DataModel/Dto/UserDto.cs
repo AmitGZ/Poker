@@ -32,7 +32,7 @@ namespace Poker.DataModel.Dto
             }
             else
             {
-                // TODO remove
+                // TODO remove somehow
                 MoneyInTable = 0;
                 RoomId = null;
                 Position = 0;

@@ -160,9 +160,8 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
 
         drawTableStatus(ctx);
 
-        console.log((roomStatus.turnStake > user.moneyInTurn))
-        console.log((roomStatus.turnStake))
-        console.log((user.moneyInTurn))
+        console.log((user))
+        console.log((roomStatus.users))
 
     },[loaded_num, roomStatus])
 
@@ -206,7 +205,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
                         onClick={() => {connection.invoke("Fold")}}>
                         Fold
                         </Button>
-                        
+
                     </div>
                     }
             </div>

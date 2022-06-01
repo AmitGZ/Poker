@@ -153,8 +153,12 @@ namespace PokerClassLibrary
 
         public bool Fold(PokerContext context,UserInGame userInGame)
         {
-            userInGame.IsActive = false;
-            userInGame.Cards.ToList().ForEach(c => userInGame.Cards.Remove(c));
+            if(userInGame.Position == TalkingPosition)
+            {
+                FinishTurn(context, userInGame);
+            }
+            userInGame.IsActive = false;                                         // Setting inactive
+            userInGame.Cards.ToList().ForEach(c => userInGame.Cards.Remove(c));  // Returning cards
 
             // Getting list of all player positions
             List<short> activePositions = Users.Where(u => u.IsActive == true).Select(u => u.Position).ToList();
@@ -164,14 +168,8 @@ namespace PokerClassLibrary
                 // TODO Set next player the winner
 
                 EndGame(context);        // End game
-
-                StartGame(context);      // Start game
                 
                 return false;
-            }
-            if (activePositions.Count() > 0)
-            {
-                FinishTurn(context, userInGame);
             }
             return true;
         }
