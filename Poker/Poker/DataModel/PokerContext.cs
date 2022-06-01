@@ -24,6 +24,7 @@ namespace PokerClassLibrary
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Card> Cards { get; set; }
         public virtual DbSet<Pot> Pots { get; set; }
+        public virtual DbSet<UserInGame> UsersInGame { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -54,9 +55,24 @@ namespace PokerClassLibrary
 
                 entity.Property(e => e.Money).HasColumnName("userMoney");
 
-                entity.HasOne<Room>().WithMany(room => room.Users).HasForeignKey(user => user.RoomId).IsRequired(false);
+                entity.HasOne<UserInGame>(e => e.UserInGame)
+                    .WithOne(u => u.User)
+                    .HasForeignKey<UserInGame>(u => u.Username)
+                    .IsRequired(false);
+            });
 
-                entity.HasMany<Card>(e => e.Cards).WithOne().OnDelete(DeleteBehavior.Cascade);
+            // UserInGame
+            modelBuilder.Entity<UserInGame>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+
+                entity.HasOne<Room>()
+                    .WithMany(room => room.Users)
+                    .HasForeignKey(userInGame => userInGame.RoomId)
+                    .IsRequired(true)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Pot
@@ -66,8 +82,9 @@ namespace PokerClassLibrary
 
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-                entity.HasOne<Room>().WithMany(room => room.Pots).
-                    HasForeignKey(pot => pot.RoomId).IsRequired(false)
+                entity.HasOne<Room>().WithMany(room => room.Pots)
+                    .HasForeignKey(pot => pot.RoomId)
+                    .IsRequired(true)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
@@ -78,13 +95,14 @@ namespace PokerClassLibrary
 
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-                entity.HasOne<User>().WithMany(room => room.Cards).
-                    HasForeignKey(card => card.UserId).IsRequired(false)
-                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne<UserInGame>().WithMany(user => user.Cards)
+                    .HasForeignKey(card => card.UserId)
+                    .IsRequired(false);
 
-                entity.HasOne<Room>().WithMany(room => room.CardsOnTable).
-                    HasForeignKey(card => card.RoomId).IsRequired(false).
-                    OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne<Room>().WithMany(room => room.CardsOnTable)
+                    .HasForeignKey(card => card.RoomId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

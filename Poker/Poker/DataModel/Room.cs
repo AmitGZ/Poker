@@ -24,7 +24,7 @@ namespace PokerClassLibrary
         public string Name { get; set; }
         public virtual List<Card> CardsOnTable { get; set; }
         public virtual List<Pot> Pots { get; set; }
-        public virtual List<User> Users { get; set; }
+        public virtual List<UserInGame> Users { get; set; }
         public short TalkingPosition { get; set; }
         public short DealerPosition { get; set; }
         public int Pot { get; set; }
@@ -34,7 +34,7 @@ namespace PokerClassLibrary
 
         public Room()
         {
-            Users = new List<User>();
+            Users = new List<UserInGame>();
             CardsOnTable = new List<Card>();
             Pots = new List<Pot>();
             Pot = 0;
@@ -54,6 +54,7 @@ namespace PokerClassLibrary
 
             // Getting available position
             List<short> positions = Users.Select(p => p.Position).ToList();
+
             short pos = 0;
             for (; pos < 5; pos++)
                 if (!positions.Contains(pos))
@@ -61,12 +62,8 @@ namespace PokerClassLibrary
 
             // Adding the player to the room
             user.Money -= enterMoney;
-            user.MoneyInTable = enterMoney;
-            user.MoneyInTurn = 0;
-            user.PlayedThisTurn = false;
-            user.Position = pos;
-            user.IsActive = false;
-            Users.Add(context.Users.FirstOrDefault(u => u.Username == user.Username));
+            user.UserInGame = new UserInGame(enterMoney, pos);
+            Users.Add(user.UserInGame);
             context.SaveChanges();
 
             // If enough players start game
@@ -125,7 +122,7 @@ namespace PokerClassLibrary
             TalkingPosition = positions.ElementAt((positions.IndexOf(DealerPosition) + 3) % positions.Count());
 
             // Getting talking user
-            User talklingUser = Users.FirstOrDefault(u=>u.Position == TalkingPosition);
+            UserInGame talklingUser = Users.FirstOrDefault(u => u.Position == TalkingPosition);
 
             // Set everyone active
             Users.ForEach(u => u.IsActive = true);
@@ -154,17 +151,17 @@ namespace PokerClassLibrary
             return true;
         }
 
-        public bool Fold(PokerContext context,User user)
+        public bool Fold(PokerContext context,UserInGame userInGame)
         {
-            user.IsActive = false;
-            user.Cards.ToList().ForEach(c => user.Cards.Remove(c));
+            userInGame.IsActive = false;
+            userInGame.Cards.ToList().ForEach(c => userInGame.Cards.Remove(c));
 
             // Getting list of all player positions
             List<short> activePositions = Users.Where(u => u.IsActive == true).Select(u => u.Position).ToList();
 
             if (activePositions.Count() == 1)
             {
-                // Set next player the winner
+                // TODO Set next player the winner
 
                 EndGame(context);        // End game
 
@@ -172,63 +169,63 @@ namespace PokerClassLibrary
                 
                 return false;
             }
-            FinishTurn(context);
+            if (activePositions.Count() > 0)
+            {
+                FinishTurn(context, userInGame);
+            }
             return true;
         }
 
-        public bool Call(PokerContext context, User user)
+        public bool Call(PokerContext context, UserInGame userInGame)
         {
             // User has enough money
-            if (TurnStake <= user.MoneyInTable)
+            if (TurnStake <= userInGame.MoneyInTable)
             {
-                user.MoneyInTurn += TurnStake;
-                user.MoneyInTable -= TurnStake;
+                userInGame.MoneyInTurn += TurnStake;
+                userInGame.MoneyInTable -= TurnStake;
             }
             else
             {
                 // Open new pot
             }
 
-            FinishTurn(context);
+            FinishTurn(context, userInGame);
             return true;
         }
 
-        public bool Raise(PokerContext context, User user, int amount)
+        public bool Raise(PokerContext context, UserInGame userInGame, int amount)
         {
             // Validating user can raise
-            if (user.MoneyInTable < amount)
+            if (userInGame.MoneyInTable < amount)
                 return false;
 
             TurnStake += (int)amount;
-            user.MoneyInTable -= (int)amount;
-            user.MoneyInTurn += (int)amount;
+            userInGame.MoneyInTable -= (int)amount;
+            userInGame.MoneyInTurn += (int)amount;
 
             //going another Stage
             Users.Where(u => u.IsActive == true).ToList().ForEach(u => u.PlayedThisTurn = false);
 
-            FinishTurn(context);
+            FinishTurn(context, userInGame);
             return true;
         }
-        public bool Check(PokerContext context, User user)
+        public bool Check(PokerContext context, UserInGame userInGame)
         {
             if (TurnStake > 0)
             {
                 return false; // Invalid operation
             }
-            FinishTurn(context);
+            FinishTurn(context, userInGame);
             return true;
         }
 
-        private bool FinishTurn(PokerContext context)
+        private bool FinishTurn(PokerContext context, UserInGame userInGame)
         {
-            // Pervious talking user
-            User talkingUser = Users.FirstOrDefault(u => u.Position == TalkingPosition);
-
             // Getting list of all player positions
             List<short> activePositions = Users.Where(u => u.IsActive == true).OrderBy(u => u.Position).Select(u => u.Position).ToList();
 
             // Setting player as already played
-            talkingUser.PlayedThisTurn = true;
+            userInGame.PlayedThisTurn = true;
 
             // Check if everyone played this turn
             if (Users.Where(u => u.IsActive == true && u.PlayedThisTurn == false).Count() == 0)

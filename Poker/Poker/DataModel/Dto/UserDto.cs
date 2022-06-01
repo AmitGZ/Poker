@@ -21,12 +21,25 @@ namespace Poker.DataModel.Dto
         {
             Username = user.Username;
             Money = user.Money;
-            MoneyInTable = user.MoneyInTable;
-            RoomId = user.RoomId;
-            Position = user.Position;
-            Cards = (isPrivate) ? new List<Card>() : user.Cards;
-            MoneyInTurn = user.MoneyInTurn;
-            IsActive = user.IsActive;
+            if (user.UserInGame != null)
+            {
+                MoneyInTable = user.UserInGame.MoneyInTable;
+                RoomId = user.UserInGame.RoomId;
+                Position = user.UserInGame.Position;
+                Cards = (isPrivate) ? new List<Card>() : user.UserInGame.Cards;
+                MoneyInTurn = user.UserInGame.MoneyInTurn;
+                IsActive = user.UserInGame.IsActive;
+            }
+            else
+            {
+                // TODO remove
+                MoneyInTable = 0;
+                RoomId = null;
+                Position = 0;
+                Cards = new List<Card>();
+                MoneyInTurn = 0;
+                IsActive = false;
+            }
         }
     }
 }

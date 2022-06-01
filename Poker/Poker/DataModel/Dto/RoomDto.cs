@@ -24,7 +24,7 @@ namespace Poker.DataModel.Dto
             Name = room.Name;
             Users = new List<UserDto>();
             Users.Add(new UserDto(user, false));
-            room.Users.Where(u => u.Username != user.Username).ToList().ForEach(us => Users.Add(new UserDto(us, true)));
+            room.Users.Where(u => u.User.Username != user.Username).ToList().ForEach(us => Users.Add(new UserDto(us.User, true)));
             NumberOfPlayers = room.Users.Count;
             TalkingPosition = room.TalkingPosition;
             Pot = room.Pot;
