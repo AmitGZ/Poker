@@ -14,6 +14,7 @@ using Poker.DataModel.Dto;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
 using Poker.DataModel;
+using BluffinMuffin.HandEvaluator;
 
 namespace Poker.Hubs
 {
@@ -63,7 +64,7 @@ namespace Poker.Hubs
 
             if (user.UserInGame != null)
             {
-                Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.RoomId);
+                Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.Room.Id);
                 if (room != null)
                     SendRoomStatus(room);                            // Sending Room status
             }
@@ -104,7 +105,7 @@ namespace Poker.Hubs
             if (user == null || user.UserInGame == null)
                 return null;                             // Verifying user and room exist
             
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.RoomId);
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.Room.Id);
             if (room == null) return null;               // Verifying room exists
 
             room.Fold(DbContext, user.UserInGame);       // Folding player
@@ -118,7 +119,7 @@ namespace Poker.Hubs
                 room.StartGame(DbContext);
 
             // Sending everyone in the room the status
-            List<User> playersInRoom = DbContext.Users.Where(u => u.UserInGame.RoomId == room.Id).ToList();
+            List<User> playersInRoom = DbContext.Users.Where(u => u.UserInGame.Room.Id == room.Id).ToList();
             if (playersInRoom.Count() == 0)
             {
                 DbContext.Rooms.Remove(room);
@@ -151,7 +152,7 @@ namespace Poker.Hubs
             User user = GetUserByConnectionId();
             if (user == null) return null;    // Verifying user exists
 
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.RoomId);
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.Room.Id);
             if (room == null) return null;    // Verifying room exists
 
             //sending a message to all users in current room
@@ -168,7 +169,7 @@ namespace Poker.Hubs
             User user = GetUserByConnectionId();
             if (user == null) return null;    // Verifying user exists
 
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.RoomId);
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.Room.Id);
             if (room == null) return null;    // Verifying room exists
 
             if (room.TalkingPosition != user.UserInGame.Position)
@@ -189,7 +190,7 @@ namespace Poker.Hubs
             User user = GetUserByConnectionId();
             if (user == null) return null;    // Verifying user exists
 
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.RoomId);
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.Room.Id);
             if (room == null) return null;    // Verifying room exists
 
             if (room.TalkingPosition != user.UserInGame.Position)
@@ -210,7 +211,7 @@ namespace Poker.Hubs
             User user = GetUserByConnectionId();
             if (user == null) return null;    // Verifying user exists
 
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.RoomId);
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.Room.Id);
             if (room == null) return null;    // Verifying room exists
 
             if (room.TalkingPosition != user.UserInGame.Position)
@@ -231,7 +232,7 @@ namespace Poker.Hubs
             User user = GetUserByConnectionId();
             if (user == null) return null;    // Verifying user exists
 
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.RoomId);
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.Room.Id);
             if (room == null) return null;    // Verifying room exists
 
             if (room.TalkingPosition != user.UserInGame.Position)

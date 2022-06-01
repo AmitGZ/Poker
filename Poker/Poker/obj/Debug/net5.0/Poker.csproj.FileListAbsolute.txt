@@ -61,3 +61,4 @@ C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\obj\Debug\net5.0\Poker.genr
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\obj\Debug\net5.0\Poker.csproj.AssemblyReference.cache
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\Castle.Core.dll
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Proxies.dll
+C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\BluffinMuffin.HandEvaluator.dll

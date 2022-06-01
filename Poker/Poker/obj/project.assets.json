@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     "net5.0": {
+      "BluffinMuffin.HandEvaluator/3.1.2": {
+        "type": "package",
+        "compile": {
+          "lib/BluffinMuffin.HandEvaluator.dll": {}
+        },
+        "runtime": {
+          "lib/BluffinMuffin.HandEvaluator.dll": {}
+        }
+      },
       "Castle.Core/4.4.1": {
         "type": "package",
         "dependencies": {
@@ -2234,6 +2243,18 @@
     }
   },
   "libraries": {
+    "BluffinMuffin.HandEvaluator/3.1.2": {
+      "sha512": "I46wDuLldanmbvpZlxEQJXLPn4ZnXTrImRgp8V8oPb5MT7XqkbxVrAxMior1ceDdFKCU9hbPesp29psmfppaBA==",
+      "type": "package",
+      "path": "bluffinmuffin.handevaluator/3.1.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "bluffinmuffin.handevaluator.3.1.2.nupkg.sha512",
+        "bluffinmuffin.handevaluator.nuspec",
+        "lib/BluffinMuffin.HandEvaluator.dll"
+      ]
+    },
     "Castle.Core/4.4.1": {
       "sha512": "zanbjWC0Y05gbx4eGXkzVycOQqVOFVeCjVsDSyuao9P4mtN1w3WxxTo193NGC7j3o2u3AJRswaoC6hEbnGACnQ==",
       "type": "package",
@@ -7644,6 +7665,7 @@
   },
   "projectFileDependencyGroups": {
     "net5.0": [
+      "BluffinMuffin.HandEvaluator >= 3.1.2",
       "Microsoft.EntityFrameworkCore >= 5.0.16",
       "Microsoft.EntityFrameworkCore.Proxies >= 5.0.16",
       "Microsoft.EntityFrameworkCore.Relational >= 5.0.16",
@@ -7691,6 +7713,10 @@
       "net5.0": {
         "targetAlias": "net5.0",
         "dependencies": {
+          "BluffinMuffin.HandEvaluator": {
+            "target": "Package",
+            "version": "[3.1.2, )"
+          },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",
             "version": "[5.0.16, )"
@@ -7739,5 +7765,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.406\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'BluffinMuffin.HandEvaluator 3.1.2' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net5.0'. This package may not be fully compatible with your project.",
+      "libraryId": "BluffinMuffin.HandEvaluator",
+      "targetGraphs": [
+        "net5.0"
+      ]
+    }
+  ]
 }

@@ -68,9 +68,9 @@ namespace PokerClassLibrary
 
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
-                entity.HasOne<Room>()
+                entity.HasOne<Room>(e => e.Room)
                     .WithMany(room => room.Users)
-                    .HasForeignKey(userInGame => userInGame.RoomId)
+                    //.HasForeignKey(userInGame => userInGame.RoomId)
                     .IsRequired(true)
                     .OnDelete(DeleteBehavior.Cascade);
             });

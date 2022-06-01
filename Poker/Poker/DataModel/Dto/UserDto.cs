@@ -24,7 +24,7 @@ namespace Poker.DataModel.Dto
             if (user.UserInGame != null)
             {
                 MoneyInTable = user.UserInGame.MoneyInTable;
-                RoomId = user.UserInGame.RoomId;
+                RoomId = user.UserInGame.Room.Id;
                 Position = user.UserInGame.Position;
                 Cards = (isPrivate) ? new List<Card>() : user.UserInGame.Cards;
                 MoneyInTurn = user.UserInGame.MoneyInTurn;
