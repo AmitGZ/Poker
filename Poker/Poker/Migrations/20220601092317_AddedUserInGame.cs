@@ -2,7 +2,7 @@
 
 namespace Poker.Migrations
 {
-    public partial class addedRoomToCard : Migration
+    public partial class AddedUserInGame : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,14 +13,28 @@ namespace Poker.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     TalkingPosition = table.Column<short>(type: "smallint", nullable: false),
-                    DealerPosition = table.Column<int>(type: "int", nullable: false),
+                    DealerPosition = table.Column<short>(type: "smallint", nullable: false),
                     Pot = table.Column<int>(type: "int", nullable: false),
                     TurnStake = table.Column<int>(type: "int", nullable: false),
-                    Stage = table.Column<int>(type: "int", nullable: false)
+                    Stage = table.Column<int>(type: "int", nullable: false),
+                    BigBlind = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rooms", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    userName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    userMoney = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.userName);
                 });
 
             migrationBuilder.CreateTable(
@@ -44,28 +58,32 @@ namespace Poker.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "UsersInGame",
                 columns: table => new
                 {
-                    userName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    userMoney = table.Column<int>(type: "int", nullable: false),
-                    ConnectionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     MoneyInTable = table.Column<int>(type: "int", nullable: false),
                     MoneyInTurn = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     PlayedThisTurn = table.Column<bool>(type: "bit", nullable: false),
                     Position = table.Column<short>(type: "smallint", nullable: false),
-                    RoomId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    RoomId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(50)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.userName);
+                    table.PrimaryKey("PK_UsersInGame", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Rooms_RoomId",
+                        name: "FK_UsersInGame_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UsersInGame_Users_Username",
+                        column: x => x.Username,
+                        principalTable: "Users",
+                        principalColumn: "userName",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -76,7 +94,7 @@ namespace Poker.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Suit = table.Column<int>(type: "int", nullable: false),
                     Value = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     RoomId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -89,11 +107,11 @@ namespace Poker.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Cards_Users_UserId",
+                        name: "FK_Cards_UsersInGame_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "userName",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "UsersInGame",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -112,9 +130,16 @@ namespace Poker.Migrations
                 column: "RoomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_RoomId",
-                table: "Users",
+                name: "IX_UsersInGame_RoomId",
+                table: "UsersInGame",
                 column: "RoomId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UsersInGame_Username",
+                table: "UsersInGame",
+                column: "Username",
+                unique: true,
+                filter: "[Username] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -126,10 +151,13 @@ namespace Poker.Migrations
                 name: "Pots");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "UsersInGame");
 
             migrationBuilder.DropTable(
                 name: "Rooms");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

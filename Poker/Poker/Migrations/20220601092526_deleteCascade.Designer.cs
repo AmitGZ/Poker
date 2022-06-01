@@ -9,8 +9,8 @@ using PokerClassLibrary;
 namespace Poker.Migrations
 {
     [DbContext(typeof(PokerContext))]
-    [Migration("20220525150609_addedRoomToCard")]
-    partial class addedRoomToCard
+    [Migration("20220601092526_deleteCascade")]
+    partial class deleteCascade
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,6 +41,45 @@ namespace Poker.Migrations
                     b.ToTable("Pots");
                 });
 
+            modelBuilder.Entity("Poker.DataModel.UserInGame", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MoneyInTable")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MoneyInTurn")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("PlayedThisTurn")
+                        .HasColumnType("bit");
+
+                    b.Property<short>("Position")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("RoomId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("Username")
+                        .IsUnique()
+                        .HasFilter("[Username] IS NOT NULL");
+
+                    b.ToTable("UsersInGame");
+                });
+
             modelBuilder.Entity("PokerClassLibrary.Card", b =>
                 {
                     b.Property<string>("Id")
@@ -54,7 +93,7 @@ namespace Poker.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Value")
                         .HasColumnType("int");
@@ -74,8 +113,11 @@ namespace Poker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("DealerPosition")
+                    b.Property<int>("BigBlind")
                         .HasColumnType("int");
+
+                    b.Property<short>("DealerPosition")
+                        .HasColumnType("smallint");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -106,38 +148,15 @@ namespace Poker.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("userName");
 
-                    b.Property<string>("ConnectionId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<int>("Money")
                         .HasColumnType("int")
                         .HasColumnName("userMoney");
-
-                    b.Property<int>("MoneyInTable")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MoneyInTurn")
-                        .HasColumnType("int");
 
                     b.Property<string>("Password")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<bool>("PlayedThisTurn")
-                        .HasColumnType("bit");
-
-                    b.Property<short>("Position")
-                        .HasColumnType("smallint");
-
-                    b.Property<string>("RoomId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Username");
-
-                    b.HasIndex("RoomId");
 
                     b.ToTable("Users");
                 });
@@ -150,6 +169,21 @@ namespace Poker.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Poker.DataModel.UserInGame", b =>
+                {
+                    b.HasOne("PokerClassLibrary.Room", null)
+                        .WithMany("Users")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PokerClassLibrary.User", "User")
+                        .WithOne("UserInGame")
+                        .HasForeignKey("Poker.DataModel.UserInGame", "Username");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PokerClassLibrary.Card", b =>
                 {
                     b.HasOne("PokerClassLibrary.Room", null)
@@ -157,17 +191,14 @@ namespace Poker.Migrations
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("PokerClassLibrary.User", null)
+                    b.HasOne("Poker.DataModel.UserInGame", null)
                         .WithMany("Cards")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("PokerClassLibrary.User", b =>
+            modelBuilder.Entity("Poker.DataModel.UserInGame", b =>
                 {
-                    b.HasOne("PokerClassLibrary.Room", null)
-                        .WithMany("Users")
-                        .HasForeignKey("RoomId");
+                    b.Navigation("Cards");
                 });
 
             modelBuilder.Entity("PokerClassLibrary.Room", b =>
@@ -181,7 +212,7 @@ namespace Poker.Migrations
 
             modelBuilder.Entity("PokerClassLibrary.User", b =>
                 {
-                    b.Navigation("Cards");
+                    b.Navigation("UserInGame");
                 });
 #pragma warning restore 612, 618
         }

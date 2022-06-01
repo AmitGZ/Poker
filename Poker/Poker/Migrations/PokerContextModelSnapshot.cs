@@ -30,6 +30,7 @@ namespace Poker.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("RoomId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -37,6 +38,45 @@ namespace Poker.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("Pots");
+                });
+
+            modelBuilder.Entity("Poker.DataModel.UserInGame", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("MoneyInTable")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MoneyInTurn")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("PlayedThisTurn")
+                        .HasColumnType("bit");
+
+                    b.Property<short>("Position")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("RoomId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
+
+                    b.HasIndex("Username")
+                        .IsUnique()
+                        .HasFilter("[Username] IS NOT NULL");
+
+                    b.ToTable("UsersInGame");
                 });
 
             modelBuilder.Entity("PokerClassLibrary.Card", b =>
@@ -52,7 +92,7 @@ namespace Poker.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Value")
                         .HasColumnType("int");
@@ -107,35 +147,15 @@ namespace Poker.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("userName");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.Property<int>("Money")
                         .HasColumnType("int")
                         .HasColumnName("userMoney");
-
-                    b.Property<int>("MoneyInTable")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MoneyInTurn")
-                        .HasColumnType("int");
 
                     b.Property<string>("Password")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<bool>("PlayedThisTurn")
-                        .HasColumnType("bit");
-
-                    b.Property<short>("Position")
-                        .HasColumnType("smallint");
-
-                    b.Property<string>("RoomId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Username");
-
-                    b.HasIndex("RoomId");
 
                     b.ToTable("Users");
                 });
@@ -145,7 +165,23 @@ namespace Poker.Migrations
                     b.HasOne("PokerClassLibrary.Room", null)
                         .WithMany("Pots")
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Poker.DataModel.UserInGame", b =>
+                {
+                    b.HasOne("PokerClassLibrary.Room", null)
+                        .WithMany("Users")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PokerClassLibrary.User", "User")
+                        .WithOne("UserInGame")
+                        .HasForeignKey("Poker.DataModel.UserInGame", "Username");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PokerClassLibrary.Card", b =>
@@ -155,17 +191,14 @@ namespace Poker.Migrations
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("PokerClassLibrary.User", null)
+                    b.HasOne("Poker.DataModel.UserInGame", null)
                         .WithMany("Cards")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("PokerClassLibrary.User", b =>
+            modelBuilder.Entity("Poker.DataModel.UserInGame", b =>
                 {
-                    b.HasOne("PokerClassLibrary.Room", null)
-                        .WithMany("Users")
-                        .HasForeignKey("RoomId");
+                    b.Navigation("Cards");
                 });
 
             modelBuilder.Entity("PokerClassLibrary.Room", b =>
@@ -179,7 +212,7 @@ namespace Poker.Migrations
 
             modelBuilder.Entity("PokerClassLibrary.User", b =>
                 {
-                    b.Navigation("Cards");
+                    b.Navigation("UserInGame");
                 });
 #pragma warning restore 612, 618
         }

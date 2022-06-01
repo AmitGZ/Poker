@@ -13,8 +13,7 @@ using System.Diagnostics;
 using Poker.DataModel.Dto;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
-
-// Put User inside Player
+using Poker.DataModel;
 
 namespace Poker.Hubs
 {
@@ -23,7 +22,6 @@ namespace Poker.Hubs
         private PokerContext DbContext;
         private readonly IDictionary<string, string> ConnectionIds;
 
-        //private SqlConnection con = new SqlConnection("Data Source=.\\SQLEXPRESS;Initial Catalog=Poker;Integrated Security=True");
         public PokerHub(PokerContext dbContext, IDictionary<string, string> connectionIds)
         {
             DbContext = dbContext;
@@ -63,9 +61,12 @@ namespace Poker.Hubs
 
             SendUserStatus(user);                                    // Sending User's status
 
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.RoomId);
-            if (room != null)
-                SendRoomStatus(room);                                // Sending Room status
+            if (user.UserInGame != null)
+            {
+                Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.RoomId);
+                if (room != null)
+                    SendRoomStatus(room);                            // Sending Room status
+            }
 
             DbContext.SaveChanges();
             return Task.CompletedTask;
@@ -100,20 +101,24 @@ namespace Poker.Hubs
         {
             // Getting the user, room, and players in room
             User user = GetUserByConnectionId();
-            if (user == null) return null;    // Verifying user exists
+            if (user == null || user.UserInGame == null)
+                return null;                             // Verifying user and room exist
             
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.RoomId);
-            if (room == null) return null;    // Verifying room exists
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.RoomId);
+            if (room == null) return null;               // Verifying room exists
 
-            room.Fold(DbContext ,user);       // Folding player
+            room.Fold(DbContext, user.UserInGame);       // Folding player
 
             // Returning player to lobby
-            room.Users.Remove(user);
-            user.Money += (int)user.MoneyInTable;
+            room.Users.Remove(user.UserInGame);
+            user.Money += (int)user.UserInGame.MoneyInTable;
             DbContext.SaveChanges();
 
+            if (room.Users.Count() > 1)
+                room.StartGame(DbContext);
+
             // Sending everyone in the room the status
-            List<User> playersInRoom = DbContext.Users.Where(u => u.RoomId == room.Id).ToList();
+            List<User> playersInRoom = DbContext.Users.Where(u => u.UserInGame.RoomId == room.Id).ToList();
             if (playersInRoom.Count() == 0)
             {
                 DbContext.Rooms.Remove(room);
@@ -146,29 +151,30 @@ namespace Poker.Hubs
             User user = GetUserByConnectionId();
             if (user == null) return null;    // Verifying user exists
 
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.RoomId);
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.RoomId);
             if (room == null) return null;    // Verifying room exists
 
             //sending a message to all users in current room
             room.Users.ForEach(u=>
-                Clients.Clients(GetUserConnections(u)).SendAsync("ReceiveMessage", user.Username, message)
+                Clients.Clients(GetUserConnections(u.User)).SendAsync("ReceiveMessage", user.Username, message)
             );
             return Task.CompletedTask;
         }
 
+        // "Synchrnoenous" fold received from fold button
         public Task Fold()
         {
             // Getting the user, room, and players in room
             User user = GetUserByConnectionId();
             if (user == null) return null;    // Verifying user exists
 
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.RoomId);
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.RoomId);
             if (room == null) return null;    // Verifying room exists
 
-            if (room.TalkingPosition != user.Position)
+            if (room.TalkingPosition != user.UserInGame.Position)
                 return null;                  // Validating it's the player's turn
 
-            room.Fold(DbContext, user);
+            room.Fold(DbContext, user.UserInGame);
 
             SendUserStatus(user);             // Sending User's status
 
@@ -183,13 +189,13 @@ namespace Poker.Hubs
             User user = GetUserByConnectionId();
             if (user == null) return null;    // Verifying user exists
 
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.RoomId);
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.RoomId);
             if (room == null) return null;    // Verifying room exists
 
-            if (room.TalkingPosition != user.Position)
+            if (room.TalkingPosition != user.UserInGame.Position)
                 return null;                  // Validating it's the player's turn
 
-            room.Call(DbContext, user);
+            room.Call(DbContext, user.UserInGame);
 
             SendUserStatus(user);             // Sending User's status
 
@@ -204,13 +210,13 @@ namespace Poker.Hubs
             User user = GetUserByConnectionId();
             if (user == null) return null;    // Verifying user exists
 
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.RoomId);
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.RoomId);
             if (room == null) return null;    // Verifying room exists
 
-            if (room.TalkingPosition != user.Position)
+            if (room.TalkingPosition != user.UserInGame.Position)
                 return null;                  // Validating it's the player's turn
 
-            room.Raise(DbContext, user, amount);
+            room.Raise(DbContext, user.UserInGame, amount);
 
             SendUserStatus(user);             // Sending User's status
 
@@ -225,13 +231,13 @@ namespace Poker.Hubs
             User user = GetUserByConnectionId();
             if (user == null) return null;    // Verifying user exists
 
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.RoomId);
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.RoomId);
             if (room == null) return null;    // Verifying room exists
 
-            if (room.TalkingPosition != user.Position)
+            if (room.TalkingPosition != user.UserInGame.Position)
                 return null;                  // Validating it's the player's turn
 
-            room.Check(DbContext, user);
+            room.Check(DbContext, user.UserInGame);
 
             SendUserStatus(user);             // Sending User's status
 
@@ -240,13 +246,14 @@ namespace Poker.Hubs
             return Task.CompletedTask;
         }
 
-        public void SendRoomStatus(Room room)
+        private void SendRoomStatus(Room room)
         {
             // Sending everyone in the room the status
-            foreach (User u in room.Users)
+            foreach (UserInGame u in room.Users)
             {
-                List<string> tmpUserConnectionIds = GetUserConnections(u);
-                Clients.Clients(tmpUserConnectionIds).SendAsync("RoomStatus", new RoomDto(room, u));
+                List<string> tmpUserConnectionIds = GetUserConnections(u.User);
+                Clients.Clients(tmpUserConnectionIds).SendAsync("RoomStatus", new RoomDto(room, u.User));
+                SendUserStatus(u.User);
             }
         }
 

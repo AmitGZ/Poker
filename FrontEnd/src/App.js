@@ -22,6 +22,7 @@ const App = () => {
         .withUrl("https://localhost:44382/poker")
         .configureLogging(LogLevel.Information)
         .build();
+        connection.serverTimeoutInMilliseconds = 100000; // 100 second
 
         connection.on("RoomStatus", (roomStatus) => {
           console.log(roomStatus)
