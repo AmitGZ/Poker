@@ -106,6 +106,7 @@ namespace PokerClassLibrary
             {
                 CheckWinner(context);
             }
+            context.SaveChanges();
 
             return true;
         }
@@ -167,10 +168,12 @@ namespace PokerClassLibrary
             {
                 // TODO Set next player the winner
 
-                EndGame(context);        // End game
-                
-                return false;
+                EndGame(context);            // End game
+
+                if (Users.Count() > 1)       // Starting new game
+                    StartGame(context);
             }
+            context.SaveChanges();
             return true;
         }
 

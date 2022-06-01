@@ -22,7 +22,6 @@ namespace Poker.Hubs
         private PokerContext DbContext;
         private readonly IDictionary<string, string> ConnectionIds;
 
-        //private SqlConnection con = new SqlConnection("Data Source=.\\SQLEXPRESS;Initial Catalog=Poker;Integrated Security=True");
         public PokerHub(PokerContext dbContext, IDictionary<string, string> connectionIds)
         {
             DbContext = dbContext;
@@ -176,9 +175,6 @@ namespace Poker.Hubs
                 return null;                  // Validating it's the player's turn
 
             room.Fold(DbContext, user.UserInGame);
-
-            if (room.Users.Count() > 1)       // Starting new game
-                room.StartGame(DbContext);
 
             SendUserStatus(user);             // Sending User's status
 
