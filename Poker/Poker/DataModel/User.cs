@@ -9,6 +9,8 @@ namespace PokerClassLibrary
 {
     public partial class User
     {
+        [NotMapped]
+        public const int StartingMoney = 1000;
         public string Username { get; set; }
         public string Password { get; set; }
         public int Money { get; set; }
@@ -16,7 +18,7 @@ namespace PokerClassLibrary
 
         public User()
         {
-            Money = 1000;
+            Money = StartingMoney;
             UserInGame = null;
         }
     }

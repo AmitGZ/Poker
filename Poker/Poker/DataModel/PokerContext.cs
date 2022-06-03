@@ -70,7 +70,6 @@ namespace PokerClassLibrary
 
                 entity.HasOne<Room>(e => e.Room)
                     .WithMany(room => room.Users)
-                    //.HasForeignKey(userInGame => userInGame.RoomId)
                     .IsRequired(true)
                     .OnDelete(DeleteBehavior.Cascade);
             });

@@ -82,36 +82,18 @@ namespace PokerClassLibrary
             // Changing the dealer
             if (Users.Count() > 0)
             {
-                //int dealerIndex = Users.Select(u => u.Position).ToList().FirstOrDefault(i => i == DealerPosition);
-                //DealerPosition = Users.Select(u=>u.Position).ToList().ElementAt((dealerIndex + 1) % Users.Count());
-
-                int i = DealerPosition;
-                do
-                {
-                    i = (i + 1) % 5;
-                    if (Users.FirstOrDefault(u => u.Position == i) != null)
-                    {
-                        DealerPosition = (short)i;
-                        break;
-                    }
-                } while (i != DealerPosition);
-
-
+                int dealerIndex = Users.OrderBy(u => u.Position).ToList().FindIndex(u => u.Position == DealerPosition);
+                DealerPosition = Users.OrderBy(u => u.Position).Select(u=>u.Position).ToList().ElementAt((dealerIndex + 1) % Users.Count());
             }
 
-            if (Users.Count() > 1)
-            {
-                CheckWinner(context);
-            }
+            EvaluatedCardHolder<IStringCardsHolder> Winners = CheckWinner(context);
 
             // Resetting table
-            Users.ToList().ForEach(u => u.Cards.ToList().ForEach(c => u.Cards.Remove(c)));
-            CardsOnTable.ToList().ForEach(c => CardsOnTable.Remove(c));
-            Users.ForEach(u => u.IsActive = false);
-            Stage = GameStage.Stopped;
+            Users.ToList().ForEach(u => u.Cards.ToList().ForEach(c => u.Cards.Remove(c))); // Removing cards on user
+            CardsOnTable.ToList().ForEach(c => CardsOnTable.Remove(c));                    // Removing cards on table
+            Users.ForEach(u => u.IsActive = false);                                        // Setting inactive
+            Stage = GameStage.Stopped;                                                     // Setting game stopped
             context.SaveChanges();
-
-
 
             return true;
         }

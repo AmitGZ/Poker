@@ -64,9 +64,7 @@ namespace Poker.Hubs
 
             if (user.UserInGame != null)
             {
-                Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.Room.Id);
-                if (room != null)
-                    SendRoomStatus(room);                            // Sending Room status
+                SendRoomStatus(user.UserInGame.Room);                // Sending Room status
             }
 
             DbContext.SaveChanges();
@@ -100,13 +98,12 @@ namespace Poker.Hubs
 
         public Task LeaveRoom()
         {
-            // Getting the user, room, and players in room
+            // Getting the user and room
             User user = GetUserByConnectionId();
             if (user == null || user.UserInGame == null)
                 return null;                             // Verifying user and room exist
-            
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.Room.Id);
-            if (room == null) return null;               // Verifying room exists
+
+            Room room = user.UserInGame.Room;
 
             room.Fold(DbContext, user.UserInGame);       // Folding player
 
@@ -148,12 +145,12 @@ namespace Poker.Hubs
 
         public Task SendMessage(string message)
         {
-            // Getting the user, room, and players in room
+            // Getting the user and room
             User user = GetUserByConnectionId();
-            if (user == null) return null;    // Verifying user exists
+            if (user == null || user.UserInGame == null)
+                return null;                             // Verifying user and room exist
 
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.Room.Id);
-            if (room == null) return null;    // Verifying room exists
+            Room room = user.UserInGame.Room;
 
             //sending a message to all users in current room
             room.Users.ForEach(u=>
@@ -165,12 +162,12 @@ namespace Poker.Hubs
         // "Synchrnoenous" fold received from fold button
         public Task Fold()
         {
-            // Getting the user, room, and players in room
+            // Getting the user and room
             User user = GetUserByConnectionId();
-            if (user == null) return null;    // Verifying user exists
+            if (user == null || user.UserInGame == null)
+                return null;                             // Verifying user and room exist
 
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.Room.Id);
-            if (room == null) return null;    // Verifying room exists
+            Room room = user.UserInGame.Room;
 
             if (room.TalkingPosition != user.UserInGame.Position)
                 return null;                  // Validating it's the player's turn
@@ -186,12 +183,12 @@ namespace Poker.Hubs
 
         public Task Call()
         {
-            // Getting the user, room, and players in room
+            // Getting the user and room
             User user = GetUserByConnectionId();
-            if (user == null) return null;    // Verifying user exists
+            if (user == null || user.UserInGame == null)
+                return null;                             // Verifying user and room exist
 
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.Room.Id);
-            if (room == null) return null;    // Verifying room exists
+            Room room = user.UserInGame.Room;
 
             if (room.TalkingPosition != user.UserInGame.Position)
                 return null;                  // Validating it's the player's turn
@@ -207,12 +204,12 @@ namespace Poker.Hubs
 
         public Task Raise(int amount)
         {
-            // Getting the user, room, and players in room
+            // Getting the user and room
             User user = GetUserByConnectionId();
-            if (user == null) return null;    // Verifying user exists
+            if (user == null || user.UserInGame == null)
+                return null;                  // Verifying user and room exist
 
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.Room.Id);
-            if (room == null) return null;    // Verifying room exists
+            Room room = user.UserInGame.Room;
 
             if (room.TalkingPosition != user.UserInGame.Position)
                 return null;                  // Validating it's the player's turn
@@ -228,12 +225,12 @@ namespace Poker.Hubs
 
         public Task Check()
         {
-            // Getting the user, room, and players in room
+            // Getting the user and room
             User user = GetUserByConnectionId();
-            if (user == null) return null;    // Verifying user exists
+            if (user == null || user.UserInGame == null)
+                return null;                   // Verifying user and room exist
 
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == user.UserInGame.Room.Id);
-            if (room == null) return null;    // Verifying room exists
+            Room room = user.UserInGame.Room;
 
             if (room.TalkingPosition != user.UserInGame.Position)
                 return null;                  // Validating it's the player's turn
