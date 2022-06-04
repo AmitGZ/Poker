@@ -211,6 +211,9 @@ namespace PokerClassLibrary
         {
             // Getting list of all player positions
             List<short> activePositions = Users.Where(u => u.IsActive == true).OrderBy(u => u.Position).Select(u => u.Position).ToList();
+            if (activePositions.Count() == 0)
+                return false;
+
 
             // Setting player as already played
             userInGame.PlayedThisTurn = true;

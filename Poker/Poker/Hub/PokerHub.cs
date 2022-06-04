@@ -88,6 +88,8 @@ namespace Poker.Hubs
                 return null;
             }
 
+            resetTimer(room.Id);
+
             SendRoomStatus(room);             // Sending everyone in the room the status
 
             SendLobbyStatus();                // Sending everyone in lobby status
@@ -112,9 +114,6 @@ namespace Poker.Hubs
             // Returning player to lobby
             room.Users.Remove(user.UserInGame);
             user.Money += (int)user.UserInGame.MoneyInTable;
-
-            if (room.Users.Count() > 1)
-                room.StartGame(DbContext);
 
             DbContext.SaveChanges();
 
@@ -299,14 +298,16 @@ namespace Poker.Hubs
             var timer = new System.Timers.Timer();
             timer.Interval = TimerInterval;
             timer.Elapsed += (sender, e) => TimerElapsed(sender, e, roomId);
-            timer.Start();
             Timers.Add(roomId, timer);
             return timer;
         }
 
-        private void TimerElapsed(object sender, System.Timers.ElapsedEventArgs e, string roomId)
+        private async void TimerElapsed(object sender, System.Timers.ElapsedEventArgs e, string roomId)
         {
             Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == roomId);
+            if (room == null)
+                return;
+            
             if (room.Stage != GameStage.Stopped)
             {
                 UserInGame talkingUser = room.Users.Where(u => u.Position == room.TalkingPosition).FirstOrDefault();
@@ -319,7 +320,7 @@ namespace Poker.Hubs
                 foreach (UserInGame u in room.Users)
                 {
                     List<string> tmpUserConnectionIds = GetUserConnections(u.User);
-                    HubContext.Clients.Clients(tmpUserConnectionIds).SendAsync("RoomStatus", new RoomDto(room, u.User));
+                    await HubContext.Clients.Clients(tmpUserConnectionIds).SendAsync("RoomStatus", new RoomDto(room, u.User));
                     SendUserStatus(u.User);
                 }
             }
@@ -332,8 +333,13 @@ namespace Poker.Hubs
             {
                 return;                 // Verifying timer exist
             }
-            timer.Stop();
-            timer.Start();
+
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == roomId);
+            if (room != null && room.Stage != GameStage.Stopped)
+            {
+                timer.Stop();
+                timer.Start();
+            }
         }
     }
 }

@@ -3,6 +3,7 @@ import { Form, Button } from 'react-bootstrap';
 import Chat from './Chat';
 import images_src from "../resources/index"
 import { cardSuits, cardValues } from "./Cards.js"
+import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 
 const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomStatus, user}) => {
     // CONSTANTS
@@ -37,6 +38,40 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
 
     const [Talking, setTalking] = useState(false);
     const [Dealer, setDealer] = useState(false);
+
+    const [counter, setCounter] = useState(10);
+
+    function Timer()
+    {
+        const [, forceUpdate] = useState();
+
+        useEffect(() => {
+          setTimeout(forceUpdate, 100);
+        }, []);
+
+        return (<div style = {{position:'absolute' ,marginLeft :`${413}px`, marginTop :`${POSITIONS[0][0] - 131}px`}}>
+            <CountdownCircleTimer
+            isPlaying = {roomStatus.stage > 0 && Talking}
+            duration={10}
+            elapsedTime = {counter}
+            size = {120}
+            prerender = {true}
+            colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+            colorsTime={[7, 5, 2, 0]}
+            />
+        </div>)
+    }
+
+    useEffect(() => {
+        if (roomStatus.stage > 0 && Talking) {
+          const timer =
+            counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
+          return () => clearInterval(timer);
+        } 
+        else if (!roomStatus.stage && counter !== 0) {
+          clearInterval(10);
+        }
+      }, [counter, roomStatus]);
 
     // TODO move to user class
     const drawUser = (context, position, user) => {
@@ -160,10 +195,11 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
 
         drawTableStatus(ctx);
 
-        console.log((user))
+        console.log((counter))
         console.log((roomStatus.users))
 
     },[loaded_num, roomStatus])
+    
 
     return (
     <div>
@@ -174,6 +210,9 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
                 width={WIDTH}
                 height={HEIGHT}>
             </canvas>
+
+            <Timer/>
+
             <div style = {{position:'absolute'}}>
                 <Button style = {{position:'absolute'}} variant='danger' onClick={() => LeaveRoom()}>Leave Room</Button>
                     {(roomStatus.stage > 0) &&
@@ -202,7 +241,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
                         
                         <Button disabled = {(!Talking)}
                         variant="dark" key = "Fold" 
-                        onClick={() => {connection.invoke("FooMethod")}}>
+                        onClick={() => {connection.invoke("Fold")}}>
                         Fold
                         </Button>
 
