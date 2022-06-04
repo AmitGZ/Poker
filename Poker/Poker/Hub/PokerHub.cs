@@ -1,32 +1,34 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Collections.Generic;
-using Poker;
 using System.Linq;
-using System;
 using System.Data;
-using System.Data.SqlClient;
-using System.Configuration;
-using Microsoft.Extensions.Configuration;
 using PokerClassLibrary;
-using System.Diagnostics;
 using Poker.DataModel.Dto;
-using Microsoft.EntityFrameworkCore;
-using System.Collections;
 using Poker.DataModel;
-using BluffinMuffin.HandEvaluator;
+using Microsoft.AspNetCore.SignalR;
+using System;
+using LinqToDB;
 
 namespace Poker.Hubs
 {
     public class PokerHub : Hub
     {
-        private PokerContext DbContext;
+        private readonly PokerContext DbContext;
         private readonly IDictionary<string, string> ConnectionIds;
+        private static readonly IDictionary<string, System.Timers.Timer> Timers = new Dictionary<string, System.Timers.Timer>();
+        private readonly IHubContext<PokerHub> HubContext;
+        private readonly int TimerInterval = 10000;
 
-        public PokerHub(PokerContext dbContext, IDictionary<string, string> connectionIds)
+        public PokerHub
+        (
+            PokerContext dbContext,
+            IDictionary<string, string> connectionIds,
+            IHubContext<PokerHub> hubContext
+        )
         {
             DbContext = dbContext;
             ConnectionIds = connectionIds;
+            HubContext = hubContext;
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
@@ -42,7 +44,6 @@ namespace Poker.Hubs
         //TODO not working
         public Task SignOut()
         {
-            Context.Abort();
             return Task.CompletedTask;
         }
 
@@ -105,15 +106,17 @@ namespace Poker.Hubs
 
             Room room = user.UserInGame.Room;
 
-            room.Fold(DbContext, user.UserInGame);       // Folding player
+            if(room.Stage != GameStage.Stopped)
+                room.Fold(DbContext, user.UserInGame);       // Folding player
 
             // Returning player to lobby
             room.Users.Remove(user.UserInGame);
             user.Money += (int)user.UserInGame.MoneyInTable;
-            DbContext.SaveChanges();
 
             if (room.Users.Count() > 1)
                 room.StartGame(DbContext);
+
+            DbContext.SaveChanges();
 
             // Sending everyone in the room the status
             List<User> playersInRoom = DbContext.Users.Where(u => u.UserInGame.Room.Id == room.Id).ToList();
@@ -140,6 +143,7 @@ namespace Poker.Hubs
             DbContext.Rooms.Add(room);
             DbContext.SaveChanges();
             JoinRoom(room.Id, enterMoney);
+            CreateTurnTimer(room.Id);
             return Task.CompletedTask;
         }
 
@@ -169,6 +173,8 @@ namespace Poker.Hubs
 
             Room room = user.UserInGame.Room;
 
+            resetTimer(room.Id);
+
             if (room.TalkingPosition != user.UserInGame.Position)
                 return null;                  // Validating it's the player's turn
 
@@ -189,6 +195,8 @@ namespace Poker.Hubs
                 return null;                             // Verifying user and room exist
 
             Room room = user.UserInGame.Room;
+
+            resetTimer(room.Id);
 
             if (room.TalkingPosition != user.UserInGame.Position)
                 return null;                  // Validating it's the player's turn
@@ -211,6 +219,8 @@ namespace Poker.Hubs
 
             Room room = user.UserInGame.Room;
 
+            resetTimer(room.Id);
+
             if (room.TalkingPosition != user.UserInGame.Position)
                 return null;                  // Validating it's the player's turn
 
@@ -231,6 +241,8 @@ namespace Poker.Hubs
                 return null;                   // Verifying user and room exist
 
             Room room = user.UserInGame.Room;
+
+            resetTimer(room.Id);
 
             if (room.TalkingPosition != user.UserInGame.Position)
                 return null;                  // Validating it's the player's turn
@@ -258,7 +270,7 @@ namespace Poker.Hubs
         private void SendUserStatus(User user)
         {
             List<string> userConnectionIds = GetUserConnections(user);
-            Clients.Clients(userConnectionIds).SendAsync("UserStatus", new UserDto(user));
+            HubContext.Clients.Clients(userConnectionIds).SendAsync("UserStatus", new UserDto(user));
         }
 
         private List<string> GetUserConnections(User user)
@@ -279,6 +291,49 @@ namespace Poker.Hubs
                 return null;                 // Verifying room and user exist
             }
             return (DbContext.Users.FirstOrDefault(u => u.Username == username));
+        }
+
+        private System.Timers.Timer CreateTurnTimer(string roomId)
+        {
+            // TODO delete timer with room
+            var timer = new System.Timers.Timer();
+            timer.Interval = TimerInterval;
+            timer.Elapsed += (sender, e) => TimerElapsed(sender, e, roomId);
+            timer.Start();
+            Timers.Add(roomId, timer);
+            return timer;
+        }
+
+        private void TimerElapsed(object sender, System.Timers.ElapsedEventArgs e, string roomId)
+        {
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == roomId);
+            if (room.Stage != GameStage.Stopped)
+            {
+                UserInGame talkingUser = room.Users.Where(u => u.Position == room.TalkingPosition).FirstOrDefault();
+                if (talkingUser == null)
+                    return;
+
+                room.Fold(DbContext, talkingUser);
+
+                // Sending everyone in the room the status
+                foreach (UserInGame u in room.Users)
+                {
+                    List<string> tmpUserConnectionIds = GetUserConnections(u.User);
+                    HubContext.Clients.Clients(tmpUserConnectionIds).SendAsync("RoomStatus", new RoomDto(room, u.User));
+                    SendUserStatus(u.User);
+                }
+            }
+        }
+
+        private void resetTimer(string roomId)
+        {
+            System.Timers.Timer timer;
+            if (!Timers.TryGetValue(roomId, out timer))
+            {
+                return;                 // Verifying timer exist
+            }
+            timer.Stop();
+            timer.Start();
         }
     }
 }

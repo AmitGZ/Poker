@@ -62,3 +62,6 @@ C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\obj\Debug\net5.0\Poker.cspr
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\Castle.Core.dll
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Proxies.dll
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\BluffinMuffin.HandEvaluator.dll
+C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\Microsoft.AspNet.SignalR.Core.dll
+C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\Owin.dll
+C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\linq2db.dll

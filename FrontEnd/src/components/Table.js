@@ -202,7 +202,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
                         
                         <Button disabled = {(!Talking)}
                         variant="dark" key = "Fold" 
-                        onClick={() => {connection.invoke("Fold")}}>
+                        onClick={() => {connection.invoke("FooMethod")}}>
                         Fold
                         </Button>
 

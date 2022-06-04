@@ -32,7 +32,8 @@ namespace Poker
 
             services.AddDbContext<PokerContext>(options =>
                options.UseLazyLoadingProxies()
-               .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+               .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")),
+               ServiceLifetime.Singleton);
 
             services.AddSignalR();
 

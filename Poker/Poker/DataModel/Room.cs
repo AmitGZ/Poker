@@ -257,7 +257,7 @@ namespace PokerClassLibrary
             IStringCardsHolder[] activePlayers = Users.Where(u => u.IsActive == true).ToArray();
             return HandEvaluators.Evaluate(activePlayers).ElementAt(0).ElementAt(0);
         }
-        //HandEvaluators.Evaluate(players).Where(t=> t.Key == 1).ElementAt(0).ElementAt(0)
+
         private List<Card> GenerateShuffledDeck() // TODO move somewhere else
         {
             // Generating deck

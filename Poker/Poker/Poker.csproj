@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="BluffinMuffin.HandEvaluator" Version="3.1.2" />
+    <PackageReference Include="linq2db" Version="4.0.1" />
+    <PackageReference Include="Microsoft.AspNet.SignalR.Core" Version="2.4.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.16" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.16" />
@@ -14,6 +16,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Owin" Version="1.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
   </ItemGroup>
 
