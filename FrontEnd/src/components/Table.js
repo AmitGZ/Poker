@@ -4,6 +4,8 @@ import Chat from './Chat';
 import images_src from "../resources/index"
 import { cardSuits, cardValues } from "./Cards.js"
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomStatus, user}) => {
     // CONSTANTS
@@ -46,32 +48,36 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
         const [, forceUpdate] = useState();
 
         useEffect(() => {
-          setTimeout(forceUpdate, 100);
-        }, []);
+          setTimeout(forceUpdate, 10000);
+        });
 
-        return (<div style = {{position:'absolute' ,marginLeft :`${413}px`, marginTop :`${POSITIONS[0][0] - 131}px`}}>
+        return (<div style = {{position:'absolute' ,marginLeft :`${POSITIONS[roomStatus.talkingPosition][0] - 60}px`, marginTop :`${POSITIONS[roomStatus.talkingPosition][1] - 60}px`}}>
             <CountdownCircleTimer
-            isPlaying = {roomStatus.stage > 0 && Talking}
+            isPlaying = {roomStatus.stage > 0}
             duration={10}
             elapsedTime = {counter}
+            remainingTime = {10- counter}
             size = {120}
-            prerender = {true}
             colors={['#004777', '#F7B801', '#A30000', '#A30000']}
             colorsTime={[7, 5, 2, 0]}
             />
         </div>)
     }
 
-    useEffect(() => {
-        if (roomStatus.stage > 0 && Talking) {
-          const timer =
-            counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
-          return () => clearInterval(timer);
-        } 
-        else if (!roomStatus.stage && counter !== 0) {
-          clearInterval(10);
-        }
-      }, [counter, roomStatus]);
+    useEffect(()=>{
+        console.log(counter)
+        let myInterval = setInterval(() => {
+                if (counter > 0) {
+                    setCounter(counter - 1);
+                }
+                if (counter === 0) {
+                    clearInterval(myInterval)
+                } 
+            }, 1000)
+            return ()=> {
+                clearInterval(myInterval);
+              };
+        });
 
     // TODO move to user class
     const drawUser = (context, position, user) => {
@@ -195,6 +201,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
 
         drawTableStatus(ctx);
 
+        setCounter(10)
         console.log((counter))
         console.log((roomStatus.users))
 
@@ -211,7 +218,11 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
                 height={HEIGHT}>
             </canvas>
 
-            <Timer/>
+            <div style={{ position:'absolute', width: 120, height: 120,
+            marginLeft :`${POSITIONS[(roomStatus.talkingPosition - user.position +PLAYER_NUM) % PLAYER_NUM][0] - 60}px`,
+            marginTop : `${POSITIONS[(roomStatus.talkingPosition - user.position +PLAYER_NUM) % PLAYER_NUM][1] - 60}px`}}>
+                <CircularProgressbar value={counter} maxValue={10}  />;
+            </div>
 
             <div style = {{position:'absolute'}}>
                 <Button style = {{position:'absolute'}} variant='danger' onClick={() => LeaveRoom()}>Leave Room</Button>
