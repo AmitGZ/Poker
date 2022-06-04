@@ -43,31 +43,9 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
 
     const [counter, setCounter] = useState(10);
 
-    function Timer()
-    {
-        const [, forceUpdate] = useState();
-
-        useEffect(() => {
-          setTimeout(forceUpdate, 10000);
-        });
-
-        return (<div style = {{position:'absolute' ,marginLeft :`${POSITIONS[roomStatus.talkingPosition][0] - 60}px`, marginTop :`${POSITIONS[roomStatus.talkingPosition][1] - 60}px`}}>
-            <CountdownCircleTimer
-            isPlaying = {roomStatus.stage > 0}
-            duration={10}
-            elapsedTime = {counter}
-            remainingTime = {10- counter}
-            size = {120}
-            colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-            colorsTime={[7, 5, 2, 0]}
-            />
-        </div>)
-    }
-
     useEffect(()=>{
-        console.log(counter)
         let myInterval = setInterval(() => {
-                if (counter > 0) {
+                if (counter > 0 && roomStatus.stage > 0) {
                     setCounter(counter - 1);
                 }
                 if (counter === 0) {
@@ -201,9 +179,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
 
         drawTableStatus(ctx);
 
-        setCounter(10)
-        console.log((counter))
-        console.log((roomStatus.users))
+        setCounter(10);
 
     },[loaded_num, roomStatus])
     
