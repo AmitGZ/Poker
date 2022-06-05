@@ -19,7 +19,7 @@ namespace Poker.Hubs
         private readonly IDictionary<string, string> ConnectionIds;
         private static readonly IDictionary<string, System.Timers.Timer> Timers = new Dictionary<string, System.Timers.Timer>();
         private readonly IHubContext<PokerHub> HubContext;
-        private readonly int TimerInterval = 20000;
+        private readonly int TimerInterval = Constants.TurnTime * 1000;
 
         public PokerHub
         (

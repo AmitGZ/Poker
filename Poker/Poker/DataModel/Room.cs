@@ -11,6 +11,11 @@ using System.Threading.Tasks;
 
 namespace PokerClassLibrary
 {
+    static class Constants
+    {
+        public const int TurnTime = 15;
+        public const int BigBlind = 10; // km per sec.
+    }
     public enum GameStage
     {
         Stopped,
@@ -45,8 +50,8 @@ namespace PokerClassLibrary
             Stage = GameStage.Stopped;
             DealerPosition = 0;
             TalkingPosition = 0;
-            BigBlind = 10;
-            TurnTime = 20;
+            BigBlind = Constants.BigBlind;
+            TurnTime = Constants.TurnTime;
         }
 
         public async Task<bool> AddUser(PokerContext context, User user, int enterMoney)
