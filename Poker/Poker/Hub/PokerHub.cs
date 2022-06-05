@@ -83,12 +83,16 @@ namespace Poker.Hubs
             // Trying to add user to room
             if (!(await room.AddUser(DbContext, user, enterMoney))) 
             {
-                await Clients .Clients(GetUserConnections(user)).SendAsync("Alert", "Room is full!");
+                await Clients.Clients(GetUserConnections(user)).SendAsync("Alert", "Room is full!");
                 return;
             }
 
-            if(room.Stage == GameStage.Stopped)
+            // If enough players start game
+            if ( room.Users.Count() == 2 && room.Stage == GameStage.Stopped )
+            {
+                await room.StartGame(DbContext);
                 ResetTimer(room.Id);
+            }
 
             SendRoomStatus(room);             // Sending everyone in the room the status
 
@@ -106,17 +110,17 @@ namespace Poker.Hubs
 
             Room room = user.UserInGame.Room;
 
-            // Returning player to lobby
-            room.Users.Remove(user.UserInGame);
-            user.Money += (int)user.UserInGame.MoneyInTable;
-            await DbContext.SaveChangesAsync();
-
             if (room.Stage != GameStage.Stopped)
                 if (!(await room.Fold(DbContext, user.UserInGame))) // Folding player
                 {
                     // Game Ended
                     await HandleEndedGame (room);
                 }
+
+            // Returning player to lobby
+            room.Users.Remove(user.UserInGame);
+            user.Money += (int)user.UserInGame.MoneyInTable;
+            await DbContext.SaveChangesAsync();
 
             // Sending everyone in the room the status
             List<User> playersInRoom = DbContext.Users.Where(u => u.UserInGame.Room.Id == room.Id).ToList();
@@ -178,7 +182,7 @@ namespace Poker.Hubs
             if(!(await room.Fold(DbContext, user.UserInGame)))
             {
                 // Game Ended
-                await HandleEndedGame (room);
+                await HandleEndedGame(room);
             }
 
             SendUserStatus(user);             // Sending User's status
@@ -323,6 +327,7 @@ namespace Poker.Hubs
                 {
                     // Game Ended
                     await HandleEndedGame(room);
+                    ResetTimer(room.Id);
                 }
             }
             else if(room.Stage == GameStage.Finished)
@@ -333,8 +338,8 @@ namespace Poker.Hubs
                 room.ResetGame();
                 if (room.Users.Count() > 1)
                 {
-                    ResetTimer(room.Id);
                     await room.StartGame(DbContext);
+                    ResetTimer(room.Id);
                 }
             }
 
@@ -365,13 +370,14 @@ namespace Poker.Hubs
         private async Task HandleEndedGame(Room room)
         {
             ResetTimer(room.Id);
-            if (room.Stage != GameStage.Finished) return; // Verifying game ended
             UserInGame winner = room.Users.FirstOrDefault(u => u.IsWinner == true);
             foreach (UserInGame u in room.Users)
             {
                 List<string> tmpUserConnectionIds = GetUserConnections(u.User);
-                await HubContext.Clients.Clients(tmpUserConnectionIds).SendAsync("Alert", (winner.Username + " " + winner.BestHand));
+                // await HubContext.Clients.Clients(tmpUserConnectionIds).SendAsync("Alert", (winner.Username + " " + winner.BestHand));
             }
+            room.Stage = GameStage.Finished;
+            await DbContext.SaveChangesAsync();
             return;
         }
     }

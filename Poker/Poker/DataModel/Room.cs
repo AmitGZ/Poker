@@ -70,10 +70,6 @@ namespace PokerClassLibrary
             Users.Add(user.UserInGame);
             await context.SaveChangesAsync();
 
-            // If enough players start game
-            if (Users.Count() == 2 && Stage == GameStage.Stopped)
-                await StartGame(context);
-
             return true;
         }
 

@@ -34,7 +34,7 @@ namespace Poker.DataModel.Dto
             CardsOnTable = ((int)room.Stage < 2) ? new List<Card>() : 
                 room.CardsOnTable.GetRange(0, Math.Min((int)room.Stage + 1, 5));
             DealerPosition = room.DealerPosition;
-            TurnTime = room.TurnTime;
+            TurnTime = room.TurnTime - 1;
         }
     }
 }
