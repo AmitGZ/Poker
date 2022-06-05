@@ -8,6 +8,7 @@ using Poker.DataModel;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using LinqToDB;
+using System.Diagnostics;
 
 namespace Poker.Hubs
 {
@@ -108,12 +109,12 @@ namespace Poker.Hubs
 
             Room room = user.UserInGame.Room;
 
-            if(room.Stage != GameStage.Stopped)
-                room.Fold(DbContext, user.UserInGame);       // Folding player
-
             // Returning player to lobby
             room.Users.Remove(user.UserInGame);
             user.Money += (int)user.UserInGame.MoneyInTable;
+
+            if (room.Stage != GameStage.Stopped)
+                room.Fold(DbContext, user.UserInGame);       // Folding player
 
             DbContext.SaveChanges();
 
@@ -304,7 +305,10 @@ namespace Poker.Hubs
 
         private async void TimerElapsed(object sender, System.Timers.ElapsedEventArgs e, string roomId)
         {
-            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == roomId);
+            if (Debugger.IsAttached)
+                return;
+
+                Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == roomId);
             if (room == null)
                 return;
             

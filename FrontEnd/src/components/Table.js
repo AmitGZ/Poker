@@ -20,7 +20,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
     const CARD_PROPORTIONS = 6;
     const CARD_WIDTH = 500/ CARD_PROPORTIONS;
     const CARD_HEIGHT = 726/ CARD_PROPORTIONS; 
-    const CARD_OFFSET = [95,120];
+    const CARD_OFFSET = [120,95];
     const CARD_POSITIONS = [];
     const CARD_SPACINGS = 6;
     for(var i =-2; i<3; i++){
@@ -83,7 +83,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
                     CARD_HEIGHT);
                 }
             }
-            else
+            else // Drawing back of cards
             {
                 for(var i =0; i < 2; i++){
                     context.drawImage(loaded_img['back_of_card'],
@@ -220,7 +220,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
                         </Button>
                         
                         <Button 
-                        disabled = {(!Talking) || (roomStatus.turnStake > user.moneyInTable)} 
+                        disabled = {(!Talking) || (roomStatus.turnStake >= user.moneyInTable)} 
                         variant="dark" key = "Raise" 
                         onClick={() =>{connection.invoke("Raise", 100)}}>
                         Raise
