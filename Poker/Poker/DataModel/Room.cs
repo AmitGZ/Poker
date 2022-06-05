@@ -46,7 +46,7 @@ namespace PokerClassLibrary
             DealerPosition = 0;
             TalkingPosition = 0;
             BigBlind = 10;
-            TurnTime = 10;
+            TurnTime = 20;
         }
 
         public async Task<bool> AddUser(PokerContext context, User user, int enterMoney)
@@ -76,7 +76,7 @@ namespace PokerClassLibrary
         public async Task<bool> EndGame(PokerContext context)
         {
 
-            // TODO reset pot
+            // TODO multiple pot
 
             // Changing the dealer
             if (Users.Count() > 0)
@@ -112,7 +112,7 @@ namespace PokerClassLibrary
             UserInGame talklingUser = Users.FirstOrDefault(u => u.Position == TalkingPosition);
 
             // Set everyone active
-            Users.ForEach(u =>  u.ResetGame());
+            Users.ForEach(u =>  u.ResetUser());
 
             // Dealing cards 
             List<Card> tmpDeck = GenerateShuffledDeck();
@@ -260,7 +260,7 @@ namespace PokerClassLibrary
             this.Pots = new List<Pot>();
             this.Stage = GameStage.Stopped;
             this.TurnStake = 0;
-            this.Users.ForEach(u => u.ResetGame());
+            this.Users.ForEach(u => u.ResetUser());
         }
 
         private List<Card> GenerateShuffledDeck() // TODO move somewhere else

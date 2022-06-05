@@ -178,7 +178,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
             setDealer(false);
 
         drawTableStatus(ctx);
-
+        console.log(roomStatus.turnTime);
         setCounter(roomStatus.turnTime);
 
     },[loaded_num, roomStatus])

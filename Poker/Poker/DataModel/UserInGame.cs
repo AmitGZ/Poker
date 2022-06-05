@@ -66,7 +66,7 @@ namespace Poker.DataModel
             BestHand = null;
         }
 
-        public void ResetGame()
+        public void ResetUser()
         {
             Cards = new List<Card>();
             IsActive = true;

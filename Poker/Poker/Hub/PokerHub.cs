@@ -19,7 +19,7 @@ namespace Poker.Hubs
         private readonly IDictionary<string, string> ConnectionIds;
         private static readonly IDictionary<string, System.Timers.Timer> Timers = new Dictionary<string, System.Timers.Timer>();
         private readonly IHubContext<PokerHub> HubContext;
-        private readonly int TimerInterval = 10000;
+        private readonly int TimerInterval = 20000;
 
         public PokerHub
         (
@@ -70,7 +70,6 @@ namespace Poker.Hubs
 
             await DbContext.SaveChangesAsync();
         }
-
 
         public async Task JoinRoom(string roomId, int enterMoney)
         {
@@ -328,6 +327,7 @@ namespace Poker.Hubs
                     // Game Ended
                     await HandleEndedGame(room);
                     ResetTimer(room.Id);
+                    room.Stage = GameStage.Finished;
                 }
             }
             else if(room.Stage == GameStage.Finished)
