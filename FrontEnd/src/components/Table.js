@@ -197,7 +197,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
             <div style={{ position:'absolute', width: 120, height: 120,
             marginLeft :`${POSITIONS[(roomStatus.talkingPosition - user.position +PLAYER_NUM) % PLAYER_NUM][0] - 60}px`,
             marginTop : `${POSITIONS[(roomStatus.talkingPosition - user.position +PLAYER_NUM) % PLAYER_NUM][1] - 60}px`}}>
-                <CircularProgressbar value={counter} maxValue={10}  />;
+                { roomStatus.stage > 0 && <CircularProgressbar value={counter} maxValue={10} /> }
             </div>
 
             <div style = {{position:'absolute'}}>

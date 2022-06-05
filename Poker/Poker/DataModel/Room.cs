@@ -86,13 +86,15 @@ namespace PokerClassLibrary
                 DealerPosition = Users.OrderBy(u => u.Position).Select(u=>u.Position).ToList().ElementAt((dealerIndex + 1) % Users.Count());
             }
 
-            EvaluatedCardHolder<IStringCardsHolder> Winners = CheckWinner(context);
+            UserInGame winner = CheckWinner(context);
 
             // Resetting table
             Users.ToList().ForEach(u => u.Cards.ToList().ForEach(c => u.Cards.Remove(c))); // Removing cards on user
             CardsOnTable.ToList().ForEach(c => CardsOnTable.Remove(c));                    // Removing cards on table
             Users.ForEach(u => u.IsActive = false);                                        // Setting inactive
             Stage = GameStage.Stopped;                                                     // Setting game stopped
+            winner.MoneyInTable += Pot;                                                    // Giving money to winner
+            Pot = 0;                                                                       // Resetting pot
             context.SaveChanges();
 
             return true;
@@ -141,27 +143,14 @@ namespace PokerClassLibrary
 
         public bool Fold(PokerContext context,UserInGame userInGame)
         {
-            if(userInGame.Position == TalkingPosition)
-            {
-                FinishTurn(context, userInGame);
-            }
             userInGame.IsActive = false;                                         // Setting inactive
             userInGame.Cards.ToList().ForEach(c => userInGame.Cards.Remove(c));  // Returning cards
 
             // Getting list of all player positions
             List<short> activePositions = Users.Where(u => u.IsActive == true).Select(u => u.Position).ToList();
 
-            if (activePositions.Count() == 1)
-            {
-                // TODO Set next player the winner
-
-                EndGame(context);            // End game
-
-                if (Users.Count() > 1)       // Starting new game
-                    StartGame(context);
-            }
             context.SaveChanges();
-            return true;
+            return FinishTurn(context, userInGame);
         }
 
         public bool Call(PokerContext context, UserInGame userInGame)
@@ -177,15 +166,14 @@ namespace PokerClassLibrary
                 // Open new pot
             }
 
-            FinishTurn(context, userInGame);
-            return true;
+            return FinishTurn (context, userInGame);
         }
 
         public bool Raise(PokerContext context, UserInGame userInGame, int amount)
         {
             // Validating user can raise
             if (userInGame.MoneyInTable < amount)
-                return false;
+                return true;
 
             TurnStake += (int)amount;
             userInGame.MoneyInTable -= (int)amount;
@@ -194,8 +182,7 @@ namespace PokerClassLibrary
             //going another Stage
             Users.Where(u => u.IsActive == true).ToList().ForEach(u => u.PlayedThisTurn = false);
 
-            FinishTurn(context, userInGame);
-            return true;
+            return FinishTurn(context, userInGame);
         }
         public bool Check(PokerContext context, UserInGame userInGame)
         {
@@ -203,17 +190,20 @@ namespace PokerClassLibrary
             {
                 return false; // Invalid operation
             }
-            FinishTurn(context, userInGame);
-            return true;
+            return FinishTurn(context, userInGame);
         }
 
         private bool FinishTurn(PokerContext context, UserInGame userInGame)
         {
             // Getting list of all player positions
             List<short> activePositions = Users.Where(u => u.IsActive == true).OrderBy(u => u.Position).Select(u => u.Position).ToList();
-            if (activePositions.Count() == 0)
+            if (activePositions.Count() <= 1)
+            {
+                // End game
+                context.SaveChanges();            // Updating database
+                EndGame(context);                 // Ending game
                 return false;
-
+            }
 
             // Setting player as already played
             userInGame.PlayedThisTurn = true;
@@ -235,30 +225,29 @@ namespace PokerClassLibrary
                 if (Stage > GameStage.River)
                 {
                     // End game
-                    EndGame(context);
-
-                    // Start new game 
-                    if (Users.Count() >= 2)
-                    {
-                        StartGame(context);
-                    }
+                    context.SaveChanges();            // Updating database
+                    EndGame(context);                 // Ending game
+                    return false;
                 }
             }
 
             // Setting new talking position
             TalkingPosition = activePositions.ElementAt((activePositions.IndexOf(TalkingPosition) + 1) % activePositions.Count());
 
-            // Updating database
-            context.SaveChanges();
+            context.SaveChanges();                   // Updating database
 
             return true;
         }
 
-        public EvaluatedCardHolder<IStringCardsHolder> CheckWinner(PokerContext context)
+        public UserInGame CheckWinner(PokerContext context)
         {
             // Getting list of all active players
             IStringCardsHolder[] activePlayers = Users.Where(u => u.IsActive == true).ToArray();
-            return HandEvaluators.Evaluate(activePlayers).ElementAt(0).ElementAt(0);
+            EvaluatedCardHolder<IStringCardsHolder> winner = HandEvaluators.Evaluate(activePlayers).ElementAt(0).ElementAt(0);
+            ((UserInGame)(winner.CardsHolder)).IsWinner = true;
+            ((UserInGame)(winner.CardsHolder)).BestHand = winner.Evaluation.ToString();
+            context.SaveChanges();
+            return (UserInGame)(winner.CardsHolder);
         }
 
         private List<Card> GenerateShuffledDeck() // TODO move somewhere else

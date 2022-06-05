@@ -49,7 +49,7 @@ namespace Poker.Data
             // Adding New Rooms
             var Rooms = new Room[]
             {
-            new Room{Name = "Test" }
+            // new Room{Name = "Test" }
             };
             
             foreach (Room r in Rooms)

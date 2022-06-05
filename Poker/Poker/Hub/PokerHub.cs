@@ -9,6 +9,10 @@ using Microsoft.AspNetCore.SignalR;
 using System;
 using LinqToDB;
 using System.Diagnostics;
+using BluffinMuffin.HandEvaluator;
+
+// Add timer sync
+
 
 namespace Poker.Hubs
 {
@@ -37,8 +41,6 @@ namespace Poker.Hubs
             ConnectionIds.Remove(Context.ConnectionId);
 
             // TODO handle disconnect
-            //LeaveRoom();
-            //DbContext.SaveChanges();
             return Task.CompletedTask;
         }
 
@@ -89,7 +91,7 @@ namespace Poker.Hubs
                 return null;
             }
 
-            resetTimer(room.Id);
+            ResetTimer(room.Id);
 
             SendRoomStatus(room);             // Sending everyone in the room the status
 
@@ -114,7 +116,11 @@ namespace Poker.Hubs
             user.Money += (int)user.UserInGame.MoneyInTable;
 
             if (room.Stage != GameStage.Stopped)
-                room.Fold(DbContext, user.UserInGame);       // Folding player
+                if (!room.Fold(DbContext, user.UserInGame)) // Folding player
+                {
+                    // Game Ended
+                    HandleEndedGame(room);
+                }
 
             DbContext.SaveChanges();
 
@@ -173,12 +179,16 @@ namespace Poker.Hubs
 
             Room room = user.UserInGame.Room;
 
-            resetTimer(room.Id);
+            ResetTimer(room.Id);
 
             if (room.TalkingPosition != user.UserInGame.Position)
                 return null;                  // Validating it's the player's turn
 
-            room.Fold(DbContext, user.UserInGame);
+            if(!room.Fold(DbContext, user.UserInGame))
+            {
+                // Game Ended
+                HandleEndedGame(room);
+            }
 
             SendUserStatus(user);             // Sending User's status
 
@@ -196,12 +206,16 @@ namespace Poker.Hubs
 
             Room room = user.UserInGame.Room;
 
-            resetTimer(room.Id);
+            ResetTimer(room.Id);
 
             if (room.TalkingPosition != user.UserInGame.Position)
                 return null;                  // Validating it's the player's turn
 
-            room.Call(DbContext, user.UserInGame);
+            if(!room.Call(DbContext, user.UserInGame))
+            {
+                // Game ended
+                HandleEndedGame(room);
+            }
 
             SendUserStatus(user);             // Sending User's status
 
@@ -219,12 +233,16 @@ namespace Poker.Hubs
 
             Room room = user.UserInGame.Room;
 
-            resetTimer(room.Id);
+            ResetTimer(room.Id);
 
             if (room.TalkingPosition != user.UserInGame.Position)
                 return null;                  // Validating it's the player's turn
 
-            room.Raise(DbContext, user.UserInGame, amount);
+            if(!room.Raise(DbContext, user.UserInGame, amount))
+            {
+                // Game ended
+                HandleEndedGame(room);
+            }
 
             SendUserStatus(user);             // Sending User's status
 
@@ -242,12 +260,16 @@ namespace Poker.Hubs
 
             Room room = user.UserInGame.Room;
 
-            resetTimer(room.Id);
+            ResetTimer(room.Id);
 
             if (room.TalkingPosition != user.UserInGame.Position)
                 return null;                  // Validating it's the player's turn
 
-            room.Check(DbContext, user.UserInGame);
+            if(!room.Check(DbContext, user.UserInGame))
+            {
+                // Game ended
+                HandleEndedGame(room);
+            }
 
             SendUserStatus(user);             // Sending User's status
 
@@ -305,12 +327,8 @@ namespace Poker.Hubs
 
         private async void TimerElapsed(object sender, System.Timers.ElapsedEventArgs e, string roomId)
         {
-            if (Debugger.IsAttached)
-                return;
-
-                Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == roomId);
-            if (room == null)
-                return;
+            Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == roomId);
+            if (room == null) return; // Validating room exists
             
             if (room.Stage != GameStage.Stopped)
             {
@@ -318,7 +336,11 @@ namespace Poker.Hubs
                 if (talkingUser == null)
                     return;
 
-                room.Fold(DbContext, talkingUser);
+                if (!room.Fold(DbContext, talkingUser))
+                {
+                    // Game Ended
+                    HandleEndedGame(room);
+                }
 
                 // Sending everyone in the room the status
                 foreach (UserInGame u in room.Users)
@@ -330,7 +352,7 @@ namespace Poker.Hubs
             }
         }
 
-        private void resetTimer(string roomId)
+        private void ResetTimer(string roomId)
         {
             System.Timers.Timer timer;
             if (!Timers.TryGetValue(roomId, out timer))
@@ -343,6 +365,16 @@ namespace Poker.Hubs
             {
                 timer.Stop();
                 timer.Start();
+            }
+        }
+
+        private void HandleEndedGame(Room room)
+        {
+            UserInGame winner = room.Users.FirstOrDefault(u => u.IsWinner == true);
+            foreach (UserInGame u in room.Users)
+            {
+                List<string> tmpUserConnectionIds = GetUserConnections(u.User);
+                Clients.Clients(tmpUserConnectionIds).SendAsync("Alert", (winner.Username + " "+ winner.BestHand));
             }
         }
     }

@@ -15,11 +15,12 @@ namespace Poker.DataModel
         public bool IsActive { get; set; }
         public bool PlayedThisTurn { get; set; }
         public short Position { get; set; }
-        //public string? RoomId { get; set; }
         public virtual Room Room { get; set; }
         public string Username { get; set; } // FK User
         public virtual User User { get; set; }
         public virtual List<Card>? Cards { get; set; }
+        public Boolean IsWinner { get; set; }
+        public String BestHand { get; set; }
 
         IEnumerable<string> IStringCardsHolder.PlayerCards => PlayerCards();
 
@@ -50,6 +51,8 @@ namespace Poker.DataModel
             Position = 0;
             IsActive = false;
             Room = null;
+            IsWinner = false;
+            BestHand = null;
         }
         public UserInGame(int enterMoney, short pos)
         {
@@ -59,6 +62,8 @@ namespace Poker.DataModel
             PlayedThisTurn = false;
             Position = pos;
             IsActive = false;
+            IsWinner = false;
+            BestHand = null;
         }
     }
 }
