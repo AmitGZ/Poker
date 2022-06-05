@@ -11,9 +11,6 @@ using LinqToDB;
 using System.Diagnostics;
 using BluffinMuffin.HandEvaluator;
 
-// Add timer sync
-
-
 namespace Poker.Hubs
 {
     public class PokerHub : Hub
@@ -50,14 +47,14 @@ namespace Poker.Hubs
             return Task.CompletedTask;
         }
 
-        public Task SignIn(string username, string password)
+        public async Task SignIn(string username, string password)
         {
             // Checking if user exists and verifying
             User user = DbContext.Users.FirstOrDefault(u => u.Username == username);
             if (user == null || user.Password != password)
             {
-                Clients.Client(Context.ConnectionId).SendAsync("Alert", "Invalid username or password");
-                return null;
+                await Clients.Client(Context.ConnectionId).SendAsync("Alert", "Invalid username or password");
+                return;
             }
 
             ConnectionIds.Add(Context.ConnectionId, user.Username);  // Adding to connectionIds list
@@ -71,65 +68,62 @@ namespace Poker.Hubs
                 SendRoomStatus(user.UserInGame.Room);                // Sending Room status
             }
 
-            DbContext.SaveChanges();
-            return Task.CompletedTask;
+            await DbContext.SaveChangesAsync();
         }
 
 
-        public Task JoinRoom(string roomId, int enterMoney)
+        public async Task JoinRoom(string roomId, int enterMoney)
         {
             // Getting the user, room, and players in room
             User user = GetUserByConnectionId();
             Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == roomId);
             if (user == null || room == null) 
-                return null;                 // Verifying user and room exist 
+                return;                 // Verifying user and room exist 
 
             // Trying to add user to room
-            if (!room.AddUser(DbContext, user, enterMoney))
+            if (!(await room.AddUser(DbContext, user, enterMoney))) 
             {
-                Clients.Clients(GetUserConnections(user)).SendAsync("Alert", "Room is full!");
-                return null;
+                await Clients .Clients(GetUserConnections(user)).SendAsync("Alert", "Room is full!");
+                return;
             }
 
-            ResetTimer(room.Id);
+            if(room.Stage == GameStage.Stopped)
+                ResetTimer(room.Id);
 
             SendRoomStatus(room);             // Sending everyone in the room the status
 
             SendLobbyStatus();                // Sending everyone in lobby status
 
             SendUserStatus(user);             // Sending User's status
-
-            return Task.CompletedTask;
         }
 
-        public Task LeaveRoom()
+        public async Task LeaveRoom()
         {
             // Getting the user and room
             User user = GetUserByConnectionId();
             if (user == null || user.UserInGame == null)
-                return null;                             // Verifying user and room exist
+                return;                             // Verifying user and room exist
 
             Room room = user.UserInGame.Room;
 
             // Returning player to lobby
             room.Users.Remove(user.UserInGame);
             user.Money += (int)user.UserInGame.MoneyInTable;
+            await DbContext.SaveChangesAsync();
 
             if (room.Stage != GameStage.Stopped)
-                if (!room.Fold(DbContext, user.UserInGame)) // Folding player
+                if (!(await room.Fold(DbContext, user.UserInGame))) // Folding player
                 {
                     // Game Ended
-                    HandleEndedGame(room);
+                    await HandleEndedGame (room);
                 }
-
-            DbContext.SaveChanges();
 
             // Sending everyone in the room the status
             List<User> playersInRoom = DbContext.Users.Where(u => u.UserInGame.Room.Id == room.Id).ToList();
             if (playersInRoom.Count() == 0)
             {
                 DbContext.Rooms.Remove(room);
-                DbContext.SaveChanges();
+                await DbContext.SaveChangesAsync();
             }
             else
             {
@@ -139,18 +133,15 @@ namespace Poker.Hubs
             SendLobbyStatus();                // Sending everyone in lobby status
 
             SendUserStatus(user);             // Sending User's status
-
-            return Task.CompletedTask;
         }
 
-        public Task CreateRoom(string roomName, int enterMoney)
+        public async Task CreateRoom(string roomName, int enterMoney)
         {
             Room room = new Room() { Name = roomName };
             DbContext.Rooms.Add(room);
-            DbContext.SaveChanges();
-            JoinRoom(room.Id, enterMoney);
+            await DbContext.SaveChangesAsync();
+            await JoinRoom(room.Id, enterMoney);
             CreateTurnTimer(room.Id);
-            return Task.CompletedTask;
         }
 
         public Task SendMessage(string message)
@@ -170,112 +161,104 @@ namespace Poker.Hubs
         }
 
         // "Synchrnoenous" fold received from fold button
-        public Task Fold()
+        public async Task Fold()
         {
             // Getting the user and room
             User user = GetUserByConnectionId();
             if (user == null || user.UserInGame == null)
-                return null;                             // Verifying user and room exist
+                return;                             // Verifying user and room exist
 
             Room room = user.UserInGame.Room;
 
             ResetTimer(room.Id);
 
             if (room.TalkingPosition != user.UserInGame.Position)
-                return null;                  // Validating it's the player's turn
+                return;                  // Validating it's the player's turn
 
-            if(!room.Fold(DbContext, user.UserInGame))
+            if(!(await room.Fold(DbContext, user.UserInGame)))
             {
                 // Game Ended
-                HandleEndedGame(room);
+                await HandleEndedGame (room);
             }
 
             SendUserStatus(user);             // Sending User's status
 
             SendRoomStatus(room);             // Sending everyone in the room the status
-
-            return Task.CompletedTask;
         }
 
-        public Task Call()
+        public async Task Call()
         {
             // Getting the user and room
             User user = GetUserByConnectionId();
             if (user == null || user.UserInGame == null)
-                return null;                             // Verifying user and room exist
+                return;                             // Verifying user and room exist
 
             Room room = user.UserInGame.Room;
 
             ResetTimer(room.Id);
 
             if (room.TalkingPosition != user.UserInGame.Position)
-                return null;                  // Validating it's the player's turn
+                return;                  // Validating it's the player's turn
 
-            if(!room.Call(DbContext, user.UserInGame))
+            if(!(await room.Call(DbContext, user.UserInGame)))
             {
                 // Game ended
-                HandleEndedGame(room);
+                await HandleEndedGame (room);
             }
 
             SendUserStatus(user);             // Sending User's status
 
             SendRoomStatus(room);             // Sending everyone in the room the status
-
-            return Task.CompletedTask;
         }
 
-        public Task Raise(int amount)
+        public async Task Raise(int amount)
         {
             // Getting the user and room
             User user = GetUserByConnectionId();
             if (user == null || user.UserInGame == null)
-                return null;                  // Verifying user and room exist
+                return;                  // Verifying user and room exist
 
             Room room = user.UserInGame.Room;
 
             ResetTimer(room.Id);
 
             if (room.TalkingPosition != user.UserInGame.Position)
-                return null;                  // Validating it's the player's turn
+                return;                  // Validating it's the player's turn
 
-            if(!room.Raise(DbContext, user.UserInGame, amount))
+            if(!(await room.Raise(DbContext, user.UserInGame, amount)))
             {
                 // Game ended
-                HandleEndedGame(room);
+                await HandleEndedGame (room);
             }
 
             SendUserStatus(user);             // Sending User's status
 
             SendRoomStatus(room);             // Sending everyone in the room the status
-
-            return Task.CompletedTask;
         }
 
-        public Task Check()
+        public async Task Check()
         {
             // Getting the user and room
             User user = GetUserByConnectionId();
             if (user == null || user.UserInGame == null)
-                return null;                   // Verifying user and room exist
+                return;                   // Verifying user and room exist
 
             Room room = user.UserInGame.Room;
 
             ResetTimer(room.Id);
 
             if (room.TalkingPosition != user.UserInGame.Position)
-                return null;                  // Validating it's the player's turn
+                return;                  // Validating it's the player's turn
 
-            if(!room.Check(DbContext, user.UserInGame))
+            if(!(await room.Check(DbContext, user.UserInGame)))
             {
                 // Game ended
-                HandleEndedGame(room);
+                await HandleEndedGame(room);
             }
 
             SendUserStatus(user);             // Sending User's status
 
             SendRoomStatus(room);             // Sending everyone in the room the status
-
-            return Task.CompletedTask;
         }
 
         private void SendRoomStatus(Room room)
@@ -300,9 +283,9 @@ namespace Poker.Hubs
             return ConnectionIds.Where(d => d.Value == user.Username).Select(d => d.Key).ToList();
         }
 
-        private void SendLobbyStatus()
+        private async void SendLobbyStatus()
         {
-            Clients.All.SendAsync("AllRoomsStatus", new LobbyDto(DbContext.Rooms.ToList()));
+            await Clients.All.SendAsync("AllRoomsStatus", new LobbyDto(DbContext.Rooms.ToList()));
         }
 
         private User GetUserByConnectionId()
@@ -320,62 +303,76 @@ namespace Poker.Hubs
             // TODO delete timer with room
             var timer = new System.Timers.Timer();
             timer.Interval = TimerInterval;
-            timer.Elapsed += (sender, e) => TimerElapsed(sender, e, roomId);
+            timer.Elapsed += async (sender, e) => await TimerElapsed(sender, e, roomId);
             Timers.Add(roomId, timer);
             return timer;
         }
 
-        private async void TimerElapsed(object sender, System.Timers.ElapsedEventArgs e, string roomId)
+        private async Task TimerElapsed(object sender, System.Timers.ElapsedEventArgs e, string roomId)
         {
             Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == roomId);
             if (room == null) return; // Validating room exists
             
-            if (room.Stage != GameStage.Stopped)
+            if (room.Stage != GameStage.Stopped && room.Stage != GameStage.Finished)
             {
                 UserInGame talkingUser = room.Users.Where(u => u.Position == room.TalkingPosition).FirstOrDefault();
                 if (talkingUser == null)
                     return;
 
-                if (!room.Fold(DbContext, talkingUser))
+                if (!(await room.Fold(DbContext, talkingUser)))
                 {
                     // Game Ended
-                    HandleEndedGame(room);
+                    await HandleEndedGame(room);
                 }
+            }
+            else if(room.Stage == GameStage.Finished)
+            {
+                System.Timers.Timer timer;
+                if (!Timers.TryGetValue(room.Id, out timer)) return;   // Verifying timer exist
 
-                // Sending everyone in the room the status
-                foreach (UserInGame u in room.Users)
+                room.ResetGame();
+                if (room.Users.Count() > 1)
                 {
-                    List<string> tmpUserConnectionIds = GetUserConnections(u.User);
-                    await HubContext.Clients.Clients(tmpUserConnectionIds).SendAsync("RoomStatus", new RoomDto(room, u.User));
-                    SendUserStatus(u.User);
+                    ResetTimer(room.Id);
+                    await room.StartGame(DbContext);
                 }
+            }
+
+            // Sending everyone in the room the status
+            foreach (UserInGame u in room.Users)
+            {
+                List<string> tmpUserConnectionIds = GetUserConnections(u.User);
+                await HubContext.Clients.Clients(tmpUserConnectionIds).SendAsync("RoomStatus", new RoomDto(room, u.User));
+                SendUserStatus(u.User);
             }
         }
 
         private void ResetTimer(string roomId)
         {
             System.Timers.Timer timer;
-            if (!Timers.TryGetValue(roomId, out timer))
-            {
-                return;                 // Verifying timer exist
-            }
+            if (!Timers.TryGetValue(roomId, out timer)) return;   // Verifying timer exist
 
             Room room = DbContext.Rooms.FirstOrDefault(r => r.Id == roomId);
-            if (room != null && room.Stage != GameStage.Stopped)
+            if (room == null) return;                             // Verifying room exists
+
+            timer.Stop();
+            if (room.Stage != GameStage.Stopped)
             {
-                timer.Stop();
                 timer.Start();
             }
         }
 
-        private void HandleEndedGame(Room room)
+        private async Task HandleEndedGame(Room room)
         {
+            ResetTimer(room.Id);
+            if (room.Stage != GameStage.Finished) return; // Verifying game ended
             UserInGame winner = room.Users.FirstOrDefault(u => u.IsWinner == true);
             foreach (UserInGame u in room.Users)
             {
                 List<string> tmpUserConnectionIds = GetUserConnections(u.User);
-                Clients.Clients(tmpUserConnectionIds).SendAsync("Alert", (winner.Username + " "+ winner.BestHand));
+                await HubContext.Clients.Clients(tmpUserConnectionIds).SendAsync("Alert", (winner.Username + " " + winner.BestHand));
             }
+            return;
         }
     }
 }

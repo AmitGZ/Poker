@@ -65,5 +65,15 @@ namespace Poker.DataModel
             IsWinner = false;
             BestHand = null;
         }
+
+        public void ResetGame()
+        {
+            Cards = new List<Card>();
+            IsActive = true;
+            IsWinner = false; 
+            MoneyInTurn = 0;
+            PlayedThisTurn = false;
+            BestHand = null;
+        }
     }
 }

@@ -41,11 +41,11 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
     const [Talking, setTalking] = useState(false);
     const [Dealer, setDealer] = useState(false);
 
-    const [counter, setCounter] = useState(10);
+    const [counter, setCounter] = useState(roomStatus.turnTime);
 
     useEffect(()=>{
         let myInterval = setInterval(() => {
-                if (counter > 0 && roomStatus.stage > 0) {
+                if (counter > 0 && roomStatus.stage != 0 && roomStatus.stage != 5) {
                     setCounter(counter - 1);
                 }
                 if (counter === 0) {
@@ -179,7 +179,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
 
         drawTableStatus(ctx);
 
-        setCounter(10);
+        setCounter(roomStatus.turnTime);
 
     },[loaded_num, roomStatus])
     
@@ -197,12 +197,13 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
             <div style={{ position:'absolute', width: 120, height: 120,
             marginLeft :`${POSITIONS[(roomStatus.talkingPosition - user.position +PLAYER_NUM) % PLAYER_NUM][0] - 60}px`,
             marginTop : `${POSITIONS[(roomStatus.talkingPosition - user.position +PLAYER_NUM) % PLAYER_NUM][1] - 60}px`}}>
-                { roomStatus.stage > 0 && <CircularProgressbar value={counter} maxValue={10} /> }
+                { roomStatus.stage != 0 && roomStatus.stage != 5 &&
+                 <CircularProgressbar value={counter} maxValue={roomStatus.turnTime} /> }
             </div>
 
             <div style = {{position:'absolute'}}>
                 <Button style = {{position:'absolute'}} variant='danger' onClick={() => LeaveRoom()}>Leave Room</Button>
-                    {(roomStatus.stage > 0) &&
+                    {(roomStatus.stage != 0 && roomStatus.stage != 5) &&
                     <div className='button-list' style = {{marginLeft :`${WIDTH*3/5}px`, marginTop :`${HEIGHT*2/3}px`}}>
                         
                         <Button 
