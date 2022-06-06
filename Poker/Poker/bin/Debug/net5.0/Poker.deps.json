@@ -40,9 +40,7 @@
           "Microsoft.EntityFrameworkCore.Relational": "5.0.16",
           "Microsoft.EntityFrameworkCore.SqlServer": "5.0.16",
           "Microsoft.EntityFrameworkCore.Tools": "5.0.16",
-          "Owin": "1.0.0",
           "System.Data.SqlClient": "4.8.3",
-          "linq2db": "4.0.1",
           "Microsoft.AspNetCore.Antiforgery": "5.0.0.0",
           "Microsoft.AspNetCore.Authentication.Abstractions": "5.0.0.0",
           "Microsoft.AspNetCore.Authentication.Cookies": "5.0.0.0",
@@ -372,17 +370,6 @@
             "assemblyVersion": "2.8.0.0",
             "fileVersion": "2.8.26.1919"
           }
-        }
-      },
-      "linq2db/4.0.1": {
-        "runtime": {
-          "lib/netcoreapp3.1/linq2db.dll": {
-            "assemblyVersion": "4.0.1.0",
-            "fileVersion": "4.0.1.0"
-          }
-        },
-        "compile": {
-          "lib/netcoreapp3.1/linq2db.dll": {}
         }
       },
       "Microsoft.AspNet.SignalR.Core/2.4.3": {
@@ -821,17 +808,6 @@
         },
         "compile": {
           "lib/netstandard1.3/Newtonsoft.Json.dll": {}
-        }
-      },
-      "Owin/1.0.0": {
-        "runtime": {
-          "lib/net40/Owin.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        },
-        "compile": {
-          "lib/net40/Owin.dll": {}
         }
       },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {},
@@ -3517,13 +3493,6 @@
       "path": "humanizer.core/2.8.26",
       "hashPath": "humanizer.core.2.8.26.nupkg.sha512"
     },
-    "linq2db/4.0.1": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-QH7xdn6PIwqC7onFO1V2Cyyg+50vaHP7dFLEsHXd4UYvCNXiSyPwTNmdhfLQf9US7yf/JvGfQQo+WhhwRkQ8kg==",
-      "path": "linq2db/4.0.1",
-      "hashPath": "linq2db.4.0.1.nupkg.sha512"
-    },
     "Microsoft.AspNet.SignalR.Core/2.4.3": {
       "type": "package",
       "serviceable": true,
@@ -3761,13 +3730,6 @@
       "sha512": "sha512-ebWzW9j2nwxQeBo59As2TYn7nYr9BHicqqCwHOD1Vdo+50HBtLPuqdiCYJcLdTRknpYis/DSEOQz5KmZxwrIAg==",
       "path": "newtonsoft.json/10.0.1",
       "hashPath": "newtonsoft.json.10.0.1.nupkg.sha512"
-    },
-    "Owin/1.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-OseTFniKmyp76mEzOBwIKGBRS5eMoYNkMKaMXOpxx9jv88+b6mh1rSaw43vjBOItNhaLFG3d0a20PfHyibH5sw==",
-      "path": "owin/1.0.0",
-      "hashPath": "owin.1.0.0.nupkg.sha512"
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
       "type": "package",

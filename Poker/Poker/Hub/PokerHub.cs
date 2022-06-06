@@ -7,7 +7,6 @@ using Poker.DataModel.Dto;
 using Poker.DataModel;
 using Microsoft.AspNetCore.SignalR;
 using System;
-using LinqToDB;
 
 namespace Poker.Hubs
 {
