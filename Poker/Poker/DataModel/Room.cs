@@ -14,7 +14,7 @@ namespace PokerClassLibrary
     static class Constants
     {
         public const int TurnTime = 15;
-        public const int BigBlind = 10; // km per sec.
+        public const int BigBlind = 10;
     }
     public enum GameStage
     {
@@ -77,10 +77,24 @@ namespace PokerClassLibrary
             return true;
         }
 
+        public bool RemoveUser(User user)
+        {
+            bool gameRunning = false;
+            if (Stage != GameStage.Stopped && Stage != GameStage.Finished)
+            {
+                gameRunning = Fold(user.UserInGame);
+            }
+
+            // Returning player to lobby
+            Users.Remove(user.UserInGame);
+            user.Money += (int)user.UserInGame.MoneyInTable;
+
+            return gameRunning;
+        }
+
         public bool EndGame()
         {
 
-            // TODO multiple pot
 
             // Changing the dealer
             if (Users.Count() > 0)
@@ -95,13 +109,6 @@ namespace PokerClassLibrary
             winner.MoneyInTable += Pot;                                                    // Giving money to winner
             Pot = 0;
             Stage = GameStage.Finished;
-
-            if(Users.Where(u => u.IsActive == true).Count() < 2)
-            {
-                // Removing all cards
-                // CardsOnTable.ForEach(c => CardsOnTable.RemoveAt(0));
-                // Users.ForEach(u => u.Cards.ToList().RemoveAll(c => true));
-            }
 
             return true;
         }
@@ -148,9 +155,6 @@ namespace PokerClassLibrary
         {
             userInGame.IsActive = false;                                         // Setting inactive
             userInGame.Cards.ToList().ForEach(c => userInGame.Cards.Remove(c));  // Returning cards
-
-            // Getting list of all player positions
-            List<short> activePositions = Users.Where(u => u.IsActive == true).Select(u => u.Position).ToList();
 
             return FinishTurn(userInGame);
         }
