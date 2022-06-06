@@ -1,7 +1,4 @@
-﻿using BluffinMuffin.HandEvaluator;
-using Poker.DataModel;
-using PokerClassLibrary;
-using System;
+﻿using PokerClassLibrary;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,56 +8,7 @@ namespace Poker.Data
     {
         public static void Initialize(PokerContext context)
         {
-
-            List<CalculateUser> users = new List<CalculateUser>();
-            users.Add(new CalculateUser());
-            users.Add(new CalculateUser());
-
-            string[] values = { "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A" };
-            string[] suits = { "C", "H", "S", "D" };
-            List<string> combinations =  new List<string>();
-            for (var value = 0; value < 13; value++)
-            {
-                for (var suit = 0; suit < 4; suit++)
-                {
-                    combinations.Add(values[value] + suits[suit]);
-                }
-            }
-
-            for (var mycard1 = 0; mycard1 < 52; mycard1++)
-            {
-                for (var mycard2 = mycard1 + 1; mycard2 < 52; mycard2++)
-                {
-                    for (var tablecard1 = mycard2 + 1; tablecard1 < 52; tablecard1++)
-                    {
-                        for (var tablecard2 = tablecard1 + 1; tablecard2 < 52; tablecard2++)
-                        {
-                            for (var tablecard3 = tablecard2 + 1; tablecard3 < 52; tablecard3++)
-                            {
-                                for (var tablecard4 = tablecard3 + 1; tablecard4 < 52; tablecard4++)
-                                {
-                                    for (var tablecard5 = tablecard4 + 1; tablecard5 < 52; tablecard5++)
-                                    {
-                                        for (var opponentcard1 = tablecard5 + 1; opponentcard1 < 52; opponentcard1++)
-                                        {
-                                            for (var opponentcard2 = opponentcard1 + 1; opponentcard2 < 52; opponentcard2++)
-                                            {
-                                                List<string> communityCards = new List<string>(new string[] { "JC", "JS", "JD", "JH", "10C" });
-                                                users[0].playerCards = new List<string>(new string[] { "4S", "KC" });
-                                                users[1].playerCards = new List<string>(new string[] { "4C", "5C" });
-                                                users[0].communityCards = communityCards;
-                                                users[1].communityCards = communityCards;
-                                                HandEvaluators.Evaluate(users, communityCards);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            context.Database.EnsureCreated();
+            // context.Database.EnsureCreated();
 
             // Removing all Cards
             foreach (var c in context.Cards)
@@ -91,7 +39,7 @@ namespace Poker.Data
                 context.Users.Add(s);
             }
             context.SaveChanges();
-
+            
             // Removing all Rooms
             foreach (var r in context.Rooms)
             {
@@ -103,7 +51,7 @@ namespace Poker.Data
             {
             // new Room{Name = "Test" }
             };
-
+            
             foreach (Room r in Rooms)
             {
                 context.Rooms.Add(r);
@@ -111,13 +59,5 @@ namespace Poker.Data
 
             context.SaveChanges();
         }
-    }
-
-    public class CalculateUser : IStringCardsHolder
-    {
-        public List<string> playerCards;
-        public List<string> communityCards;
-        IEnumerable<string> IStringCardsHolder.PlayerCards => playerCards;
-        IEnumerable<string> IStringCardsHolder.CommunityCards => communityCards;
     }
 }
