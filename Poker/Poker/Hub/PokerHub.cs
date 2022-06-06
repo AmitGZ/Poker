@@ -57,9 +57,9 @@ namespace Poker.Hubs
 
             ConnectionIds.Add(Context.ConnectionId, user.Username);  // Adding to connectionIds list
 
-            SendLobbyStatus();                                       // Sending Lobby status
+            SendUserStatus(user);                                    // Sending User status
 
-            SendUserStatus(user);                                    // Sending User's status
+            SendLobbyStatus();                                       // Sending Lobby status
 
             if (user.UserInGame != null)
             {
@@ -99,8 +99,6 @@ namespace Poker.Hubs
             SendRoomStatus(room);             // Sending everyone in the room the status
 
             SendLobbyStatus();                // Sending everyone in lobby status
-
-            SendUserStatus(user);             // Sending User's status
         }
 
         public async Task LeaveRoom()
@@ -112,21 +110,16 @@ namespace Poker.Hubs
 
             Room room = user.UserInGame.Room;
 
-            if (room.Stage != GameStage.Stopped)
-                if (!room.Fold(user.UserInGame)) // Folding player
-                {
-                    // Game Ended
-                    await HandleEndedGame (room);
-                }
-
-            // Returning player to lobby
-            room.Users.Remove(user.UserInGame);
-            user.Money += (int)user.UserInGame.MoneyInTable;
+            bool gameRunning = room.RemoveUser(user);
             await DbContext.SaveChangesAsync();
+            if(!gameRunning)
+            {
+                // Game Ended
+                await HandleEndedGame(room);
+            }
 
             // Sending everyone in the room the status
-            List<User> playersInRoom = DbContext.Users.Where(u => u.UserInGame.Room.Id == room.Id).ToList();
-            if (playersInRoom.Count() == 0)
+            if (room.Users.Count() == 0)
             {
                 DbContext.Rooms.Remove(room);
                 await DbContext.SaveChangesAsync();
@@ -166,8 +159,7 @@ namespace Poker.Hubs
             return Task.CompletedTask;
         }
 
-        // "Synchrnoenous" fold received from fold button
-        public async Task Fold()
+        public async Task ReceiveFold()
         {
             // Getting the user and room
             User user = GetUserByConnectionId();
@@ -176,23 +168,23 @@ namespace Poker.Hubs
 
             Room room = user.UserInGame.Room;
 
-            ResetTimer(room.Id);
-
             if (room.TalkingPosition != user.UserInGame.Position)
                 return;                  // Validating it's the player's turn
 
-            if(! room.Fold(user.UserInGame))
+            ResetTimer(room.Id);
+
+            bool gameRunning = room.Fold(user.UserInGame);
+            DbContext.SaveChanges();
+            if (!gameRunning)
             {
                 // Game Ended
                 await HandleEndedGame(room);
             }
 
-            SendUserStatus(user);             // Sending User's status
-
             SendRoomStatus(room);             // Sending everyone in the room the status
         }
 
-        public async Task Call()
+        public async Task ReceiveCall()
         {
             // Getting the user and room
             User user = GetUserByConnectionId();
@@ -201,23 +193,23 @@ namespace Poker.Hubs
 
             Room room = user.UserInGame.Room;
 
-            ResetTimer(room.Id);
-
             if (room.TalkingPosition != user.UserInGame.Position)
                 return;                  // Validating it's the player's turn
 
-            if(room.Call(user.UserInGame))
+            ResetTimer(room.Id);
+
+            bool gameRunning = room.Call(user.UserInGame);
+            DbContext.SaveChanges();
+            if (!gameRunning)
             {
                 // Game ended
-                await HandleEndedGame (room);
+                await HandleEndedGame(room);
             }
-
-            SendUserStatus(user);             // Sending User's status
 
             SendRoomStatus(room);             // Sending everyone in the room the status
         }
 
-        public async Task Raise(int amount)
+        public async Task ReceiveRaise(int amount)
         {
             // Getting the user and room
             User user = GetUserByConnectionId();
@@ -226,23 +218,23 @@ namespace Poker.Hubs
 
             Room room = user.UserInGame.Room;
 
-            ResetTimer(room.Id);
-
             if (room.TalkingPosition != user.UserInGame.Position)
                 return;                  // Validating it's the player's turn
 
-            if(room.Raise(user.UserInGame, amount))
+            ResetTimer(room.Id);
+
+            bool gameRunning = room.Raise(user.UserInGame, amount);
+            DbContext.SaveChanges();
+            if (!gameRunning)
             {
                 // Game ended
                 await HandleEndedGame (room);
             }
 
-            SendUserStatus(user);             // Sending User's status
-
             SendRoomStatus(room);             // Sending everyone in the room the status
         }
 
-        public async Task Check()
+        public async Task ReceiveCheck()
         {
             // Getting the user and room
             User user = GetUserByConnectionId();
@@ -251,18 +243,18 @@ namespace Poker.Hubs
 
             Room room = user.UserInGame.Room;
 
-            ResetTimer(room.Id);
-
             if (room.TalkingPosition != user.UserInGame.Position)
                 return;                  // Validating it's the player's turn
 
-            if( room.Check(user.UserInGame))
+            ResetTimer(room.Id);
+
+            bool gameRunning = room.Check(user.UserInGame);
+            DbContext.SaveChanges();
+            if (!gameRunning)
             {
                 // Game ended
                 await HandleEndedGame(room);
             }
-
-            SendUserStatus(user);             // Sending User's status
 
             SendRoomStatus(room);             // Sending everyone in the room the status
         }

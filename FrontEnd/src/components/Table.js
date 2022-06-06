@@ -209,27 +209,27 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
                         <Button 
                         disabled = {(!Talking) || (user.moneyInTurn < roomStatus.turnStake)}        
                         variant="dark" key = "Check" 
-                        onClick={() =>{connection.invoke("Check")}}>
+                        onClick={() =>{connection.invoke("ReceiveCheck")}}>
                         Check
                         </Button>
                         
                         <Button 
                         disabled = {(!Talking)  || (user.moneyInTurn == roomStatus.turnStake)} 
                         variant="dark" key = "Call" 
-                        onClick={() => {connection.invoke("Call")}}>
+                        onClick={() => {connection.invoke("ReceiveCall")}}>
                         Call {(roomStatus.turnStake > user.moneyInTurn) ? (roomStatus.turnStake - user.moneyInTurn): null }
                         </Button>
                         
                         <Button 
                         disabled = {(!Talking) || (roomStatus.turnStake >= user.moneyInTable)} 
                         variant="dark" key = "Raise" 
-                        onClick={() =>{connection.invoke("Raise", 100)}}>
+                        onClick={() =>{connection.invoke("ReceiveRaise", 100)}}>
                         Raise
                         </Button>
                         
                         <Button disabled = {(!Talking)}
                         variant="dark" key = "Fold" 
-                        onClick={() => {connection.invoke("Fold")}}>
+                        onClick={() => {connection.invoke("ReceiveFold")}}>
                         Fold
                         </Button>
 
