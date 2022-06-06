@@ -8,8 +8,6 @@ using Poker.DataModel;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using LinqToDB;
-using System.Diagnostics;
-using BluffinMuffin.HandEvaluator;
 
 namespace Poker.Hubs
 {
@@ -80,8 +78,11 @@ namespace Poker.Hubs
                 return;                 // Verifying user and room exist 
 
             // Trying to add user to room
-            if (!(await room.AddUser(DbContext, user, enterMoney))) 
+            bool gameRunning = room.AddUser(user, enterMoney);
+            await DbContext.SaveChangesAsync();
+            if (!gameRunning) 
             {
+                await DbContext.SaveChangesAsync();
                 await Clients.Clients(GetUserConnections(user)).SendAsync("Alert", "Room is full!");
                 return;
             }
@@ -89,9 +90,11 @@ namespace Poker.Hubs
             // If enough players start game
             if ( room.Users.Count() == 2 && room.Stage == GameStage.Stopped )
             {
-                await room.StartGame(DbContext);
+                room.StartGame();
                 ResetTimer(room.Id);
             }
+
+            await DbContext.SaveChangesAsync();
 
             SendRoomStatus(room);             // Sending everyone in the room the status
 
@@ -110,7 +113,7 @@ namespace Poker.Hubs
             Room room = user.UserInGame.Room;
 
             if (room.Stage != GameStage.Stopped)
-                if (!(await room.Fold(DbContext, user.UserInGame))) // Folding player
+                if (!room.Fold(user.UserInGame)) // Folding player
                 {
                     // Game Ended
                     await HandleEndedGame (room);
@@ -178,7 +181,7 @@ namespace Poker.Hubs
             if (room.TalkingPosition != user.UserInGame.Position)
                 return;                  // Validating it's the player's turn
 
-            if(!(await room.Fold(DbContext, user.UserInGame)))
+            if(! room.Fold(user.UserInGame))
             {
                 // Game Ended
                 await HandleEndedGame(room);
@@ -203,7 +206,7 @@ namespace Poker.Hubs
             if (room.TalkingPosition != user.UserInGame.Position)
                 return;                  // Validating it's the player's turn
 
-            if(!(await room.Call(DbContext, user.UserInGame)))
+            if(room.Call(user.UserInGame))
             {
                 // Game ended
                 await HandleEndedGame (room);
@@ -228,7 +231,7 @@ namespace Poker.Hubs
             if (room.TalkingPosition != user.UserInGame.Position)
                 return;                  // Validating it's the player's turn
 
-            if(!(await room.Raise(DbContext, user.UserInGame, amount)))
+            if(room.Raise(user.UserInGame, amount))
             {
                 // Game ended
                 await HandleEndedGame (room);
@@ -253,7 +256,7 @@ namespace Poker.Hubs
             if (room.TalkingPosition != user.UserInGame.Position)
                 return;                  // Validating it's the player's turn
 
-            if(!(await room.Check(DbContext, user.UserInGame)))
+            if( room.Check(user.UserInGame))
             {
                 // Game ended
                 await HandleEndedGame(room);
@@ -322,12 +325,11 @@ namespace Poker.Hubs
                 if (talkingUser == null)
                     return;
 
-                if (!(await room.Fold(DbContext, talkingUser)))
+                if (room.Fold(talkingUser))
                 {
                     // Game Ended
                     await HandleEndedGame(room);
                     ResetTimer(room.Id);
-                    room.Stage = GameStage.Finished;
                 }
             }
             else if(room.Stage == GameStage.Finished)
@@ -338,7 +340,7 @@ namespace Poker.Hubs
                 room.ResetGame();
                 if (room.Users.Count() > 1)
                 {
-                    await room.StartGame(DbContext);
+                    room.StartGame();
                     ResetTimer(room.Id);
                 }
             }
@@ -376,7 +378,6 @@ namespace Poker.Hubs
                 List<string> tmpUserConnectionIds = GetUserConnections(u.User);
                 // await HubContext.Clients.Clients(tmpUserConnectionIds).SendAsync("Alert", (winner.Username + " " + winner.BestHand));
             }
-            room.Stage = GameStage.Finished;
             await DbContext.SaveChangesAsync();
             return;
         }

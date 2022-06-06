@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace PokerClassLibrary
 {
@@ -54,7 +53,7 @@ namespace PokerClassLibrary
             TurnTime = Constants.TurnTime;
         }
 
-        public async Task<bool> AddUser(PokerContext context, User user, int enterMoney)
+        public bool AddUser(User user, int enterMoney)
         {
             if (Users.Count == 5)
             {
@@ -73,12 +72,11 @@ namespace PokerClassLibrary
             user.Money -= enterMoney;
             user.UserInGame = new UserInGame(enterMoney, pos);
             Users.Add(user.UserInGame);
-            await context.SaveChangesAsync();
 
             return true;
         }
 
-        public async Task<bool> EndGame(PokerContext context)
+        public bool EndGame()
         {
 
             // TODO multiple pot
@@ -90,19 +88,24 @@ namespace PokerClassLibrary
                 DealerPosition = Users.OrderBy(u => u.Position).Select(u=>u.Position).ToList().ElementAt((dealerIndex + 1) % Users.Count());
             }
 
-            UserInGame winner = await CheckWinner(context);
+            UserInGame winner = CheckWinner();
 
             // Resetting table
             winner.MoneyInTable += Pot;                                                    // Giving money to winner
             Pot = 0;
             Stage = GameStage.Finished;
 
-            await context.SaveChangesAsync();
+            if(Users.Where(u => u.IsActive == true).Count() < 2)
+            {
+                // Removing all cards
+                // CardsOnTable.ForEach(c => CardsOnTable.RemoveAt(0));
+                // Users.ForEach(u => u.Cards.ToList().RemoveAll(c => true));
+            }
 
             return true;
         }
 
-        public async Task<bool> StartGame(PokerContext context)
+        public bool StartGame()
         {
             // Setting initial bet
             TurnStake = BigBlind;
@@ -137,13 +140,10 @@ namespace PokerClassLibrary
             Stage = GameStage.Preflop;
             Pot = 0;
 
-            // Updating database
-            await context.SaveChangesAsync();
-
             return true;
         }
 
-        public async Task<bool> Fold(PokerContext context,UserInGame userInGame)
+        public bool Fold(UserInGame userInGame)
         {
             userInGame.IsActive = false;                                         // Setting inactive
             userInGame.Cards.ToList().ForEach(c => userInGame.Cards.Remove(c));  // Returning cards
@@ -151,11 +151,10 @@ namespace PokerClassLibrary
             // Getting list of all player positions
             List<short> activePositions = Users.Where(u => u.IsActive == true).Select(u => u.Position).ToList();
 
-            await context .SaveChangesAsync();
-            return await FinishTurnAsync (context, userInGame);
+            return FinishTurn(userInGame);
         }
 
-        public async Task<bool> Call(PokerContext context, UserInGame userInGame)
+        public bool Call(UserInGame userInGame)
         {
             // User has enough money
             if (TurnStake <= userInGame.MoneyInTable)
@@ -168,10 +167,10 @@ namespace PokerClassLibrary
                 // Open new pot
             }
 
-            return await FinishTurnAsync (context, userInGame);
+            return FinishTurn(userInGame);
         }
 
-        public async Task<bool> Raise(PokerContext context, UserInGame userInGame, int amount)
+        public bool Raise(UserInGame userInGame, int amount)
         {
             // Validating user can raise
             if (userInGame.MoneyInTable < amount)
@@ -184,26 +183,26 @@ namespace PokerClassLibrary
             //going another Stage
             Users.Where(u => u.IsActive == true).ToList().ForEach(u => u.PlayedThisTurn = false);
 
-            return await FinishTurnAsync(context, userInGame);
+            return FinishTurn(userInGame);
         }
-        public async Task<bool> Check(PokerContext context, UserInGame userInGame)
+
+        public bool Check(UserInGame userInGame)
         {
             if (TurnStake > 0)
             {
                 return false; // Invalid operation
             }
-            return await FinishTurnAsync(context, userInGame);
+            return FinishTurn(userInGame);
         }
 
-        private async Task<bool> FinishTurnAsync(PokerContext context, UserInGame userInGame)
+        private bool FinishTurn(UserInGame userInGame)
         {
             // Getting list of all player positions
             List<short> activePositions = Users.Where(u => u.IsActive == true).OrderBy(u => u.Position).Select(u => u.Position).ToList();
             if (activePositions.Count() <= 1)
             {
                 // End game
-                await context.SaveChangesAsync();            // Updating database
-                await EndGame(context);                      // Ending game
+                EndGame();                      // Ending game
                 return false;
             }
 
@@ -227,8 +226,7 @@ namespace PokerClassLibrary
                 if (Stage > GameStage.River)
                 {
                     // End game
-                    await context.SaveChangesAsync();            // Updating database
-                    await EndGame(context);                 // Ending game
+                    EndGame();                 // Ending game
                     return false;
                 }
             }
@@ -236,12 +234,10 @@ namespace PokerClassLibrary
             // Setting new talking position
             TalkingPosition = activePositions.ElementAt((activePositions.IndexOf(TalkingPosition) + 1) % activePositions.Count());
 
-            await context.SaveChangesAsync();                   // Updating database
-
             return true;
         }
 
-        public async Task<UserInGame> CheckWinner(PokerContext context)
+        public UserInGame CheckWinner()
         {
             // Getting list of all active players
             IStringCardsHolder[] activePlayers = Users.Where(u => u.IsActive == true).ToArray();
@@ -253,8 +249,6 @@ namespace PokerClassLibrary
             ((UserInGame)(winner.CardsHolder)).IsWinner = true;
             ((UserInGame)(winner.CardsHolder)).BestHand = winner.Evaluation.ToString();
             
-
-            await context.SaveChangesAsync();                      // Saving changes
             return (UserInGame)(winner.CardsHolder);    // Returning winner
         }
 
