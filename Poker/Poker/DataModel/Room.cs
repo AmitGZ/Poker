@@ -3,6 +3,7 @@
 using BluffinMuffin.HandEvaluator;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Poker.DataModel;
+using Poker.Handlres;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -123,7 +124,7 @@ namespace PokerClassLibrary
             Users.ForEach(u =>  u.ResetUser());
 
             // Dealing cards 
-            List<Card> tmpDeck = GenerateShuffledDeck();
+            List<Card> tmpDeck = CardHandler.GenerateShuffledDeck();
 
             int cardIdx;
             for (cardIdx = 0; cardIdx < 5; cardIdx++)
@@ -261,31 +262,5 @@ namespace PokerClassLibrary
             this.TurnStake = 0;
             this.Users.ForEach(u => u.ResetUser());
         }
-
-        private List<Card> GenerateShuffledDeck() // TODO move somewhere else
-        {
-            // Generating deck
-            List<Card> tmpDeck = new List<Card>(); 
-            for (var i = 0; i < 4; i++)
-            {
-                for (var j = 0; j < 13; j++)
-                {
-                    tmpDeck.Add(new Card() { Suit = (CardSuit)i, Value = (CardValue)j });
-                }
-            }
-
-            // Shuffling Deck
-            int n = tmpDeck.Count;           
-            Random rng = new Random();
-            while (n > 1)
-            {
-                n--;
-                int k = rng.Next(n + 1);
-                Card value = tmpDeck[k];
-                tmpDeck[k] = tmpDeck[n];
-                tmpDeck[n] = value;
-            }
-            return tmpDeck;
-        } 
     }
 }
