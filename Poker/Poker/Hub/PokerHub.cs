@@ -78,9 +78,9 @@ namespace Poker.Hubs
                 return;                 // Verifying user and room exist 
 
             // Trying to add user to room
-            bool gameRunning = room.AddUser(user, enterMoney);
+            bool roomFull = room.AddUser(user, enterMoney);
             await DbContext.SaveChangesAsync();
-            if (!gameRunning) 
+            if (!roomFull) 
             {
                 await DbContext.SaveChangesAsync();
                 await Clients.Clients(GetUserConnections(user)).SendAsync("Alert", "Room is full!");
@@ -121,6 +121,7 @@ namespace Poker.Hubs
             // Sending everyone in the room the status
             if (room.Users.Count() == 0)
             {
+                RemoveTimer(room.Id);
                 DbContext.Rooms.Remove(room);
                 await DbContext.SaveChangesAsync();
             }
@@ -346,6 +347,14 @@ namespace Poker.Hubs
             }
         }
 
+        private void RemoveTimer(string roomId)
+        {
+            System.Timers.Timer timer;
+            if (!Timers.TryGetValue(roomId, out timer)) return;   // Verifying timer exist
+            timer.Dispose();
+            ConnectionIds.Remove(roomId);
+        }
+
         private void ResetTimer(string roomId)
         {
             System.Timers.Timer timer;
@@ -371,7 +380,6 @@ namespace Poker.Hubs
                 // await HubContext.Clients.Clients(tmpUserConnectionIds).SendAsync("Alert", (winner.Username + " " + winner.BestHand));
             }
             await DbContext.SaveChangesAsync();
-            return;
         }
     }
 }

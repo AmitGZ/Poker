@@ -13,7 +13,7 @@ namespace PokerClassLibrary
     static class Constants
     {
         public const int TurnTime = 15;
-        public const int BigBlind = 10; // km per sec.
+        public const int BigBlind = 10;
     }
     public enum GameStage
     {
@@ -94,7 +94,6 @@ namespace PokerClassLibrary
         public bool EndGame()
         {
 
-            // TODO multiple pot
 
             // Changing the dealer
             if (Users.Count() > 0)
@@ -109,13 +108,6 @@ namespace PokerClassLibrary
             winner.MoneyInTable += Pot;                                                    // Giving money to winner
             Pot = 0;
             Stage = GameStage.Finished;
-
-            if(Users.Where(u => u.IsActive == true).Count() < 2)
-            {
-                // Removing all cards
-                // CardsOnTable.ForEach(c => CardsOnTable.RemoveAt(0));
-                // Users.ForEach(u => u.Cards.ToList().RemoveAll(c => true));
-            }
 
             return true;
         }
@@ -274,7 +266,7 @@ namespace PokerClassLibrary
             this.Users.ForEach(u => u.ResetUser());
         }
 
-        private List<Card> GenerateShuffledDeck() // TODO move somewhere else
+        private List<Card> GenerateShuffledDeck()
         {
             // Generating deck
             List<Card> tmpDeck = new List<Card>(); 
