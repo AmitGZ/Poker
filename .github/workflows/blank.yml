@@ -18,7 +18,7 @@ jobs:
       with:
         dotnet-version: 3.1.x
     - name: Restore dependencies
-      run:  dotnet restore RestAPI2/RestAPI2.sln
+      run:  dotnet restore Poker/Poker.sln
     - name: Restore dependencies Tests
       run:  dotnet restore Poker/UnitTestsProject/UnitTestsProject.csproj
     - name: Build
