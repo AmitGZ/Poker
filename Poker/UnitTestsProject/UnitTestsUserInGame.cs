@@ -5,7 +5,7 @@ using Xunit;
 namespace UnitTestsProject
 {
     // This Tests class deals with UserInRoom class methods
-    // The Only method that we can define unit tests is ResetUser()
+    // The Only method that we can define unit tests is ResetUser
     public class UnitTestsUserInGame
     {
         // -------------Tests for ResetUser() method----------------
@@ -29,7 +29,7 @@ namespace UnitTestsProject
         [Fact]
         public void ResetUser_IsWinnerFalse_Void()
         {
-            // Gaol: Invoke the method ResetUser() and check if IsWinner == false
+            // Gaol: Invoke the method ResetUser and check if IsWinner == false
 
             // Arrange
             var userInGame = new UserInGame();
@@ -45,7 +45,7 @@ namespace UnitTestsProject
         [Fact]
         public void ResetUser_IsMoneyInTurnZero_Void()
         {
-            // Gaol: Invoke the method ResetUser() and check if MoneyInTurn == 0
+            // Gaol: Invoke the method ResetUser and check if MoneyInTurn == 0
 
             // Arrange
             var userInGame = new UserInGame();
@@ -61,7 +61,7 @@ namespace UnitTestsProject
         [Fact]
         public void ResetUser_IsPlayedThisTurnFalse_Void()
         {
-            // Gaol: Invoke the method ResetUser() and check if PlayedThisTurn == false
+            // Gaol: Invoke the method ResetUser and check if PlayedThisTurn == false
 
             // Arrange
             var userInGame = new UserInGame();
@@ -77,7 +77,7 @@ namespace UnitTestsProject
         [Fact]
         public void ResetUser_IsBestHandNull_Void()
         {
-            // Gaol: Invoke the method ResetUser() and check if BestHand == null
+            // Gaol: Invoke the method ResetUser and check if BestHand == null
 
             // Arrange
             var userInGame = new UserInGame();

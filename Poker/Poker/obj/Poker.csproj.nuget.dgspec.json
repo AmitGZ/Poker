@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\Poker\\Poker.csproj": {}
+    "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\Poker\\Poker.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\Poker\\Poker.csproj": {
+    "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\Poker\\Poker.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\Poker\\Poker.csproj",
+        "projectUniqueName": "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\Poker\\Poker.csproj",
         "projectName": "Poker",
-        "projectPath": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\Poker\\Poker.csproj",
-        "packagesPath": "C:\\Users\\Amit Zohar\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\Poker\\obj\\",
+        "projectPath": "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\Poker\\Poker.csproj",
+        "packagesPath": "C:\\Users\\ofirn\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\Poker\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Amit Zohar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ofirn\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -93,7 +93,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.406\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
         }
       }
     }

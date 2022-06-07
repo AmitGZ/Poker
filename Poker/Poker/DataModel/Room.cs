@@ -92,10 +92,8 @@ namespace PokerClassLibrary
             return gameRunning;
         }
 
-        public bool EndGame()
+        private bool EndGame()
         {
-
-
             // Changing the dealer
             if (Users.Count() > 0)
             {
@@ -106,7 +104,7 @@ namespace PokerClassLibrary
             UserInGame winner = CheckWinner();
 
             // Resetting table
-            winner.MoneyInTable += Pot;                                                    // Giving money to winner
+            winner.MoneyInTable += Pot; // Giving money to winner
             Pot = 0;
             Stage = GameStage.Finished;
 
@@ -185,7 +183,7 @@ namespace PokerClassLibrary
             userInGame.MoneyInTable -= (int)amount;
             userInGame.MoneyInTurn += (int)amount;
 
-            //going another Stage
+            // Going another Stage
             Users.Where(u => u.IsActive == true).ToList().ForEach(u => u.PlayedThisTurn = false);
 
             return FinishTurn(userInGame);
@@ -206,8 +204,8 @@ namespace PokerClassLibrary
             List<short> activePositions = Users.Where(u => u.IsActive == true).OrderBy(u => u.Position).Select(u => u.Position).ToList();
             if (activePositions.Count() <= 1)
             {
-                // End game
-                EndGame();                      // Ending game
+                // Ending game
+                EndGame();
                 return false;
             }
 
