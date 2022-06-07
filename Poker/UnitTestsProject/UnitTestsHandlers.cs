@@ -9,6 +9,8 @@ using Xunit;
 
 namespace UnitTestsProject
 {
+    // This tests class deals with the functions implemented in class CardHandler
+    // The only function in this CardHandler is GenerateShuffledDeck
     public class UnitTestsHandlers
     {
         // -------------Tests for GenerateShuffledDeck() method----------
