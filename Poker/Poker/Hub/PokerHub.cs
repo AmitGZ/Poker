@@ -7,7 +7,6 @@ using Poker.DataModel.Dto;
 using Poker.DataModel;
 using Microsoft.AspNetCore.SignalR;
 using System;
-using LinqToDB;
 
 namespace Poker.Hubs
 {
@@ -115,7 +114,7 @@ namespace Poker.Hubs
             if(!gameRunning)
             {
                 // Game Ended
-                await HandleEndedGame(room);
+                await SendEndedGame(room);
             }
 
             // Sending everyone in the room the status
@@ -179,7 +178,7 @@ namespace Poker.Hubs
             if (!gameRunning)
             {
                 // Game Ended
-                await HandleEndedGame(room);
+                await SendEndedGame(room);
             }
 
             SendRoomStatus(room);             // Sending everyone in the room the status
@@ -204,7 +203,7 @@ namespace Poker.Hubs
             if (!gameRunning)
             {
                 // Game ended
-                await HandleEndedGame(room);
+                await SendEndedGame(room);
             }
 
             SendRoomStatus(room);             // Sending everyone in the room the status
@@ -229,7 +228,7 @@ namespace Poker.Hubs
             if (!gameRunning)
             {
                 // Game ended
-                await HandleEndedGame (room);
+                await SendEndedGame (room);
             }
 
             SendRoomStatus(room);             // Sending everyone in the room the status
@@ -254,7 +253,7 @@ namespace Poker.Hubs
             if (!gameRunning)
             {
                 // Game ended
-                await HandleEndedGame(room);
+                await SendEndedGame(room);
             }
 
             SendRoomStatus(room);             // Sending everyone in the room the status
@@ -321,7 +320,7 @@ namespace Poker.Hubs
                 if (room.Fold(talkingUser))
                 {
                     // Game Ended
-                    await HandleEndedGame(room);
+                    await SendEndedGame(room);
                     ResetTimer(room.Id);
                 }
             }
@@ -370,7 +369,7 @@ namespace Poker.Hubs
             }
         }
 
-        private async Task HandleEndedGame(Room room)
+        private async Task SendEndedGame(Room room)
         {
             ResetTimer(room.Id);
             UserInGame winner = room.Users.FirstOrDefault(u => u.IsWinner == true);

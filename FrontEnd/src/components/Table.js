@@ -104,12 +104,35 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
             }
         }
 
+        // Drawing Winner sign
+        if(user.isWinner && roomStatus.stage == 5)
+        {
+            context.font = "50px Arial";
+            context.strokeStyle= "black"; //set the color of the stroke line 
+            context.fillStyle = "white";
+            context.lineWidth = 6;  //define the width of the stroke line
+            context.strokeText("Winner!",
+            POSITIONS[position][0],
+            POSITIONS[position][1] - TEXT_OFFSET
+            );
+            context.fillText("Winner!",
+            POSITIONS[position][0],
+            POSITIONS[position][1] - TEXT_OFFSET
+            );
+        }
+
         // Writing User name and money
         context.font = "20px Arial";
+        context.strokeStyle= "black"; //set the color of the stroke line 
         context.fillStyle = "white";
+        context.lineWidth = 7;  //define the width of the stroke line
         context.textAlign = "center";
         context.backgroundColor = "white";
-        context.fillText(user.username + "\n" + user.moneyInTable+'$' + ' ' + user.moneyInTurn,
+        context.strokeText(user.username + user.moneyInTable+'$' + ' ' + user.moneyInTurn,
+        POSITIONS[position][0],
+        POSITIONS[position][1] + TEXT_OFFSET
+        );
+        context.fillText(user.username + user.moneyInTable+'$' + ' ' + user.moneyInTurn,
         POSITIONS[position][0],
         POSITIONS[position][1] + TEXT_OFFSET
         );

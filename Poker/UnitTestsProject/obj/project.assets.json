@@ -38,21 +38,8 @@
           "build/netstandard1.0/coverlet.collector.targets": {}
         }
       },
-      "linq2db/4.0.1": {
-        "type": "package",
-        "compile": {
-          "lib/netcoreapp3.1/linq2db.dll": {}
-        },
-        "runtime": {
-          "lib/netcoreapp3.1/linq2db.dll": {}
-        }
-      },
       "Microsoft.AspNet.SignalR.Core/2.4.3": {
         "type": "package",
-        "dependencies": {
-          "Microsoft.Owin.Security": "2.1.0",
-          "Newtonsoft.Json": "6.0.4"
-        },
         "compile": {
           "lib/net45/Microsoft.AspNet.SignalR.Core.dll": {}
         },
@@ -454,31 +441,6 @@
           "lib/netstandard1.0/_._": {}
         }
       },
-      "Microsoft.Owin/2.1.0": {
-        "type": "package",
-        "dependencies": {
-          "Owin": "1.0.0"
-        },
-        "compile": {
-          "lib/net45/Microsoft.Owin.dll": {}
-        },
-        "runtime": {
-          "lib/net45/Microsoft.Owin.dll": {}
-        }
-      },
-      "Microsoft.Owin.Security/2.1.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Owin": "2.1.0",
-          "Owin": "1.0.0"
-        },
-        "compile": {
-          "lib/net45/Microsoft.Owin.Security.dll": {}
-        },
-        "runtime": {
-          "lib/net45/Microsoft.Owin.Security.dll": {}
-        }
-      },
       "Microsoft.TestPlatform.ObjectModel/17.1.0": {
         "type": "package",
         "dependencies": {
@@ -870,15 +832,6 @@
         },
         "runtime": {
           "lib/netstandard2.0/NuGet.Frameworks.dll": {}
-        }
-      },
-      "Owin/1.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/net40/Owin.dll": {}
-        },
-        "runtime": {
-          "lib/net40/Owin.dll": {}
         }
       },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
@@ -2650,9 +2603,7 @@
           "Microsoft.EntityFrameworkCore.Proxies": "5.0.16",
           "Microsoft.EntityFrameworkCore.Relational": "5.0.16",
           "Microsoft.EntityFrameworkCore.SqlServer": "5.0.16",
-          "Owin": "1.0.0",
-          "System.Data.SqlClient": "4.8.3",
-          "linq2db": "4.0.1"
+          "System.Data.SqlClient": "4.8.3"
         },
         "compile": {
           "bin/placeholder/Poker.dll": {}
@@ -2753,34 +2704,6 @@
         "coverlet-icon.png",
         "coverlet.collector.3.1.2.nupkg.sha512",
         "coverlet.collector.nuspec"
-      ]
-    },
-    "linq2db/4.0.1": {
-      "sha512": "QH7xdn6PIwqC7onFO1V2Cyyg+50vaHP7dFLEsHXd4UYvCNXiSyPwTNmdhfLQf9US7yf/JvGfQQo+WhhwRkQ8kg==",
-      "type": "package",
-      "path": "linq2db/4.0.1",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "MIT-LICENSE.txt",
-        "README.md",
-        "images/icon.png",
-        "lib/net45/linq2db.dll",
-        "lib/net45/linq2db.xml",
-        "lib/net46/linq2db.dll",
-        "lib/net46/linq2db.xml",
-        "lib/net472/linq2db.dll",
-        "lib/net472/linq2db.xml",
-        "lib/net6.0/linq2db.dll",
-        "lib/net6.0/linq2db.xml",
-        "lib/netcoreapp3.1/linq2db.dll",
-        "lib/netcoreapp3.1/linq2db.xml",
-        "lib/netstandard2.0/linq2db.dll",
-        "lib/netstandard2.0/linq2db.xml",
-        "lib/netstandard2.1/linq2db.dll",
-        "lib/netstandard2.1/linq2db.xml",
-        "linq2db.4.0.1.nupkg.sha512",
-        "linq2db.nuspec"
       ]
     },
     "Microsoft.AspNet.SignalR.Core/2.4.3": {
@@ -3501,34 +3424,6 @@
         "runtime.json"
       ]
     },
-    "Microsoft.Owin/2.1.0": {
-      "sha512": "lk0kK64mlmcmtWX8YOYkZsnZKDoGEzMZhe8e1bcP+FFcgD4f2QfKwvu5Z8Bh8WS0VO7Rgk+DJ0hwW0k+S/UGMg==",
-      "type": "package",
-      "path": "microsoft.owin/2.1.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net40/Microsoft.Owin.XML",
-        "lib/net40/Microsoft.Owin.dll",
-        "lib/net45/Microsoft.Owin.XML",
-        "lib/net45/Microsoft.Owin.dll",
-        "microsoft.owin.2.1.0.nupkg.sha512",
-        "microsoft.owin.nuspec"
-      ]
-    },
-    "Microsoft.Owin.Security/2.1.0": {
-      "sha512": "4n1V0p+O6W1L0xHUM8Cjp2Y+MmmUkiCZv6PvRNIDCJD9zlerBJa2HECo9lUiWC+KuasQJ3QxB1FmipNBxdXXIQ==",
-      "type": "package",
-      "path": "microsoft.owin.security/2.1.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net45/Microsoft.Owin.Security.XML",
-        "lib/net45/Microsoft.Owin.Security.dll",
-        "microsoft.owin.security.2.1.0.nupkg.sha512",
-        "microsoft.owin.security.nuspec"
-      ]
-    },
     "Microsoft.TestPlatform.ObjectModel/17.1.0": {
       "sha512": "OMo/FYnKGy3lZEK0gfitskRM3ga/YBt6MyCyFPq0xNLeybGOQ6HnYNAAvzyePo5WPuMiw3LX+HiuRWNjnas1fA==",
       "type": "package",
@@ -4165,18 +4060,6 @@
         "lib/netstandard2.0/NuGet.Frameworks.xml",
         "nuget.frameworks.5.11.0.nupkg.sha512",
         "nuget.frameworks.nuspec"
-      ]
-    },
-    "Owin/1.0.0": {
-      "sha512": "OseTFniKmyp76mEzOBwIKGBRS5eMoYNkMKaMXOpxx9jv88+b6mh1rSaw43vjBOItNhaLFG3d0a20PfHyibH5sw==",
-      "type": "package",
-      "path": "owin/1.0.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "lib/net40/Owin.dll",
-        "owin.1.0.0.nupkg.sha512",
-        "owin.nuspec"
       ]
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
@@ -8923,19 +8806,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ofirn\\.nuget\\packages\\": {}
+    "C:\\Users\\Amit Zohar\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\UnitTestsProject\\UnitTestsProject.csproj",
+      "projectUniqueName": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\UnitTestsProject\\UnitTestsProject.csproj",
       "projectName": "UnitTestsProject",
-      "projectPath": "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\UnitTestsProject\\UnitTestsProject.csproj",
-      "packagesPath": "C:\\Users\\ofirn\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\UnitTestsProject\\obj\\",
+      "projectPath": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\UnitTestsProject\\UnitTestsProject.csproj",
+      "packagesPath": "C:\\Users\\Amit Zohar\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\UnitTestsProject\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\ofirn\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Amit Zohar\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -8943,14 +8826,15 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {},
+        "https://packagesource": {}
       },
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\Poker\\Poker.csproj": {
-              "projectPath": "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\Poker\\Poker.csproj"
+            "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\Poker\\Poker.csproj": {
+              "projectPath": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\Poker\\Poker.csproj"
             }
           }
         }
@@ -9001,7 +8885,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.406\\RuntimeIdentifierGraph.json"
       }
     }
   },
@@ -9022,36 +8906,6 @@
       "warningLevel": 1,
       "message": "Package 'Microsoft.AspNet.SignalR.Core 2.4.3' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net5.0'. This package may not be fully compatible with your project.",
       "libraryId": "Microsoft.AspNet.SignalR.Core",
-      "targetGraphs": [
-        "net5.0"
-      ]
-    },
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Microsoft.Owin 2.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net5.0'. This package may not be fully compatible with your project.",
-      "libraryId": "Microsoft.Owin",
-      "targetGraphs": [
-        "net5.0"
-      ]
-    },
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Microsoft.Owin.Security 2.1.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net5.0'. This package may not be fully compatible with your project.",
-      "libraryId": "Microsoft.Owin.Security",
-      "targetGraphs": [
-        "net5.0"
-      ]
-    },
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Owin 1.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net5.0'. This package may not be fully compatible with your project.",
-      "libraryId": "Owin",
       "targetGraphs": [
         "net5.0"
       ]

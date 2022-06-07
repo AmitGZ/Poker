@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace Poker.Data
 {
-    public static class DbInitializer
+    public static class DbInitializer 
     {
         public static void Initialize(PokerContext context)
         {
-            context.Database.EnsureCreated();
+            // context.Database.EnsureCreated();
 
             // Removing all Cards
             foreach (var c in context.Cards)

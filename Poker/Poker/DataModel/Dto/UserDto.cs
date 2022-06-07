@@ -16,6 +16,7 @@ namespace Poker.DataModel.Dto
         public List<Card> Cards { get; set; }
         public int MoneyInTurn { get; set; }
         public bool IsActive { get; set; }
+        public bool IsWinner { get; set; }
 
         public UserDto(User user, Boolean isPrivate = false)
         {
@@ -29,6 +30,7 @@ namespace Poker.DataModel.Dto
                 Cards = (isPrivate) ? new List<Card>() : user.UserInGame.Cards;
                 MoneyInTurn = user.UserInGame.MoneyInTurn;
                 IsActive = user.UserInGame.IsActive;
+                IsWinner = user.UserInGame.IsWinner;
             }
             else
             {
@@ -39,6 +41,7 @@ namespace Poker.DataModel.Dto
                 Cards = new List<Card>();
                 MoneyInTurn = 0;
                 IsActive = false;
+                IsWinner = false;
             }
         }
     }
