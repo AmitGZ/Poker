@@ -61,11 +61,9 @@ jobs:
           name: node-app
 
       - name: 'Deploy to Azure Web App'
-      - uses: azure/login@v1
-      - uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
           app-name: 'PokerApplication'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B9A39C1D8C9D4A7C9056AC2D0CAD6857 }}
