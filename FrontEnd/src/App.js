@@ -6,7 +6,6 @@ import UserStats from './components/UserStats';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import background from './resources/background.png'
-import { ConsoleLogger } from '@microsoft/signalr/dist/esm/Utils';
 
 const App = () => {
   const [connection, setConnection] = useState();
