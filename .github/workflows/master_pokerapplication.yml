@@ -5,8 +5,9 @@ name: Build and deploy Node.js app to Azure Web App - PokerApplication
 
 on:
   push:
-    branches:
-      - master
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -25,8 +26,8 @@ jobs:
         env:
           CI: false
         run: |
-          npm install
-          npm run build --if-present 
+          npm install --prefix FrontEnd
+          npm run build --if-present --prefix FrontEnd
       
       - name: Zip the File
 
