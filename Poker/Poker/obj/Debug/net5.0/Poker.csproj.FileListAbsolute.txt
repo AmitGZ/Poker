@@ -62,7 +62,6 @@ C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\obj\Debug\net5.0\Poker.cspr
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\Castle.Core.dll
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.Proxies.dll
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\BluffinMuffin.HandEvaluator.dll
-C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\Microsoft.AspNet.SignalR.Core.dll
 C:\Users\ofirn\OneDrive\Desktop\Year3\Sem2\Computer_Engineering_WorkShop\CodeMainProgram\Poker-Online\Poker\Poker\bin\Debug\net5.0\appsettings.json
 C:\Users\ofirn\OneDrive\Desktop\Year3\Sem2\Computer_Engineering_WorkShop\CodeMainProgram\Poker-Online\Poker\Poker\bin\Debug\net5.0\Poker.StaticWebAssets.xml
 C:\Users\ofirn\OneDrive\Desktop\Year3\Sem2\Computer_Engineering_WorkShop\CodeMainProgram\Poker-Online\Poker\Poker\bin\Debug\net5.0\Poker.exe

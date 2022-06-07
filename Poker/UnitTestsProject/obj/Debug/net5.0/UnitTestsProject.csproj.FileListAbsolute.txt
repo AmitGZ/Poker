@@ -170,7 +170,6 @@ C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\UnitTestsProject\bin\Debug\net5.0
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\UnitTestsProject\bin\Debug\net5.0\UnitTestsProject.pdb
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\UnitTestsProject\bin\Debug\net5.0\BluffinMuffin.HandEvaluator.dll
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\UnitTestsProject\bin\Debug\net5.0\Castle.Core.dll
-C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\UnitTestsProject\bin\Debug\net5.0\Microsoft.AspNet.SignalR.Core.dll
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\UnitTestsProject\bin\Debug\net5.0\Microsoft.VisualStudio.CodeCoverage.Shim.dll
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\UnitTestsProject\bin\Debug\net5.0\Microsoft.Data.SqlClient.dll
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\UnitTestsProject\bin\Debug\net5.0\Microsoft.EntityFrameworkCore.dll

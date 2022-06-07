@@ -1,20 +1,19 @@
 {
   "version": 2,
-  "dgSpecHash": "QpNM/CHRCsSm1w8X91tbsnN71vhx0GKI+zYN4TlHXZeu4hmqhu/S1M64vBf0KiGFjlf+X+mQibSluN3PPcC99Q==",
+  "dgSpecHash": "jL86LD/V62vowrFRvA6kExuyhXjdIQO8KrOZisHvM/xVcG835+WLGYiS6sFjoFd6IZ6jCrAAbg3lLng3pRMhiQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\UnitTestsProject\\UnitTestsProject.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Amit Zohar\\.nuget\\packages\\bluffinmuffin.handevaluator\\3.1.2\\bluffinmuffin.handevaluator.3.1.2.nupkg.sha512",
     "C:\\Users\\Amit Zohar\\.nuget\\packages\\castle.core\\4.4.1\\castle.core.4.4.1.nupkg.sha512",
     "C:\\Users\\Amit Zohar\\.nuget\\packages\\coverlet.collector\\3.1.2\\coverlet.collector.3.1.2.nupkg.sha512",
-    "C:\\Users\\Amit Zohar\\.nuget\\packages\\microsoft.aspnet.signalr.core\\2.4.3\\microsoft.aspnet.signalr.core.2.4.3.nupkg.sha512",
     "C:\\Users\\Amit Zohar\\.nuget\\packages\\microsoft.codecoverage\\17.1.0\\microsoft.codecoverage.17.1.0.nupkg.sha512",
     "C:\\Users\\Amit Zohar\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\Amit Zohar\\.nuget\\packages\\microsoft.data.sqlclient\\2.0.1\\microsoft.data.sqlclient.2.0.1.nupkg.sha512",
     "C:\\Users\\Amit Zohar\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\2.0.1\\microsoft.data.sqlclient.sni.runtime.2.0.1.nupkg.sha512",
-    "C:\\Users\\Amit Zohar\\.nuget\\packages\\microsoft.entityframeworkcore\\5.0.16\\microsoft.entityframeworkcore.5.0.16.nupkg.sha512",
-    "C:\\Users\\Amit Zohar\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\5.0.16\\microsoft.entityframeworkcore.abstractions.5.0.16.nupkg.sha512",
-    "C:\\Users\\Amit Zohar\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\5.0.16\\microsoft.entityframeworkcore.analyzers.5.0.16.nupkg.sha512",
+    "C:\\Users\\Amit Zohar\\.nuget\\packages\\microsoft.entityframeworkcore\\5.0.17\\microsoft.entityframeworkcore.5.0.17.nupkg.sha512",
+    "C:\\Users\\Amit Zohar\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\5.0.17\\microsoft.entityframeworkcore.abstractions.5.0.17.nupkg.sha512",
+    "C:\\Users\\Amit Zohar\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\5.0.17\\microsoft.entityframeworkcore.analyzers.5.0.17.nupkg.sha512",
     "C:\\Users\\Amit Zohar\\.nuget\\packages\\microsoft.entityframeworkcore.proxies\\5.0.16\\microsoft.entityframeworkcore.proxies.5.0.16.nupkg.sha512",
     "C:\\Users\\Amit Zohar\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\5.0.16\\microsoft.entityframeworkcore.relational.5.0.16.nupkg.sha512",
     "C:\\Users\\Amit Zohar\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\5.0.16\\microsoft.entityframeworkcore.sqlserver.5.0.16.nupkg.sha512",
@@ -163,16 +162,6 @@
       "warningLevel": 1,
       "message": "Package 'BluffinMuffin.HandEvaluator 3.1.2' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net5.0'. This package may not be fully compatible with your project.",
       "libraryId": "BluffinMuffin.HandEvaluator",
-      "targetGraphs": [
-        "net5.0"
-      ]
-    },
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Microsoft.AspNet.SignalR.Core 2.4.3' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net5.0'. This package may not be fully compatible with your project.",
-      "libraryId": "Microsoft.AspNet.SignalR.Core",
       "targetGraphs": [
         "net5.0"
       ]
