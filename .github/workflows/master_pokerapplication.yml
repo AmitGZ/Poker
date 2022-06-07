@@ -39,7 +39,7 @@ jobs:
           # Filename for archive
           filename: release.zip
           # Base path for archive files
-          path: ./build/*
+          path: FrontEnd/build/*
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -66,5 +66,5 @@ jobs:
         with:
           app-name: 'PokerApplication'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B9A39C1D8C9D4A7C9056AC2D0CAD6857 }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: release.zip
