@@ -5,8 +5,9 @@ name: Build and deploy Node.js app to Azure Web App - PokerApplication
 
 on:
   push:
-    branches:
-      - master
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
