@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using PokerClassLibrary;
+using Xunit;
 
 namespace UnitTestsProject
 {

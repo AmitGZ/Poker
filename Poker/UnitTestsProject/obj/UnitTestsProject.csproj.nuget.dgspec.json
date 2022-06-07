@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\UnitTestsProject\\UnitTestsProject.csproj": {}
+    "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\UnitTestsProject\\UnitTestsProject.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\Poker\\Poker.csproj": {
+    "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\Poker\\Poker.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\Poker\\Poker.csproj",
+        "projectUniqueName": "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\Poker\\Poker.csproj",
         "projectName": "Poker",
-        "projectPath": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\Poker\\Poker.csproj",
-        "packagesPath": "C:\\Users\\Amit Zohar\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\Poker\\obj\\",
+        "projectPath": "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\Poker\\Poker.csproj",
+        "packagesPath": "C:\\Users\\ofirn\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\Poker\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Amit Zohar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ofirn\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,8 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://packagesource": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net5.0": {
@@ -94,21 +93,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.406\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\UnitTestsProject\\UnitTestsProject.csproj": {
+    "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\UnitTestsProject\\UnitTestsProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\UnitTestsProject\\UnitTestsProject.csproj",
+        "projectUniqueName": "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\UnitTestsProject\\UnitTestsProject.csproj",
         "projectName": "UnitTestsProject",
-        "projectPath": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\UnitTestsProject\\UnitTestsProject.csproj",
-        "packagesPath": "C:\\Users\\Amit Zohar\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\UnitTestsProject\\obj\\",
+        "projectPath": "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\UnitTestsProject\\UnitTestsProject.csproj",
+        "packagesPath": "C:\\Users\\ofirn\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\UnitTestsProject\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Amit Zohar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ofirn\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -116,15 +115,14 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {},
-          "https://packagesource": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\Poker\\Poker.csproj": {
-                "projectPath": "C:\\Users\\Amit Zohar\\Desktop\\Poker-Online\\Poker\\Poker\\Poker.csproj"
+              "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\Poker\\Poker.csproj": {
+                "projectPath": "C:\\Users\\ofirn\\OneDrive\\Desktop\\Year3\\Sem2\\Computer_Engineering_WorkShop\\CodeMainProgram\\Poker-Online\\Poker\\Poker\\Poker.csproj"
               }
             }
           }
@@ -175,7 +173,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.406\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
         }
       }
     }
