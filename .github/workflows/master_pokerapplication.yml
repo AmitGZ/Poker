@@ -66,5 +66,5 @@ jobs:
         with:
           app-name: 'PokerApplication'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B9A39C1D8C9D4A7C9056AC2D0CAD6857 }}
+          # publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B9A39C1D8C9D4A7C9056AC2D0CAD6857 }}
           package: release.zip
