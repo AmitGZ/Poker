@@ -6,7 +6,7 @@ import Slider from 'react-input-slider';
 import { useState } from "react";
 
 const Rooms = ({ rooms , joinRoom, createRoom, user}) => {
-    const [enterMoney, setEnterMoney] = useState({ x: 10 });
+    const [enterMoney, setEnterMoney] = useState({ x: parseInt(user.money/2) });
 
     return(
     <div id = "room-list" className='room-list'>

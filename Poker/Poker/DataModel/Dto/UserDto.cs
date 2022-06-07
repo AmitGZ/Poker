@@ -34,7 +34,7 @@ namespace Poker.DataModel.Dto
             }
             else
             {
-                // TODO remove somehow
+                // Sending blank UserInRoom parameters
                 MoneyInTable = 0;
                 RoomId = null;
                 Position = 0;

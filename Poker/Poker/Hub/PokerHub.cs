@@ -34,7 +34,6 @@ namespace Poker.Hubs
         {
             ConnectionIds.Remove(Context.ConnectionId);
 
-            // TODO handle disconnect
             return Task.CompletedTask;
         }
 
@@ -298,7 +297,6 @@ namespace Poker.Hubs
 
         private System.Timers.Timer CreateTurnTimer(string roomId)
         {
-            // TODO delete timer with room
             var timer = new System.Timers.Timer();
             timer.Interval = TimerInterval;
             timer.Elapsed += async (sender, e) => await TimerElapsed(sender, e, roomId);

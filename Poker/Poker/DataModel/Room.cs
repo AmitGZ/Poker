@@ -13,7 +13,7 @@ namespace PokerClassLibrary
 {
     static class Constants
     {
-        public const int TurnTime = 15;
+        public const int TurnTime = 20;
         public const int BigBlind = 10;
     }
     public enum GameStage

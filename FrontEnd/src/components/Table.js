@@ -6,6 +6,7 @@ import { cardSuits, cardValues } from "./Cards.js"
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import Slider from 'react-input-slider';
 
 const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomStatus, user}) => {
     // CONSTANTS
@@ -42,6 +43,8 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
     const [Dealer, setDealer] = useState(false);
 
     const [counter, setCounter] = useState(roomStatus.turnTime);
+
+    const [enterMoney, setEnterMoney] = useState({ y: 0 });
 
     useEffect(()=>{
         let myInterval = setInterval(() => {
@@ -226,7 +229,16 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
 
             <div style = {{position:'absolute'}}>
                 <Button style = {{position:'absolute'}} variant='danger' onClick={() => LeaveRoom()}>Leave Room</Button>
-                    {(roomStatus.stage != 0 && roomStatus.stage != 5) &&
+                    {(roomStatus.stage != 0 && roomStatus.stage != 5) && // Only if playing game show buttons
+                    <div>
+
+                    <div style ={{position:'absolute', marginLeft:"543px", marginTop: "343px", height: "90px"}}>
+                        {((Talking) && (roomStatus.turnStake < user.moneyInTable)) && 
+                        <Slider style ={{color: "#7d0015", height: "120px"}} 
+                        yreverse = {true} axis = 'y' ymin = {roomStatus.turnStake} ymax = {user.moneyInTable} y={enterMoney.y} onChange={({ y }) => setEnterMoney(enterMoney => ({ ...enterMoney, y }))} />
+                        }
+                    </div>
+
                     <div className='button-list' style = {{marginLeft :`${WIDTH*3/5}px`, marginTop :`${HEIGHT*2/3}px`}}>
                         
                         <Button 
@@ -246,8 +258,8 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
                         <Button 
                         disabled = {(!Talking) || (roomStatus.turnStake >= user.moneyInTable)} 
                         variant="dark" key = "Raise" 
-                        onClick={() =>{connection.invoke("ReceiveRaise", 100)}}>
-                        Raise
+                        onClick={() =>{connection.invoke("ReceiveRaise", enterMoney.y)}}>
+                        Raise {enterMoney.y}
                         </Button>
                         
                         <Button disabled = {(!Talking)}
@@ -256,6 +268,7 @@ const Table = ({ joinRoom, LeaveRoom, sendMessage, connection, messages, roomSta
                         Fold
                         </Button>
 
+                    </div>
                     </div>
                     }
             </div>
