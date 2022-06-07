@@ -39,7 +39,7 @@ jobs:
           # Filename for archive
           filename: release.zip
           # Base path for archive files
-          path: ./build/*
+          path: FrontEnd/build/*
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
