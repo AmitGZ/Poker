@@ -35,13 +35,13 @@ namespace Poker
                .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")),
                ServiceLifetime.Singleton);
 
-            services.AddSignalR();
+            services.AddSignalR().AddAzureSignalR("Endpoint=https://pokersignalr.service.signalr.net;AccessKey=cxR4bYaXzsjLlNWRYxhUYpp4wGddY6kDzIM/GHqKAtE=;Version=1.0;");
 
             // services.AddCors(options =>
             // {
             //     options.AddDefaultPolicy(builder =>
             //     {
-            //         builder.WithOrigins("https://pokerapplication.azurewebsites.net/")
+            //         builder.WithOrigins("https://pokerapplication.azurewebsites.net/") 
             //             .AllowAnyHeader()
             //             .AllowAnyMethod()
             //             .AllowCredentials();
@@ -73,7 +73,7 @@ namespace Poker
 
             app.UseCors("CorsPolicy");
 
-            app.UseEndpoints(endpoints =>
+            app.UseAzureSignalR(endpoints =>
             {
                 endpoints.MapHub<PokerHub>("/poker");
             });
