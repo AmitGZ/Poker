@@ -35,26 +35,18 @@ namespace Poker
                .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")),
                ServiceLifetime.Singleton);
 
-            services.AddSignalR().AddAzureSignalR("Endpoint=https://pokersignalr.service.signalr.net;AccessKey=cxR4bYaXzsjLlNWRYxhUYpp4wGddY6kDzIM/GHqKAtE=;Version=1.0;");
+            services.AddSignalR();
 
-            // services.AddCors(options =>
-            // {
-            //     options.AddDefaultPolicy(builder =>
-            //     {
-            //         builder.WithOrigins("https://pokerapplication.azurewebsites.net/") 
-            //             .AllowAnyHeader()
-            //             .AllowAnyMethod()
-            //             .AllowCredentials();
-            //     });
-            // });
-
-            services.AddCors(o => o.AddPolicy("CorsPolicy", builder => {
-                builder
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials()
-                .WithOrigins("https://pokerapplication.azurewebsites.net/");
-            }));
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.WithOrigins("http://localhost:3000")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
 
             services.AddSingleton<IDictionary<string, string>>(options => new Dictionary<string, string>());
         }
@@ -69,11 +61,9 @@ namespace Poker
 
             app.UseRouting();
 
-            // app.UseCors();
+            app.UseCors();
 
-            app.UseCors("CorsPolicy");
-
-            app.UseAzureSignalR(endpoints =>
+            app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<PokerHub>("/poker");
             });
