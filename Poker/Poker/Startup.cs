@@ -37,16 +37,24 @@ namespace Poker
 
             services.AddSignalR();
 
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(builder =>
-                {
-                    builder.WithOrigins("https://pokerapplication.azurewebsites.net/")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
-                });
-            });
+            // services.AddCors(options =>
+            // {
+            //     options.AddDefaultPolicy(builder =>
+            //     {
+            //         builder.WithOrigins("https://pokerapplication.azurewebsites.net/")
+            //             .AllowAnyHeader()
+            //             .AllowAnyMethod()
+            //             .AllowCredentials();
+            //     });
+            // });
+
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder => {
+                builder
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials()
+                .WithOrigins("https://pokerapplication.azurewebsites.net/");
+            }));
 
             services.AddSingleton<IDictionary<string, string>>(options => new Dictionary<string, string>());
         }
@@ -61,7 +69,9 @@ namespace Poker
 
             app.UseRouting();
 
-            app.UseCors();
+            // app.UseCors();
+
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {
