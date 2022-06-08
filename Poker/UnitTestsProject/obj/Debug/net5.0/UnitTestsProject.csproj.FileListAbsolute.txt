@@ -296,7 +296,3 @@ C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\UnitTestsProject\obj\Debug\net5.0
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\UnitTestsProject\obj\Debug\net5.0\ref\UnitTestsProject.dll
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\UnitTestsProject\obj\Debug\net5.0\UnitTestsProject.pdb
 C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\UnitTestsProject\obj\Debug\net5.0\UnitTestsProject.genruntimeconfig.cache
-C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\UnitTestsProject\bin\Debug\net5.0\Microsoft.AspNetCore.Http.Connections.Client.dll
-C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\UnitTestsProject\bin\Debug\net5.0\Microsoft.Azure.SignalR.Common.dll
-C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\UnitTestsProject\bin\Debug\net5.0\Microsoft.Azure.SignalR.dll
-C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\UnitTestsProject\bin\Debug\net5.0\Microsoft.Azure.SignalR.Protocols.dll

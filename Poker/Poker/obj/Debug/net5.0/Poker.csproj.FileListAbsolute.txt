@@ -131,7 +131,3 @@ C:\Users\ofirn\OneDrive\Desktop\Year3\Sem2\Computer_Engineering_WorkShop\CodeMai
 C:\Users\ofirn\OneDrive\Desktop\Year3\Sem2\Computer_Engineering_WorkShop\CodeMainProgram\Poker-Online\Poker\Poker\obj\Debug\net5.0\Poker.pdb
 C:\Users\ofirn\OneDrive\Desktop\Year3\Sem2\Computer_Engineering_WorkShop\CodeMainProgram\Poker-Online\Poker\Poker\obj\Debug\net5.0\Poker.genruntimeconfig.cache
 C:\Users\ofirn\OneDrive\Desktop\Year3\Sem2\Computer_Engineering_WorkShop\CodeMainProgram\Poker-Online\Poker\Poker\obj\Debug\net5.0\ref\Poker.dll
-C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\Microsoft.AspNetCore.Http.Connections.Client.dll
-C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\Microsoft.Azure.SignalR.Common.dll
-C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\Microsoft.Azure.SignalR.dll
-C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\bin\Debug\net5.0\Microsoft.Azure.SignalR.Protocols.dll
