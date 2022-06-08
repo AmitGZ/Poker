@@ -89,6 +89,8 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
     - name: npm install, build, and test
+      env:
+         CI: false
       run: |
         # Build and test the project, then
         # deploy to Azure Web App.
