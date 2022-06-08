@@ -97,7 +97,7 @@ jobs:
         npm install --prefix FrontEnd
         npm install react-scripts --prefix FrontEnd
         npm run build --if-present --prefix FrontEnd
-        npm run test --if-present --prefix FrontEnd
+ #       npm run test --if-present --prefix FrontEnd
     - name: add process.json
       run: |
         echo '{ script: "serve", env: { PM2_SERVE_SPA: "true", PM2_SERVE_HOMEPAGE: "/index.html" } }' >> FrontEnd/build/process.json
