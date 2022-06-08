@@ -13,6 +13,8 @@ using System.IO;
 using PokerClassLibrary;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Proxies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Threading.Tasks;
 
 namespace Poker
 {
@@ -35,37 +37,36 @@ namespace Poker
                .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")),
                ServiceLifetime.Singleton);
 
-            services.AddSignalR();
+            services.AddSignalR().AddAzureSignalR("Endpoint=https://pokersignalr.service.signalr.net;AccessKey=c6LDgHAz7IJK6BkZn2SX0GcsUmXLq4RIQ3BND23BSHc=;Version=1.0;");
 
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
                 {
-
-                    builder.WithOrigins("http://localhost:3000")
-                    //.WithOrigins("https://pokerapplication.azurewebsites.net/")
+                    builder
+                    //.WithOrigins("http://localhost:3000")
+                    .WithOrigins("https://pokerapplication.azurewebsites.net/")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
                 });
             });
-
             services.AddSingleton<IDictionary<string, string>>(options => new Dictionary<string, string>());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            //if (env.IsDevelopment())
+            //{
+            //    app.UseDeveloperExceptionPage();
+            //}
 
             app.UseRouting();
 
             app.UseCors();
 
-            app.UseEndpoints(endpoints =>
+            app.UseAzureSignalR(endpoints =>
             {
                 endpoints.MapHub<PokerHub>("/poker");
             });

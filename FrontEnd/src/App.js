@@ -6,7 +6,8 @@ import UserStats from './components/UserStats';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import background from './resources/background.png'
-import { ConsoleLogger } from '@microsoft/signalr/dist/esm/Utils';
+//import { ConsoleLogger } from '@microsoft/signalr/dist/esm/Utils';
+import * as signalR from '@microsoft/signalr';
 
 const App = () => {
   const [connection, setConnection] = useState();
@@ -14,12 +15,14 @@ const App = () => {
   const [roomStatus, setRoomStatus] = useState([]);
   const [rooms,setRooms] = useState([]);
   const [user, setUser] = useState({});
+  
 
   const joinGame = async (username, password) => {
     try {
       //establishing connection
       const connection = new HubConnectionBuilder()
-        .withUrl("https://localhost:44382/poker")
+        //.withUrl("https://localhost:44382/poker")
+        .withUrl("http://expensesapi1.azurewebsites.net/poker")
         .configureLogging(LogLevel.Information)
         .build();
         connection.serverTimeoutInMilliseconds = 100000; // 100 second
