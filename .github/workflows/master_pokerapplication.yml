@@ -1,71 +1,106 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - PokerApplication
-
+#name: Build and deploy Node.js app to Azure Web App - PokerApplication
+#
+#on:
+#  push:
+#    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
+#  workflow_dispatch:
+#
+#jobs:
+#  build:
+#    runs-on: windows-latest
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: Set up Node.js version
+#        uses: actions/setup-node@v1
+#        with:
+#          node-version: '16.x'
+#
+#      - name: npm install,build,test
+#        env:
+#          CI: false
+#        run: |
+#          npm install --prefix FrontEnd
+#          npm i -S react-scripts --prefix FrontEnd
+#          npm run build --if-present --prefix FrontEnd
+#      
+#      - name: Zip the File
+#
+#        # You may pin to the exact commit or the version.
+#        # uses: TheDoctor0/zip-release@09336613be18a8208dfa66bd57efafd9e2685657
+#        uses: TheDoctor0/zip-release@0.6.2
+#        with:
+#          # Filename for archive
+#          filename: release.zip
+#          # Base path for archive files
+#          path: FrontEnd/build/*
+#
+#      - name: Upload artifact for deployment job
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: node-app
+#          path: release.zip
+#
+#  deploy:
+#    runs-on: ubuntu-latest
+#    needs: build
+#    environment:
+#      name: 'Production'
+#      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+#
+#    steps:
+#      - name: Download artifact from build job
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: node-app
+#
+#      - name: 'Deploy to Azure Web App'
+#        uses: azure/webapps-deploy@v2
+#        id: deploy-to-webapp
+#        with:
+#        
+#          app-name: 'PokerApplication'
+#          slot-name: 'Production'
+#          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+#          package: release.zip
+#
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  workflow_dispatch:
+env:
+  AZURE_WEBAPP_NAME: reactapptutorial # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: 'build'  # set this to the path to your web app project, defaults to the repository root
+  NODE_VERSION: '14.x'                # set this to the node version to use
 
 jobs:
-  build:
-    runs-on: windows-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up Node.js version
-        uses: actions/setup-node@v1
-        with:
-          node-version: '16.x'
-
-      - name: npm install,build,test
-        env:
-          CI: false
-        run: |
-          npm install --prefix FrontEnd
-          npm i -S react-scripts --prefix FrontEnd
-          npm run build --if-present --prefix FrontEnd
-      
-      - name: Zip the File
-
-        # You may pin to the exact commit or the version.
-        # uses: TheDoctor0/zip-release@09336613be18a8208dfa66bd57efafd9e2685657
-        uses: TheDoctor0/zip-release@0.6.2
-        with:
-          # Filename for archive
-          filename: release.zip
-          # Base path for archive files
-          path: FrontEnd/build/*
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: node-app
-          path: release.zip
-
-  deploy:
+  build-and-deploy:
+    name: Build and Deploy
     runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
     steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: node-app
-
-      - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v2
-        id: deploy-to-webapp
-        with:
-        
-          app-name: 'PokerApplication'
-          slot-name: 'Production'
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: release.zip
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - name: npm install, build, and test
+      run: |
+        # Build and test the project, then
+        # deploy to Azure Web App.
+        npm install
+        npm run build --if-present
+        npm run test --if-present
+    - name: add process.json
+      run: |
+        echo '{ script: "serve", env: { PM2_SERVE_SPA: "true", PM2_SERVE_HOMEPAGE: "/index.html" } }' >> build/process.json
+    - name: 'Deploy to Azure WebApp'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
