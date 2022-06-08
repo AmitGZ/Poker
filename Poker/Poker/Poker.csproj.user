@@ -5,6 +5,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <ActiveDebugProfile>IIS Express</ActiveDebugProfile>
-    <NameOfLastUsedPublishProfile>C:\Users\Amit Zohar\Desktop\Poker-Online\Poker\Poker\Properties\PublishProfiles\PokerApplication - Web Deploy.pubxml</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>C:\Users\Amit Zohar\Desktop\Poker-Online\.github\workflows\blank.yml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>

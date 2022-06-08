@@ -41,7 +41,7 @@ namespace Poker
             {
                 options.AddDefaultPolicy(builder =>
                 {
-                    builder.WithOrigins("http://pokerapplication.azurewebsites.net/")
+                    builder.WithOrigins("https://pokerapplication.azurewebsites.net/")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();

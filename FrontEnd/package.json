@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@aspnet/signalr": "^1.0.27",
     "@microsoft/signalr": "^5.0.5",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -19,7 +18,6 @@
     "react-scripts": "^4.0.3",
     "react-slick": "^0.29.0",
     "react-slider": "^2.0.0",
-    "signalr": "^2.4.3",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
