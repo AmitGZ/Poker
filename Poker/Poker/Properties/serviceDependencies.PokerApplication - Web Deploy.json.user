@@ -1,27 +1,28 @@
 {
   "dependencies": {
-    "signalr1": {
-      "restored": true,
-      "restoreTime": "2022-06-08T14:27:55.4813502Z"
-    },
     "mssql1": {
       "restored": true,
       "restoreTime": "2022-06-08T14:23:22.9049047Z"
     }
   },
   "parameters": {
-    "signalr1.resourceGroupName": {
-      "Name": "signalr1.resourceGroupName",
+    "PokerApplication.resourceGroupName": {
+      "Name": "PokerApplication.resourceGroupName",
       "Type": "resourceGroup",
       "Value": "ExpensesResourceGroup"
     },
-    "mssql1.subscriptionId": {
-      "Name": "mssql1.subscriptionId",
+    "PokerApplication.subscriptionId": {
+      "Name": "PokerApplication.subscriptionId",
       "Type": "subscription",
       "Value": "068d8090-b82d-455a-bf0c-3b78a7cf5f82"
     },
-    "signalr1.subscriptionId": {
-      "Name": "signalr1.subscriptionId",
+    "PokerApplication.resourceName": {
+      "Name": "PokerApplication.resourceName",
+      "Type": null,
+      "Value": "PokerApplication"
+    },
+    "mssql1.subscriptionId": {
+      "Name": "mssql1.subscriptionId",
       "Type": "subscription",
       "Value": "068d8090-b82d-455a-bf0c-3b78a7cf5f82"
     },
@@ -29,6 +30,11 @@
       "Name": "mssql1.resourceGroupName",
       "Type": "resourceGroup",
       "Value": "ExpensesResourceGroup"
+    },
+    "subscriptionId": {
+      "Name": "subscriptionId",
+      "Type": "subscription",
+      "Value": "068d8090-b82d-455a-bf0c-3b78a7cf5f82"
     }
   }
 }
