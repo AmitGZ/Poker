@@ -79,3 +79,7 @@ C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\obj\Release\net5
 C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\obj\Release\net5.0\Poker.pdb
 C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\obj\Release\net5.0\Poker.genruntimeconfig.cache
 C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\obj\Release\net5.0\ref\Poker.dll
+C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\bin\Release\net5.0\Microsoft.AspNet.SignalR.Core.dll
+C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\bin\Release\net5.0\Microsoft.Owin.dll
+C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\bin\Release\net5.0\Microsoft.Owin.Security.dll
+C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\bin\Release\net5.0\Owin.dll

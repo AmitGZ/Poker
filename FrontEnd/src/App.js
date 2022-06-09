@@ -21,8 +21,7 @@ const App = () => {
     try {
       //establishing connection
       const connection = new HubConnectionBuilder()
-        //.withUrl("https://localhost:44382/poker")
-        .withUrl("http://expensesapi1.azurewebsites.net/poker")
+        .withUrl("https://localhost:44382/poker")
         .configureLogging(LogLevel.Information)
         .build();
         connection.serverTimeoutInMilliseconds = 100000; // 100 second

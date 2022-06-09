@@ -15,11 +15,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Proxies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Threading.Tasks;
+using Microsoft.AspNet.SignalR;
+using Owin;
 
 namespace Poker
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -43,15 +46,14 @@ namespace Poker
             {
                 options.AddDefaultPolicy(builder =>
                 {
-                    builder
-                    //.WithOrigins("http://localhost:3000")
-                    .WithOrigins("https://pokerapplication.azurewebsites.net/")
+                    builder.WithOrigins("http://localhost:3000")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();
                 });
             });
             services.AddSingleton<IDictionary<string, string>>(options => new Dictionary<string, string>());
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

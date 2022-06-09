@@ -5,6 +5,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <ActiveDebugProfile>IIS Express</ActiveDebugProfile>
-    <NameOfLastUsedPublishProfile>C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\Properties\PublishProfiles\ExpensesApi1 - Web Deploy.pubxml</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\Properties\PublishProfiles\PokerAppServer - Web Deploy1.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
 </Project>

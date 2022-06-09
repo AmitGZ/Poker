@@ -213,3 +213,7 @@ C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\bin\Debug\net5.0
 C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\bin\Debug\net5.0\System.Memory.Data.dll
 C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\bin\Debug\net5.0\System.Net.WebSockets.WebSocketProtocol.dll
 C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\bin\Debug\net5.0\Microsoft.AspNet.SignalR.Core.dll
+C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\bin\Debug\net5.0\Microsoft.Owin.dll
+C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\bin\Debug\net5.0\Microsoft.Owin.Security.dll
+C:\Users\Ofek\Desktop\PokerUploadCloud\Poker-Online\Poker\Poker\bin\Debug\net5.0\Owin.dll
