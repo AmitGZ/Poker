@@ -26,6 +26,7 @@ jobs:
           CI: false
         run: |
           npm install --prefix FrontEnd
+          npm install react-scripts --prefix FrontEnd
           npm run build --prefix FrontEnd --if-present
         #  npm run test --if-present
       
