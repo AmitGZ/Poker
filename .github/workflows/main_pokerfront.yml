@@ -25,8 +25,8 @@ jobs:
         env:
           CI: false
         run: |
-          npm install --perfix FrontEnd
-          npm run build --perfix FrontEnd --if-present
+          npm install --prefix FrontEnd
+          npm run build --prefix FrontEnd --if-present
         #  npm run test --if-present
       
       - name: Zip Release
