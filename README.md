@@ -17,10 +17,10 @@ User2:\
   Username: Ofek\
   Password: 1234\
 User3:\
-  Username: Ofir\ 
+  Username: Ofir\
   Password: 1234\
 User4:\
   Username: Golan\
-  Password: 1234\
+  Password: 1234
 
 
