@@ -9,18 +9,18 @@ and for the integration between them we used SignalR.
 
 We denied registed for farity resons. that no one can create a lot of users, if you want to register into the site you have to talk with the Admins.
 
-Login Information :
+Login Information :\
 User1:\
-  Username: Amit 
-  Password: 1234
-User2:
-  Username: Ofek
-  Password: 1234
-User3:
-  Username: Ofir 
-  Password: 1234
-User4:
-  Username: Golan
-  Password: 1234
+  Username: Amit \
+  Password: 1234 \
+User2:\
+  Username: Ofek\
+  Password: 1234\
+User3:\
+  Username: Ofir\ 
+  Password: 1234\
+User4:\
+  Username: Golan\
+  Password: 1234\
 
 
