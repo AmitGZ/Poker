@@ -16,9 +16,8 @@ Sign In Page
 
 <img width="881" alt="image" src="https://user-images.githubusercontent.com/88097271/176676371-aa1cb23f-a690-41dc-a85e-6d3375db0fdc.png">
 
-Also Have A chat
-
-<img width="751" alt="image" src="https://user-images.githubusercontent.com/88097271/176676484-fae472f6-2c15-4f43-8ec9-f378d35a93b7.png">
+You can talk via chat 
+<img width="789" alt="image" src="https://user-images.githubusercontent.com/88097271/176676673-f5815871-cb0c-4b83-9686-cacff7207568.png">
 
 Login Information :\
 User1:\
